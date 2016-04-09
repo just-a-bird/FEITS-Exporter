@@ -1,18 +1,20 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FEITS", "FEITS\FEITS.csproj", "{E1E65485-618C-43E2-A213-5BC5803807AE}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FEITS", "FEITS\FEITS.csproj", "{1DDD4FB1-C846-4F39-877E-385623C263DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x86 = Debug|x86
-		Release|x86 = Release|x86
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E1E65485-618C-43E2-A213-5BC5803807AE}.Debug|x86.ActiveCfg = Release|x86
-		{E1E65485-618C-43E2-A213-5BC5803807AE}.Debug|x86.Build.0 = Release|x86
-		{E1E65485-618C-43E2-A213-5BC5803807AE}.Release|x86.ActiveCfg = Release|x86
-		{E1E65485-618C-43E2-A213-5BC5803807AE}.Release|x86.Build.0 = Release|x86
+		{1DDD4FB1-C846-4F39-877E-385623C263DE}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{1DDD4FB1-C846-4F39-877E-385623C263DE}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{1DDD4FB1-C846-4F39-877E-385623C263DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DDD4FB1-C846-4F39-877E-385623C263DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

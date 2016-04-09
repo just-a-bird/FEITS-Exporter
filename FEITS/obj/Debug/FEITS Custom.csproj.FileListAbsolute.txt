@@ -1,0 +1,27 @@
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\bin\Debug\FEITS Custom.exe.config
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\bin\Debug\FEITS Custom.exe
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\bin\Debug\FEITS Custom.pdb
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS Custom.csprojResolveAssemblyReference.cache
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.Properties.Resources.resources
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS Custom.csproj.GenerateResource.Cache
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS Custom.exe
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS Custom.pdb
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.ScriptInput.resources
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.MainForm.resources
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.Settings.resources
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.DirectEdit.resources
+C:\Users\Ryan\Documents\If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.ScriptExport.resources
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\bin\Debug\FEITS Custom.exe.config
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\bin\Debug\FEITS Custom.exe
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\bin\Debug\FEITS Custom.pdb
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS Custom.csprojResolveAssemblyReference.cache
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.MainForm.resources
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.DirectEdit.resources
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.Forms.HalfBoxTester.resources
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.ScriptExport.resources
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.Settings.resources
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.Properties.Resources.resources
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS_Custom.ScriptInput.resources
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS Custom.csproj.GenerateResource.Cache
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS Custom.exe
+C:\Users\Ryan\Documents\Team If\FEITS Custom\FEITS Custom\FEITS Custom\obj\Debug\FEITS Custom.pdb
