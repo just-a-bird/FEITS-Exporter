@@ -14,8 +14,10 @@ Behaves similarly to the original FEITS, but serves more specifically for editin
 -Editor now supports newlines. You can use the enter key to position text, and FEITSE will add the \n marker automatically.
 
 ![FEITS](https://i.imgur.com/1hC2HjB.png)
+
 If you'd like access to the code, you can still edit lines directly.
 
 ![FEITS](https://i.imgur.com/vUIUxQj.png)
+
 When you're finished editing, the Export function will compile the lines back into one script formatted identically to the original, with your changes included.
 Character count makes it easy to see how many characters your script contains.
