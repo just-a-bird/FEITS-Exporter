@@ -87,7 +87,7 @@
             this.Name = "ScriptExport";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Script Input";
+            this.Text = "Script Export";
             this.ResumeLayout(false);
             this.PerformLayout();
 
