@@ -17,7 +17,7 @@ namespace FEITS
             InitializeComponent();
             m_validCharacters = validCharacters;
 
-            Tools.UpdateMessageRaw(currentMessage);
+            Tools.SaveLineToRaw(currentMessage);
 
             TB_LineEdit.Text = currentMessage.rawLine;
         }

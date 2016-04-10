@@ -143,7 +143,7 @@ namespace FEITS
         {
             if(msg.spokenText != string.Empty)
             {
-                Tools.UpdateMessageRaw(msg);
+                Tools.SaveLineToRaw(msg);
                 msg.rawLine = msg.rawLine.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
             }
 
@@ -906,7 +906,7 @@ namespace FEITS
                 string newScript = string.Empty;
                 foreach(Message msg in Messages)
                 {
-                    Tools.UpdateMessageRaw(msg);
+                    Tools.SaveLineToRaw(msg);
                 }
 
                 Messages[CUR_INDEX].rawLine = directEdit.enteredData;
@@ -930,7 +930,7 @@ namespace FEITS
             string newScript = string.Empty;
             foreach(Message msg in Messages)
             {
-                Tools.UpdateMessageRaw(msg);
+                Tools.SaveLineToRaw(msg);
                 newScript += msg.rawLine;
             }
 
