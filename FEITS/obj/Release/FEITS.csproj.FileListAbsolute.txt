@@ -1,3 +1,0 @@
-C:\Users\Ryan\Documents\Team If\FE If\FEITS\FEITS\bin\Release\FEITS Exporter.exe.config
-C:\Users\Ryan\Documents\Team If\FE If\FEITS\FEITS\obj\Release\FEITS Exporter.exe
-C:\Users\Ryan\Documents\Team If\FE If\FEITS\FEITS\obj\Release\FEITS Exporter.pdb

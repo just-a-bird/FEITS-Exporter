@@ -462,91 +462,75 @@ namespace FEITS
 
         private Image RenderTypeZero()
         {
-            string topMessage = string.Empty, bottomMessage = string.Empty;
+            string TopMessage = string.Empty, BottomMessage = string.Empty;
             ResetParameters();
             
             for(int i = 0; i <= CUR_INDEX; i++)
             {
-                Message msg = UpdateParse(Messages[i]);
+                string msg = UpdateParse(Messages[i]).spokenText;
 
-                if(msg.spokenText.Contains("$Nu") && HAS_PERMS)
+                if(msg.Contains("$Nu") && HAS_PERMS)
                 {
-                    msg.spokenText = msg.spokenText.Replace("$Nu", PLAYER_NAME);
+                    msg = msg.Replace("$Nu", PLAYER_NAME);
                 }
 
-                msg.spokenText = msg.spokenText.Replace(Environment.NewLine, "\n");
+                msg = msg.Replace(Environment.NewLine, "\n");
 
                 if (CHAR_ACTIVE == CHAR_A)
-                    topMessage = msg.spokenText;
+                    TopMessage = msg;
                 else
-                    bottomMessage = msg.spokenText;
+                    BottomMessage = msg;
             }
 
-            Bitmap box = new Bitmap(PB_TextBox.Width, PB_TextBox.Height);
-            Bitmap topBox = new Bitmap(1, 1), BottomBox = new Bitmap(1, 1);
-
-            if(topMessage != string.Empty && CHAR_A != string.Empty)
+            Bitmap Box = new Bitmap(PB_TextBox.Width, PB_TextBox.Height);
+            Bitmap TopBox = new Bitmap(1, 1), BottomBox = new Bitmap(1, 1);
+            if (TopMessage != string.Empty && CHAR_A != string.Empty)
             {
-                topBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
-
-                using (Graphics g = Graphics.FromImage(topBox))
+                TopBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
+                using (Graphics g = Graphics.FromImage(TopBox))
                 {
                     g.DrawImage(GetCharacterBUImage(CHAR_A, EMOTION_A, COLOR_A, true), new Point(2, 3));
-                    g.DrawImage(Tools.DrawString(Characters, new Bitmap(282, 50), bottomMessage, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
+                    g.DrawImage(Tools.DrawString(Characters, new Bitmap(282, 50), TopMessage, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
                 }
             }
-
-            if(bottomMessage != string.Empty && CHAR_B != string.Empty)
+            if (BottomMessage != string.Empty && CHAR_B != string.Empty)
             {
                 BottomBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
-
                 using (Graphics g = Graphics.FromImage(BottomBox))
                 {
                     g.DrawImage(GetCharacterBUImage(CHAR_B, EMOTION_B, COLOR_B, true), new Point(2, 3));
-                    g.DrawImage(Tools.DrawString(Characters, new Bitmap(282, 50), bottomMessage, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
+                    g.DrawImage(Tools.DrawString(Characters, new Bitmap(282, 50), BottomMessage, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
                 }
             }
-
-            using (Graphics g = Graphics.FromImage(box))
+            using (Graphics g = Graphics.FromImage(Box))
             {
                 if (CUR_INDEX < Messages.Count - 1)
                 {
-                    using (Graphics g2 = Graphics.FromImage(CHAR_ACTIVE == CHAR_A ? topBox : BottomBox))
+                    using (Graphics g2 = Graphics.FromImage(CHAR_ACTIVE == CHAR_A ? TopBox : BottomBox))
                     {
                         g2.DrawImage(Resources.KeyPress, new Point(TextBoxes[TextboxIndex].Width - 30, 32));
                     }
                 }
-
                 if (USE_BACKGROUNDS)
-                {
                     g.DrawImage(BACKGROUND_IMAGE, new Point(0, 0));
-                }
-
-                g.DrawImage(topBox, new Point(10, 3));
-                g.DrawImage(BottomBox, new Point(10, box.Height - BottomBox.Height + 2));
-
-                if (topMessage != string.Empty && CHAR_A != string.Empty)
+                g.DrawImage(TopBox, new Point(10, 3));
+                g.DrawImage(BottomBox, new Point(10, Box.Height - BottomBox.Height + 2));
+                if (TopMessage != string.Empty && CHAR_A != string.Empty)
                 {
-                    string topName = Names.ContainsKey(CHAR_A) ? Names[CHAR_A] : (CHAR_A == "username" ? PLAYER_NAME : CHAR_A);
-                    int nameLength = Tools.GetLength(topName, Characters);
-
-                    //Center Name in NameBox
-                    Bitmap topNameBox = Tools.DrawString(Characters, Resources.NameBox, topName, Resources.NameBox.Width / 2 - nameLength / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap;
-                    g.DrawImage(topNameBox, new Point(7, topBox.Height - (topNameBox.Height - 20)));
+                    string TopName = Names.ContainsKey(CHAR_A) ? Names[CHAR_A] : (CHAR_A == "username" ? PLAYER_NAME : CHAR_A);
+                    int NameLen = Tools.GetLength(TopName, Characters);
+                    Bitmap TopNameBox = Tools.DrawString(Characters, Resources.NameBox, TopName, Resources.NameBox.Width / 2 - NameLen / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap; // Center Name in NameBox
+                    g.DrawImage(TopNameBox, new Point(7, TopBox.Height - (TopNameBox.Height - 20)));
                 }
-
-                if (bottomMessage != string.Empty && CHAR_B != string.Empty)
+                if (BottomMessage != string.Empty && CHAR_B != string.Empty)
                 {
-                    string bottomName = Names.ContainsKey(CHAR_B) ? Names[CHAR_B] : (CHAR_B == "username" ? PLAYER_NAME : CHAR_B);
-                    int nameLength = Tools.GetLength(bottomName, Characters);
-
-                    // Center Name in NameBox
-                    Bitmap bottomNameBoox = Tools.DrawString(Characters, Resources.NameBox, bottomName, Resources.NameBox.Width / 2 - nameLength / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap;
-                    g.DrawImage(bottomNameBoox, new Point(7, box.Height - BottomBox.Height - 14));
+                    string BottomName = Names.ContainsKey(CHAR_B) ? Names[CHAR_B] : (CHAR_B == "username" ? PLAYER_NAME : CHAR_B);
+                    int NameLen = Tools.GetLength(BottomName, Characters);
+                    Bitmap BottomNameBox = Tools.DrawString(Characters, Resources.NameBox, BottomName, Resources.NameBox.Width / 2 - NameLen / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap; // Center Name in NameBox
+                    g.DrawImage(BottomNameBox, new Point(7, Box.Height - BottomBox.Height - 14));
                 }
             }
-
-            return box;
+            return Box;
         }
 
         private Image GetCharacterStageImage(string CName, string CEmo, Color HairColor, bool Slot1)
