@@ -43,11 +43,11 @@ namespace FEITS
             return NewImage;
         }
 
-        public static void UpdateMessageRaw(Message msg)
+        public static void SaveLineToRaw(Message msg)
         {
             if(msg.spokenText != string.Empty)
             {
-                msg.spokenText = msg.spokenText.Replace('’', '\'').Replace('~', '～').Replace("--", "―");
+                msg.spokenText = msg.spokenText.Replace('’', '\'').Replace('~', '～').Replace("  ", " ");
 
                 int lineIndex;
                 if (msg.rawLine.Contains("$Nu"))
