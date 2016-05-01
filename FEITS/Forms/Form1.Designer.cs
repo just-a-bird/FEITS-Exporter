@@ -1,6 +1,6 @@
 ﻿namespace FEITS
 {
-    partial class MainForm
+    partial class Form1
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.PB_TextBox = new System.Windows.Forms.PictureBox();
             this.TB_CurrentLine = new System.Windows.Forms.TextBox();
             this.B_ExportNewScript = new System.Windows.Forms.Button();

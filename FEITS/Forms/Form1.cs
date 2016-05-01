@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace FEITS
 {
-    public partial class MainForm : Form
+    public partial class Form1 : Form
     {
         private Image[] Images = { Resources.Awakening_0, Resources.Awakening_1 };
 
@@ -59,7 +59,7 @@ namespace FEITS
             TYPE_1
         }
 
-        public MainForm()
+        public Form1()
         {
             InitializeComponent();
 
