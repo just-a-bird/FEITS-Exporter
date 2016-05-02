@@ -69,7 +69,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FontCharacter.cs" />
+    <Compile Include="Controller\IMainView.cs" />
+    <Compile Include="Controller\MainController.cs" />
+    <Compile Include="Model\Command.cs" />
+    <Compile Include="Model\MessageLine.cs" />
+    <Compile Include="Model\Message.cs" />
+    <Compile Include="Model\ParsedFileContainer.cs" />
+    <Compile Include="Model\FontCharacter.cs" />
     <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,7 +106,6 @@
     <Compile Include="Forms\ScriptExport.Designer.cs">
       <DependentUpon>ScriptExport.cs</DependentUpon>
     </Compile>
-    <Compile Include="Message.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Forms\ScriptInput.cs">
@@ -10941,6 +10946,7 @@
   <ItemGroup>
     <Content Include="FEITS Icon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

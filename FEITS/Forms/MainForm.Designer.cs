@@ -47,8 +47,6 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.B_NextBlock = new System.Windows.Forms.Button();
-            this.B_PrevBlock = new System.Windows.Forms.Button();
             this.LB_BlockList = new System.Windows.Forms.ListBox();
             this.CHK_Backgrounds = new System.Windows.Forms.CheckBox();
             this.CB_Textbox = new System.Windows.Forms.ComboBox();
@@ -216,8 +214,6 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.B_NextBlock);
-            this.splitContainer1.Panel1.Controls.Add(this.B_PrevBlock);
             this.splitContainer1.Panel1.Controls.Add(this.LB_BlockList);
             this.splitContainer1.Panel1MinSize = 130;
             // 
@@ -244,35 +240,13 @@
             this.splitContainer1.SplitterDistance = 130;
             this.splitContainer1.TabIndex = 1;
             // 
-            // B_NextBlock
-            // 
-            this.B_NextBlock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.B_NextBlock.Location = new System.Drawing.Point(65, 469);
-            this.B_NextBlock.Name = "B_NextBlock";
-            this.B_NextBlock.Size = new System.Drawing.Size(60, 30);
-            this.B_NextBlock.TabIndex = 3;
-            this.B_NextBlock.Text = "Next";
-            this.B_NextBlock.UseVisualStyleBackColor = true;
-            // 
-            // B_PrevBlock
-            // 
-            this.B_PrevBlock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.B_PrevBlock.Location = new System.Drawing.Point(3, 469);
-            this.B_PrevBlock.Name = "B_PrevBlock";
-            this.B_PrevBlock.Size = new System.Drawing.Size(60, 30);
-            this.B_PrevBlock.TabIndex = 2;
-            this.B_PrevBlock.Text = "Prev";
-            this.B_PrevBlock.UseVisualStyleBackColor = true;
-            // 
             // LB_BlockList
             // 
-            this.LB_BlockList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LB_BlockList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LB_BlockList.FormattingEnabled = true;
-            this.LB_BlockList.Location = new System.Drawing.Point(3, 3);
+            this.LB_BlockList.Location = new System.Drawing.Point(0, 0);
             this.LB_BlockList.Name = "LB_BlockList";
-            this.LB_BlockList.Size = new System.Drawing.Size(122, 459);
+            this.LB_BlockList.Size = new System.Drawing.Size(128, 510);
             this.LB_BlockList.TabIndex = 0;
             // 
             // CHK_Backgrounds
@@ -475,8 +449,6 @@
         private System.Windows.Forms.PictureBox PB_TextBox;
         private System.Windows.Forms.TextBox TB_CurrentLine;
         private System.Windows.Forms.ListBox LB_BlockList;
-        private System.Windows.Forms.Button B_PrevBlock;
-        private System.Windows.Forms.Button B_NextBlock;
         private System.Windows.Forms.Label LBL_MessageInfo;
         private System.Windows.Forms.CheckBox CHK_Backgrounds;
         private System.Windows.Forms.ComboBox CB_Textbox;
