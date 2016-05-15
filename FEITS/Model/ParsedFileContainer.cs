@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace FEITS.Model
@@ -10,13 +10,39 @@ namespace FEITS.Model
     /// </summary>
     public class ParsedFileContainer
     {
-        public string header = string.Empty;
-        public List<Message> messageList = new List<Message>();
+        public string FilePathAndName;
+        public string Header;
+        public List<MessageBlock> MessageList;
 
-        public void LoadFromFile(string fileName)
+        public ParsedFileContainer()
+        {
+            EmptyFileData();
+        }
+
+        /// <summary>
+        /// Removes any previous message data
+        /// and returns the file to an empty state.
+        /// </summary>
+        public void EmptyFileData()
+        {
+            FilePathAndName = string.Empty;
+            Header = string.Empty;
+            MessageList = new List<MessageBlock>();
+        }
+
+        /// <summary>
+        /// Reads lines from specified file
+        /// and parses the information
+        /// </summary>
+        /// <param name="fileName">Specified file name</param>
+        public bool LoadFromFile(string fileName)
         {
             if(fileName != string.Empty)
             {
+                //Store the file path
+                FilePathAndName = fileName;
+
+                //Store text into an array split by line breaks
                 string[] fileLines = File.ReadAllLines(fileName);
 
                 //Parse for header and message blocks
@@ -42,7 +68,7 @@ namespace FEITS.Model
                         }
                     }
 
-                    //If we found the header, add it to header
+                    //If we found the header, add it to Header
                     if(headerEndIndex != 0)
                     {
                         string newHeader = string.Empty;
@@ -51,7 +77,7 @@ namespace FEITS.Model
                             newHeader += fileLines[i];
                         }
 
-                        header = newHeader;
+                        Header = newHeader;
 
                         //Create messages from the rest of the lines
                         for(int i = headerEndIndex; i < fileLines.Length; i++)
@@ -59,9 +85,9 @@ namespace FEITS.Model
                             //Separate the prefix from the message itself
                             if(fileLines[i].Contains(":"))
                             {
-                                Message newMessage = new Message();
+                                MessageBlock newMessage = new MessageBlock();
                                 int prefixIndex = fileLines[i].IndexOf(":");
-                                newMessage.prefix = fileLines[i].Substring(0, prefixIndex + 1);
+                                newMessage.Prefix = fileLines[i].Substring(0, prefixIndex + 1);
 
                                 //Get the message by itself
                                 string message = fileLines[i].Substring(prefixIndex + 1);
@@ -71,7 +97,7 @@ namespace FEITS.Model
                                 {
                                     MessageBox.Show("Error: There is a bug in the parsing code. Please inform the programmer of this issue.");
 
-                                    return;
+                                    return false;
                                 }
                                 else if(char.IsWhiteSpace(message[0]))
                                 {
@@ -82,29 +108,66 @@ namespace FEITS.Model
                                 newMessage.ParseMessage(message);
 
                                 //Add it to our list
-                                messageList.Add(newMessage);
+                                MessageList.Add(newMessage);
                             }
                             else
                             {
                                 MessageBox.Show("Error: Message lines don't appear to be formatted correctly. Please make sure each message is preceeded with a Message Name.");
+                                return false;
                             }
                         }
                     }
                     else
                     {
                         MessageBox.Show("Error: File header doesn't appear to be formatted correctly. Please make sure the formatting is correct.");
+                        return false;
                     }
                 }
                 else
                 {
                     MessageBox.Show("Error: File contents don't appear to be formatted correctly. Please make sure the formatting is correct.");
+                    return false;
                 }
             }
+            else
+            {
+                EmptyFileData();
+                FilePathAndName = fileName;
+                Console.WriteLine("Opened file was empty; treating as a new object and keeping the file path.");
+                return true;
+            }
+
+            return true;
         }
 
-        public void SaveToFile(string fileName)
+        /// <summary>
+        /// Compiles the message list and
+        /// writes contents with header to file.
+        /// </summary>
+        /// <param name="fileName">File to save as</param>
+        public bool SaveToFile(string fileName)
         {
+            if(fileName != string.Empty)
+            {
+                //Update file path in case different
+                FilePathAndName = fileName;
 
+                //Start compiling a string to make up the new file
+                string newFileText = Header + Environment.NewLine;
+
+                foreach (MessageBlock msg in MessageList)
+                {
+                    string compiledMsg = msg.CompileMessage();
+                    newFileText += (compiledMsg + Environment.NewLine);
+                }
+
+                File.WriteAllText(fileName, newFileText);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

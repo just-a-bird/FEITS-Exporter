@@ -1,4 +1,4 @@
-﻿namespace FEITS
+﻿namespace FEITS.View
 {
     partial class MainForm
     {
@@ -47,7 +47,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.LB_BlockList = new System.Windows.Forms.ListBox();
+            this.LB_MessageList = new System.Windows.Forms.ListBox();
             this.CHK_Backgrounds = new System.Windows.Forms.CheckBox();
             this.CB_Textbox = new System.Windows.Forms.ComboBox();
             this.LBL_Textbox = new System.Windows.Forms.Label();
@@ -79,8 +79,10 @@
             this.editToolStripMenuItem,
             this.toolsToolStripMenuItem,
             this.helpToolStripMenuItem});
+            this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.Size = new System.Drawing.Size(564, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
@@ -106,8 +108,9 @@
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.openToolStripMenuItem.Text = "&Open Script File";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
@@ -115,45 +118,47 @@
             this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.saveToolStripMenuItem.Text = "&Save File";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Shift+S";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.saveAsToolStripMenuItem.Text = "Save File &As";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(209, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(204, 6);
             // 
             // printToolStripMenuItem
             // 
             this.printToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
             this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.printToolStripMenuItem.Text = "&Import Script Block";
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.printToolStripMenuItem.Text = "&Import Message";
             // 
             // printPreviewToolStripMenuItem
             // 
             this.printPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.printPreviewToolStripMenuItem.Text = "&Export Script Block";
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.printPreviewToolStripMenuItem.Text = "Export Message";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(209, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(204, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             // 
             // editToolStripMenuItem
@@ -168,14 +173,14 @@
             // directBlockEditToolStripMenuItem
             // 
             this.directBlockEditToolStripMenuItem.Name = "directBlockEditToolStripMenuItem";
-            this.directBlockEditToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.directBlockEditToolStripMenuItem.Text = "Direct &Block Edit";
+            this.directBlockEditToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.directBlockEditToolStripMenuItem.Text = "Edit Message Code";
             // 
             // directLineEditToolStripMenuItem
             // 
             this.directLineEditToolStripMenuItem.Name = "directLineEditToolStripMenuItem";
-            this.directLineEditToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.directLineEditToolStripMenuItem.Text = "Direct &Line Edit";
+            this.directLineEditToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.directLineEditToolStripMenuItem.Text = "Edit Single Line Code";
             // 
             // toolsToolStripMenuItem
             // 
@@ -214,7 +219,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.LB_BlockList);
+            this.splitContainer1.Panel1.Controls.Add(this.LB_MessageList);
             this.splitContainer1.Panel1MinSize = 130;
             // 
             // splitContainer1.Panel2
@@ -240,14 +245,15 @@
             this.splitContainer1.SplitterDistance = 130;
             this.splitContainer1.TabIndex = 1;
             // 
-            // LB_BlockList
+            // LB_MessageList
             // 
-            this.LB_BlockList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LB_BlockList.FormattingEnabled = true;
-            this.LB_BlockList.Location = new System.Drawing.Point(0, 0);
-            this.LB_BlockList.Name = "LB_BlockList";
-            this.LB_BlockList.Size = new System.Drawing.Size(128, 510);
-            this.LB_BlockList.TabIndex = 0;
+            this.LB_MessageList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LB_MessageList.FormattingEnabled = true;
+            this.LB_MessageList.Location = new System.Drawing.Point(0, 0);
+            this.LB_MessageList.Name = "LB_MessageList";
+            this.LB_MessageList.Size = new System.Drawing.Size(128, 510);
+            this.LB_MessageList.TabIndex = 0;
+            this.LB_MessageList.SelectedIndexChanged += new System.EventHandler(this.LB_MessageList_SelectedIndexChanged);
             // 
             // CHK_Backgrounds
             // 
@@ -259,19 +265,21 @@
             this.CHK_Backgrounds.TabIndex = 35;
             this.CHK_Backgrounds.Text = "Use Backgrounds:";
             this.CHK_Backgrounds.UseVisualStyleBackColor = true;
+            this.CHK_Backgrounds.CheckedChanged += new System.EventHandler(this.CHK_Backgrounds_CheckedChanged);
             // 
             // CB_Textbox
             // 
             this.CB_Textbox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CB_Textbox.FormattingEnabled = true;
             this.CB_Textbox.Items.AddRange(new object[] {
             "Standard",
             "Nohr",
             "Hoshido"});
             this.CB_Textbox.Location = new System.Drawing.Point(101, 354);
+            this.CB_Textbox.MaxDropDownItems = 3;
             this.CB_Textbox.Name = "CB_Textbox";
             this.CB_Textbox.Size = new System.Drawing.Size(121, 21);
             this.CB_Textbox.TabIndex = 34;
+            this.CB_Textbox.SelectedIndexChanged += new System.EventHandler(this.CB_Textbox_SelectedIndexChanged);
             // 
             // LBL_Textbox
             // 
@@ -299,6 +307,7 @@
             this.TB_ProtagName.Name = "TB_ProtagName";
             this.TB_ProtagName.Size = new System.Drawing.Size(100, 20);
             this.TB_ProtagName.TabIndex = 33;
+            this.TB_ProtagName.TextChanged += new System.EventHandler(this.TB_ProtagName_TextChanged);
             // 
             // LBL_Emotion
             // 
@@ -355,22 +364,26 @@
             // 
             // B_Prev
             // 
+            this.B_Prev.Enabled = false;
             this.B_Prev.Location = new System.Drawing.Point(13, 399);
             this.B_Prev.Name = "B_Prev";
             this.B_Prev.Size = new System.Drawing.Size(100, 20);
             this.B_Prev.TabIndex = 32;
             this.B_Prev.Text = "<-----";
             this.B_Prev.UseVisualStyleBackColor = true;
+            this.B_Prev.Click += new System.EventHandler(this.B_Prev_Click);
             // 
             // B_Next
             // 
             this.B_Next.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.B_Next.Enabled = false;
             this.B_Next.Location = new System.Drawing.Point(316, 399);
             this.B_Next.Name = "B_Next";
             this.B_Next.Size = new System.Drawing.Size(100, 20);
             this.B_Next.TabIndex = 31;
             this.B_Next.Text = "----->";
             this.B_Next.UseVisualStyleBackColor = true;
+            this.B_Next.Click += new System.EventHandler(this.B_Next_Click);
             // 
             // LBL_MessageInfo
             // 
@@ -392,6 +405,7 @@
             this.TB_CurrentLine.Name = "TB_CurrentLine";
             this.TB_CurrentLine.Size = new System.Drawing.Size(403, 73);
             this.TB_CurrentLine.TabIndex = 1;
+            this.TB_CurrentLine.TextChanged += new System.EventHandler(this.TB_CurrentLine_TextChanged);
             // 
             // PB_TextBox
             // 
@@ -448,7 +462,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.PictureBox PB_TextBox;
         private System.Windows.Forms.TextBox TB_CurrentLine;
-        private System.Windows.Forms.ListBox LB_BlockList;
+        private System.Windows.Forms.ListBox LB_MessageList;
         private System.Windows.Forms.Label LBL_MessageInfo;
         private System.Windows.Forms.CheckBox CHK_Backgrounds;
         private System.Windows.Forms.ComboBox CB_Textbox;

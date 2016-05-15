@@ -1,6 +1,6 @@
 ﻿namespace FEITS.Model
 {
-    class Command
+    public class Command
     {
         public string cmd;
         public int numParams;

@@ -55,7 +55,7 @@
             this.B_Export.TabIndex = 2;
             this.B_Export.Text = "Export Line";
             this.B_Export.UseVisualStyleBackColor = true;
-            this.B_Export.Click += new System.EventHandler(this.B_Export_Click);
+            //this.B_Export.Click += new System.EventHandler(this.B_Export_Click);
             // 
             // TB_Line
             // 
@@ -71,8 +71,8 @@
             this.TB_Line.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.TB_Line.Size = new System.Drawing.Size(355, 120);
             this.TB_Line.TabIndex = 1;
-            this.TB_Line.TextChanged += new System.EventHandler(this.TB_Line_TextChanged);
-            this.TB_Line.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_Line_KeyDown);
+            //this.TB_Line.TextChanged += new System.EventHandler(this.TB_Line_TextChanged);
+            //this.TB_Line.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_Line_KeyDown);
             // 
             // CB_TB
             // 
@@ -83,7 +83,7 @@
             this.CB_TB.Name = "CB_TB";
             this.CB_TB.Size = new System.Drawing.Size(82, 21);
             this.CB_TB.TabIndex = 3;
-            this.CB_TB.SelectedIndexChanged += new System.EventHandler(this.CB_TB_SelectedIndexChanged);
+            //this.CB_TB.SelectedIndexChanged += new System.EventHandler(this.CB_TB_SelectedIndexChanged);
             // 
             // LBL_TBType
             // 

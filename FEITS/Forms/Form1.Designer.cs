@@ -65,8 +65,6 @@
             this.PB_TextBox.Size = new System.Drawing.Size(400, 240);
             this.PB_TextBox.TabIndex = 0;
             this.PB_TextBox.TabStop = false;
-            this.PB_TextBox.Click += new System.EventHandler(this.PB_TextBox_Click);
-            this.PB_TextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.PB_TextBox_DragDrop);
             // 
             // TB_CurrentLine
             // 
@@ -81,8 +79,6 @@
             this.TB_CurrentLine.Name = "TB_CurrentLine";
             this.TB_CurrentLine.Size = new System.Drawing.Size(390, 77);
             this.TB_CurrentLine.TabIndex = 1;
-            this.TB_CurrentLine.TextChanged += new System.EventHandler(this.TB_CurrentLine_TextChanged);
-            this.TB_CurrentLine.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_CurrentLine_KeyDown);
             // 
             // B_ExportNewScript
             // 
@@ -93,7 +89,6 @@
             this.B_ExportNewScript.TabIndex = 5;
             this.B_ExportNewScript.Text = "Export";
             this.B_ExportNewScript.UseVisualStyleBackColor = true;
-            this.B_ExportNewScript.Click += new System.EventHandler(this.B_ExportNewScript_Click);
             // 
             // B_LoadScript
             // 
@@ -104,7 +99,6 @@
             this.B_LoadScript.TabIndex = 4;
             this.B_LoadScript.Text = "Import";
             this.B_LoadScript.UseVisualStyleBackColor = true;
-            this.B_LoadScript.Click += new System.EventHandler(this.B_LoadScript_Click);
             // 
             // B_HalfBox
             // 
@@ -115,7 +109,6 @@
             this.B_HalfBox.TabIndex = 7;
             this.B_HalfBox.Text = "Half-Box Edit";
             this.B_HalfBox.UseVisualStyleBackColor = true;
-            this.B_HalfBox.Click += new System.EventHandler(this.B_Settings_Click);
             // 
             // B_Next
             // 
@@ -126,7 +119,6 @@
             this.B_Next.TabIndex = 2;
             this.B_Next.Text = "----->";
             this.B_Next.UseVisualStyleBackColor = true;
-            this.B_Next.Click += new System.EventHandler(this.B_Next_Click);
             // 
             // B_Prev
             // 
@@ -136,7 +128,6 @@
             this.B_Prev.TabIndex = 3;
             this.B_Prev.Text = "<-----";
             this.B_Prev.UseVisualStyleBackColor = true;
-            this.B_Prev.Click += new System.EventHandler(this.B_Prev_Click);
             // 
             // B_EditLineScript
             // 
@@ -147,7 +138,6 @@
             this.B_EditLineScript.TabIndex = 6;
             this.B_EditLineScript.Text = "Direct Edit";
             this.B_EditLineScript.UseVisualStyleBackColor = true;
-            this.B_EditLineScript.Click += new System.EventHandler(this.B_EditLineScript_Click);
             // 
             // LBL_ActiveChar
             // 
@@ -219,7 +209,6 @@
             this.TB_ProtagName.Name = "TB_ProtagName";
             this.TB_ProtagName.Size = new System.Drawing.Size(100, 20);
             this.TB_ProtagName.TabIndex = 8;
-            this.TB_ProtagName.TextChanged += new System.EventHandler(this.TB_ProtagName_TextChanged);
             // 
             // LBL_ProtagName
             // 
@@ -252,7 +241,6 @@
             this.CB_Textbox.Name = "CB_Textbox";
             this.CB_Textbox.Size = new System.Drawing.Size(121, 21);
             this.CB_Textbox.TabIndex = 9;
-            this.CB_Textbox.SelectedIndexChanged += new System.EventHandler(this.CB_Textbox_SelectedIndexChanged);
             // 
             // CHK_Backgrounds
             // 
@@ -264,7 +252,6 @@
             this.CHK_Backgrounds.TabIndex = 10;
             this.CHK_Backgrounds.Text = "Use Backgrounds:";
             this.CHK_Backgrounds.UseVisualStyleBackColor = true;
-            this.CHK_Backgrounds.CheckedChanged += new System.EventHandler(this.CHK_Backgrounds_CheckedChanged);
             // 
             // MainForm
             // 
