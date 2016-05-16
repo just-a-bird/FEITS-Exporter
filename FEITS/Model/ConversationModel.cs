@@ -185,7 +185,7 @@ namespace FEITS.Model
                 }
             }
 
-            line.SpeechIndex = line.RawLine.IndexOf(line.SpokenText);
+            line.SpeechIndex = line.RawLine.LastIndexOf(line.SpokenText);
             line.RawLine = line.RawLine.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
             line.SpokenText.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
             line.SpokenText = line.SpokenText.Replace("\n", Environment.NewLine);

@@ -71,6 +71,12 @@
   <ItemGroup>
     <Compile Include="Controller\IMainView.cs" />
     <Compile Include="Controller\MainController.cs" />
+    <Compile Include="Forms\LoadingMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LoadingMessage.Designer.cs">
+      <DependentUpon>LoadingMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\ConversationTypes.cs" />
     <Compile Include="Model\ConversationModel.cs" />
@@ -125,6 +131,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HalfBoxTester.resx">
       <DependentUpon>HalfBoxTester.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LoadingMessage.resx">
+      <DependentUpon>LoadingMessage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -11,7 +11,7 @@ namespace FEITS.Model
     public class ParsedFileContainer
     {
         public string FilePathAndName;
-        public string Header;
+        public string[] Header;
         public List<MessageBlock> MessageList;
 
         public ParsedFileContainer()
@@ -26,10 +26,11 @@ namespace FEITS.Model
         public void EmptyFileData()
         {
             FilePathAndName = string.Empty;
-            Header = string.Empty;
+            Header = null;
             MessageList = new List<MessageBlock>();
         }
 
+        #region Loading
         /// <summary>
         /// Reads lines from specified file
         /// and parses the information
@@ -39,21 +40,24 @@ namespace FEITS.Model
         {
             if(fileName != string.Empty)
             {
+                EmptyFileData();
+
                 //Store the file path
                 FilePathAndName = fileName;
 
                 //Store text into an array split by line breaks
                 string[] fileLines = File.ReadAllLines(fileName);
+                //int messageProgress;
 
                 //Parse for header and message blocks
-                if(fileLines[0].StartsWith("MESS_"))
+                if (fileLines[0].StartsWith("MESS_"))
                 {
                     //Find where the header ends
                     //Should be after "Message Name: Message"
                     int headerEndIndex = 0;
-                    for(int i = 0; i < fileLines.Length; i++)
+                    for (int i = 0; i < fileLines.Length; i++)
                     {
-                        if(fileLines[i].Contains(":"))
+                        if (fileLines[i].Contains(":"))
                         {
                             if (headerEndIndex != 0)
                             {
@@ -69,21 +73,19 @@ namespace FEITS.Model
                     }
 
                     //If we found the header, add it to Header
-                    if(headerEndIndex != 0)
+                    if (headerEndIndex != 0)
                     {
-                        string newHeader = string.Empty;
-                        for(int i = 0; i < headerEndIndex; i++)
+                        Header = new string[headerEndIndex];
+                        for (int i = 0; i < headerEndIndex; i++)
                         {
-                            newHeader += fileLines[i];
+                            Header[i] = fileLines[i];
                         }
 
-                        Header = newHeader;
-
                         //Create messages from the rest of the lines
-                        for(int i = headerEndIndex; i < fileLines.Length; i++)
+                        for (int i = headerEndIndex; i < fileLines.Length; i++)
                         {
                             //Separate the prefix from the message itself
-                            if(fileLines[i].Contains(":"))
+                            if (fileLines[i].Contains(":"))
                             {
                                 MessageBlock newMessage = new MessageBlock();
                                 int prefixIndex = fileLines[i].IndexOf(":");
@@ -93,13 +95,13 @@ namespace FEITS.Model
                                 string message = fileLines[i].Substring(prefixIndex + 2);
 
                                 //Make sure we didn't leave any prefix stuff behind
-                                if(message.StartsWith(":"))
+                                if (message.StartsWith(":"))
                                 {
                                     message = message.Remove(0, 2);
 
                                     return false;
                                 }
-                                else if(char.IsWhiteSpace(message[0]))
+                                else if (char.IsWhiteSpace(message[0]))
                                 {
                                     message = message.Remove(0, 1);
                                 }
@@ -115,6 +117,7 @@ namespace FEITS.Model
                                 MessageBox.Show("Error: Message lines don't appear to be formatted correctly. Please make sure each message is preceeded with a Message Name.");
                                 return false;
                             }
+                            //messageProgress = (int)((float)i / fileLines.Length * 100);
                         }
                     }
                     else
@@ -125,7 +128,7 @@ namespace FEITS.Model
                 }
                 else
                 {
-                    MessageBox.Show("Error: File contents don't appear to be formatted correctly. Please make sure the formatting is correct.");
+                    MessageBox.Show("Error: File contents don't appear to be formatted correctly. Please make sure the formatting is correct and the file is compatible with FEITS.");
                     return false;
                 }
             }
@@ -139,7 +142,9 @@ namespace FEITS.Model
 
             return true;
         }
+        #endregion
 
+        #region Saving
         /// <summary>
         /// Compiles the message list and
         /// writes contents with header to file.
@@ -153,7 +158,11 @@ namespace FEITS.Model
                 FilePathAndName = fileName;
 
                 //Start compiling a string to make up the new file
-                string newFileText = Header + Environment.NewLine;
+                string newFileText = string.Empty;
+                foreach(string str in Header)
+                {
+                    newFileText += str + Environment.NewLine;
+                }
 
                 foreach (MessageBlock msg in MessageList)
                 {
@@ -169,5 +178,6 @@ namespace FEITS.Model
                 return false;
             }
         }
+        #endregion
     }
 }

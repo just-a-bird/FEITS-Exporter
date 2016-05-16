@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FEITS.Model;
 using FEITS.Properties;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace FEITS.Controller
 {
@@ -45,7 +46,7 @@ namespace FEITS.Controller
             {
                 try
                 {
-                    if(fileCont.LoadFromFile(openDialog.FileName))
+                    if (fileCont.LoadFromFile(openDialog.FileName))
                     {
                         Console.WriteLine("File opened successfully.");
                         mainView.SetMessageList(fileCont.MessageList);
@@ -178,7 +179,7 @@ namespace FEITS.Controller
         {
             conv.CurrentMessage.MessageLines[conv.LineIndex].SpokenText = mainView.CurrentLine;
 
-            if(conv.CurrentMessage != null)
+            if (conv.CurrentMessage != null)
                 mainView.PreviewImage = conv.RenderPreviewBox(mainView.CurrentLine);
         }
 

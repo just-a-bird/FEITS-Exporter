@@ -35,7 +35,7 @@ namespace FEITS.Model
                 else
                     oldDialogue = RawLine.Substring(SpeechIndex);
 
-                RawLine = RawLine.Replace(oldDialogue, SpokenText);
+                RawLine = RawLine.Substring(0, SpeechIndex) + SpokenText + RawLine.Substring(SpeechIndex + oldDialogue.Length);
             }
 
             RawLine = RawLine.Replace(Environment.NewLine, "\\n");
