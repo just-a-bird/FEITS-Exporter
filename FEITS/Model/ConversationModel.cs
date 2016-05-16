@@ -1,5 +1,6 @@
 ﻿using FEITS.Properties;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -42,7 +43,7 @@ namespace FEITS.Model
         public string CharA { get { return charA; } }
         private string charB = string.Empty;
         public string CharB { get { return charB; } }
-        private int charSide;
+        private int charSide = -1;
         public int CharSide { get { return charSide; } }
         private const string defaultEmotion = "通常,";
         private string emotionA = defaultEmotion;
@@ -68,6 +69,7 @@ namespace FEITS.Model
             hasPerms = setType = false;
             charActive = charA = charB = string.Empty;
             emotionA = emotionB = defaultEmotion;
+            charSide = -1;
             ConversationType = ConversationTypes.Type1;
         }
 
@@ -83,86 +85,110 @@ namespace FEITS.Model
 
         public string GetParsedCommands(MessageLine line)
         {
-            if (!line.CommandsParsed)
-                line.ParseLineCommands();
-
-            //$E
-            if(line.Emotion != string.Empty)
+            if(line.SpokenText != string.Empty)
             {
-                if(charActive != string.Empty && charActive == charB)
-                    emotionB = line.Emotion;
-                else
-                    emotionA = line.Emotion;
+                line.UpdateRawWithNewDialogue();
+                line.RawLine = line.RawLine.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
             }
 
-            //$Ws
-            if(line.CharacterActive != string.Empty)
-            {
-                charActive = line.CharacterActive;
-            }
+            line.SpokenText = line.RawLine;
 
-            //$Wm
-            if(line.CharacterSide != -1)
+            for(int i = 0; i < line.SpokenText.Length; i++)
             {
-                charSide = line.CharacterSide;
-
-                if (ConversationType == ConversationTypes.Type1)
+                if(line.SpokenText[i] == '$')
                 {
-                    if (charSide == 3)
+                    Tuple<string, Command> res = MessageBlock.ParseCommand(line.SpokenText, i);
+                    line.SpokenText = res.Item1;
+
+                    if (res.Item2.numParams > 0)
+                        if (res.Item2.Params[0] == "ベロア")
+                            res.Item2.Params[0] = "べロア"; // Velour Fix
+
+                    switch(res.Item2.cmd)
                     {
-                        charA = line.CharacterA;
-                        emotionA = defaultEmotion;
+                        case "$E":
+                            if (charActive != string.Empty && charActive == charB)
+                                emotionB = res.Item2.Params[0];
+                            else
+                                emotionA = res.Item2.Params[0];
+                            break;
+                        case "$Ws":
+                            charActive = res.Item2.Params[0];
+                            break;
+                        case "$Wm":
+                            charSide = Convert.ToInt32(res.Item2.Params[1]);
+
+                            if(ConversationType == ConversationTypes.Type1)
+                            {
+                                if(charSide == 3)
+                                {
+                                    charA = res.Item2.Params[0];
+                                    emotionA = defaultEmotion;
+                                }
+                                else if(charSide == 7)
+                                {
+                                    charB = res.Item2.Params[0];
+                                    emotionB = defaultEmotion;
+                                }
+                            }
+                            else
+                            {
+                                if(charSide == 0| charSide == 2)
+                                {
+                                    charA = res.Item2.Params[0];
+                                    emotionA = defaultEmotion;
+                                }
+                                else if(charSide == 6)
+                                {
+                                    charB = res.Item2.Params[0];
+                                    emotionB = defaultEmotion;
+                                }
+                            }
+                            break;
+                        case "$Wd":
+                            if(charActive == charB)
+                            {
+                                charActive = charA;
+                                charB = string.Empty;
+                            }
+                            else
+                            {
+                                charA = string.Empty;
+                            }
+                            break;
+                        case "$a":
+                            hasPerms = true;
+                            break;
+                        case "$t0":
+                            if (!setType)
+                                ConversationType = ConversationTypes.Type0;
+                            setType = true;
+                            break;
+                        case "$t1":
+                            if (!setType)
+                                ConversationType = ConversationTypes.Type1;
+                            setType = true;
+                            break;
+                        case "$Nu":
+                            line.SpokenText = line.SpokenText.Substring(0, i) + "$Nu" + line.SpokenText.Substring(i);
+                            i += 2;
+                            break;
+                        case "$Wa":
+                            break;
+                        case "$Wc":
+                            break;
+                        default:
+                            break;
                     }
-                    else if (charSide == 7)
-                    {
-                        charB = line.CharacterB;
-                        emotionB = defaultEmotion;
-                    }
-                }
-                else
-                {
-                    if (charSide == 0 || charSide == 2)
-                    {
-                        charA = line.CharacterA;
-                        emotionA = defaultEmotion;
-                    }
-                    else if (charSide == 6)
-                    {
-                        charB = line.CharacterB;
-                        emotionB = defaultEmotion;
-                    }
+
+                    i--;
                 }
             }
 
-            //$Wd
-            if(line.Wd)
-            {
-                if(charActive == charB)
-                {
-                    charActive = charA;
-                    charB = string.Empty;
-                }
-                else
-                {
-                    charA = string.Empty;
-                }
-            }
-
-            //$a
-            if(!hasPerms)
-            {
-                if(line.HasPerms)
-                {
-                    hasPerms = true;
-                }
-            }
-
-            //$t0 & $t1
-            if(line.SetType && !setType)
-            {
-                ConversationType = line.ConversationType;
-                setType = true;
-            }
+            line.SpeechIndex = line.RawLine.IndexOf(line.SpokenText);
+            line.RawLine = line.RawLine.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
+            line.SpokenText.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
+            line.SpokenText = line.SpokenText.Replace("\n", Environment.NewLine);
 
             return line.SpokenText;
         }

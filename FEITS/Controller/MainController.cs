@@ -35,7 +35,7 @@ namespace FEITS.Controller
         public void OpenFile()
         {
             OpenFileDialog openDialog = new OpenFileDialog();
-            openDialog.Filter = "Text files (*.txt)|*.txt|All files(*.*)|*.*";
+            openDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             openDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             if (fileCont.FilePathAndName != string.Empty)

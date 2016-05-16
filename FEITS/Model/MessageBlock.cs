@@ -23,8 +23,10 @@ namespace FEITS.Model
         /// <param name="message">The message to parse</param>
         public void ParseMessage(string message)
         {
+            message = message.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
+
             //Split the lines based on the line-end markers
-            var delimiters = new List<string> { "$k$p", "$\\n" };
+            var delimiters = new List<string> { "$k$p", "$k\\n" };
             string pattern = "(?<=" + string.Join("|", delimiters.Select(d => Regex.Escape(d)).ToArray()) + ")";
             string[] splits = Regex.Split(message, pattern);
 
@@ -35,8 +37,6 @@ namespace FEITS.Model
             {
                 MessageLine newLine = new MessageLine();
                 newLine.RawLine = str;
-                newLine.ParseLineCommands();
-
                 messageLines.Add(newLine);
             }
         }
@@ -119,6 +119,12 @@ namespace FEITS.Model
                     int index2 = line.IndexOf("|", index + 1);
 
                     if(delim == "$Wm")
+                    {
+                        newCmd.Params[0] = line.Substring(offset + delim.Length, index - (offset + delim.Length));
+                        newCmd.Params[1] = line.Substring(index + 1, 1);
+                        line = line.Substring(0, offset) + line.Substring(index + 2);
+                    }
+                    else
                     {
                         newCmd.Params[0] = line.Substring(offset + delim.Length, index - (offset + delim.Length));
                         newCmd.Params[1] = line.Substring(index + 1, index2 - (index + 1));

@@ -87,15 +87,15 @@ namespace FEITS.Model
                             {
                                 MessageBlock newMessage = new MessageBlock();
                                 int prefixIndex = fileLines[i].IndexOf(":");
-                                newMessage.Prefix = fileLines[i].Substring(0, prefixIndex + 1);
+                                newMessage.Prefix = fileLines[i].Substring(0, prefixIndex);
 
                                 //Get the message by itself
-                                string message = fileLines[i].Substring(prefixIndex + 1);
+                                string message = fileLines[i].Substring(prefixIndex + 2);
 
-                                //Make sure we haven't messed up
+                                //Make sure we didn't leave any prefix stuff behind
                                 if(message.StartsWith(":"))
                                 {
-                                    MessageBox.Show("Error: There is a bug in the parsing code. Please inform the programmer of this issue.");
+                                    message = message.Remove(0, 2);
 
                                     return false;
                                 }
