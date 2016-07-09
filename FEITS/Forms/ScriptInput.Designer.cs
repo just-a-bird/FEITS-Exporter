@@ -1,6 +1,6 @@
-﻿namespace FEITS
+﻿namespace FEITS.View
 {
-    partial class ScriptInput
+    public partial class ScriptInput
     {
         /// <summary>
         /// Required designer variable.
@@ -41,7 +41,7 @@
             this.B_LoadScript.Name = "B_LoadScript";
             this.B_LoadScript.Size = new System.Drawing.Size(80, 25);
             this.B_LoadScript.TabIndex = 2;
-            this.B_LoadScript.Text = "Load Script";
+            this.B_LoadScript.Text = "Import";
             this.B_LoadScript.UseVisualStyleBackColor = true;
             // 
             // B_Cancel
@@ -68,8 +68,7 @@
             this.TB_ScriptInput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.TB_ScriptInput.Size = new System.Drawing.Size(390, 206);
             this.TB_ScriptInput.TabIndex = 1;
-            //this.TB_ScriptInput.TextChanged += new System.EventHandler(this.TB_ScriptInput_TextChanged);
-            //this.TB_ScriptInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_ScriptInput_KeyDown);
+            this.TB_ScriptInput.TextChanged += new System.EventHandler(this.TB_ScriptInput_TextChanged);
             // 
             // LBL_Warning
             // 
@@ -96,6 +95,7 @@
             this.Name = "ScriptInput";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Script Input";
             this.ResumeLayout(false);
             this.PerformLayout();

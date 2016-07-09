@@ -114,7 +114,7 @@ namespace FEITS.Model
                             }
                             else
                             {
-                                MessageBox.Show("Error: Message lines don't appear to be formatted correctly. Please make sure each message is preceeded with a Message Name.");
+                                MessageBox.Show("Message lines don't appear to be formatted correctly. Please make sure each message is preceeded with a Message Name.", "Error");
                                 return false;
                             }
                             //messageProgress = (int)((float)i / fileLines.Length * 100);
@@ -122,13 +122,13 @@ namespace FEITS.Model
                     }
                     else
                     {
-                        MessageBox.Show("Error: File header doesn't appear to be formatted correctly. Please make sure the formatting is correct.");
+                        MessageBox.Show("File header doesn't appear to be formatted correctly. Please make sure the formatting is correct.", "Error");
                         return false;
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Error: File contents don't appear to be formatted correctly. Please make sure the formatting is correct and the file is compatible with FEITS.");
+                    MessageBox.Show("File contents don't appear to be formatted correctly. Please make sure the formatting is correct and the file is compatible with FEITS.", "Error");
                     return false;
                 }
             }
@@ -138,6 +138,25 @@ namespace FEITS.Model
                 FilePathAndName = fileName;
                 Console.WriteLine("Opened file was empty; treating as a new object and keeping the file path.");
                 return true;
+            }
+
+            return true;
+        }
+
+        public bool LoadFromString(string messageString)
+        {
+            EmptyFileData();
+
+            try
+            {
+                MessageBlock newMessage = new MessageBlock();
+                newMessage.Prefix = "Imported Message";
+                newMessage.ParseMessage(messageString);
+                MessageList.Add(newMessage);
+            }
+            catch
+            {
+                return false;
             }
 
             return true;

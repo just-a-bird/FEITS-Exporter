@@ -69,13 +69,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\IExportImportView.cs" />
     <Compile Include="Controller\IMainView.cs" />
+    <Compile Include="Controller\ImportExportController.cs" />
     <Compile Include="Controller\MainController.cs" />
-    <Compile Include="Forms\LoadingMessage.cs">
+    <Compile Include="Forms\CompactMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\LoadingMessage.Designer.cs">
-      <DependentUpon>LoadingMessage.cs</DependentUpon>
+    <Compile Include="Forms\CompactMainForm.Designer.cs">
+      <DependentUpon>CompactMainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\ConversationTypes.cs" />
@@ -123,6 +125,9 @@
     <Compile Include="Forms\ScriptInput.Designer.cs">
       <DependentUpon>ScriptInput.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forms\CompactMainForm.resx">
+      <DependentUpon>CompactMainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -131,9 +136,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HalfBoxTester.resx">
       <DependentUpon>HalfBoxTester.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LoadingMessage.resx">
-      <DependentUpon>LoadingMessage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -154,6 +156,7 @@
     <EmbeddedResource Include="Forms\ScriptInput.resx">
       <DependentUpon>ScriptInput.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\DataSources\FEITS.Properties.Resources.datasource" />
     <None Include="Properties\DataSources\FEITS.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">

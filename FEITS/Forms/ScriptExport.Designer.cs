@@ -1,4 +1,4 @@
-﻿namespace FEITS
+﻿namespace FEITS.View
 {
     partial class ScriptExport
     {
@@ -87,6 +87,7 @@
             this.Name = "ScriptExport";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Script Export";
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -10,9 +10,6 @@ namespace FEITS.Controller
         //Message controls
         int MsgListIndex { get; set; }
         string CurrentLine { get; set; }
-        string ActiveCharacter { get; set; }
-        string CharacterPortrait { get; set; }
-        string Emotion { get; set; }
         bool PrevLine { get; set; }
         bool NextLine { get; set; }
         Image PreviewImage { get; set; }

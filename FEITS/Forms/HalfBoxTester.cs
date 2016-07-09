@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace FEITS.Forms
+namespace FEITS.View
 {
     public partial class HalfBoxTester : Form
     {

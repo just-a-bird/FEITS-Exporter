@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using FEITS.Model;
-using FEITS.Properties;
+using FEITS.View;
 using System.Windows.Forms;
 using System.ComponentModel;
 
@@ -58,7 +58,7 @@ namespace FEITS.Controller
                 }
                 catch(Exception ex)
                 {
-                    MessageBox.Show("Error: Could not read the file. Original error: " + ex.Message);
+                    MessageBox.Show(ex.Message, "Error: Could Not Read File");
                 }
             }
         }
@@ -110,11 +110,33 @@ namespace FEITS.Controller
 
         public void ImportMessageScript()
         {
+            ScriptInput messageImporter = new ScriptInput();
+            ImportExportController importCont = new ImportExportController(messageImporter, "");
+            DialogResult dialogResult = messageImporter.ShowDialog();
 
+            if(dialogResult == DialogResult.OK)
+            {
+                if (fileCont.LoadFromString(importCont.MessageScript))
+                {
+                    Console.WriteLine("Message Imported Successfully.");
+                    mainView.SetMessageList(fileCont.MessageList);
+                }
+                else
+                {
+                    MessageBox.Show("There was a problem importing the message. Please double-check the text and try again.", "Error");
+                }
+            }
+
+            messageImporter.Dispose();
         }
 
         public void ExportMessageScript()
         {
+            ScriptExport messageExporter = new ScriptExport();
+            ImportExportController exportCont = new ImportExportController(messageExporter, conv.CurrentMessage.CompileMessage(false));
+            DialogResult dialogResult = messageExporter.ShowDialog();
+
+            messageExporter.Dispose();
 
         }
 
@@ -133,9 +155,19 @@ namespace FEITS.Controller
 
         }
 
+        public void OpenSettingsMenu()
+        {
+
+        }
+
         public void ShowFriendlyReminder()
         {
 
+        }
+
+        public void ExitApplication()
+        {
+            Application.Exit();
         }
         #endregion
 
@@ -170,9 +202,6 @@ namespace FEITS.Controller
             mainView.CurrentLine = conv.GetParsedCommands(conv.CurrentMessage.MessageLines[conv.LineIndex]);
             mainView.PrevLine = (conv.LineIndex > 0) ? true : false;
             mainView.NextLine = (conv.LineIndex < conv.CurrentMessage.MessageLines.Count - 1) ? true : false;
-            mainView.ActiveCharacter = conv.CharActive;
-            mainView.CharacterPortrait = (conv.CharSide == (0 | 2 | 3)) ? conv.CharA : conv.CharB;
-            mainView.Emotion = (conv.CharActive == conv.CharA) ? conv.EmotionA : conv.EmotionB;
         }
 
         public void OnMsgLineChanged()

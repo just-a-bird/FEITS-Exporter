@@ -1,4 +1,4 @@
-﻿namespace FEITS.Forms
+﻿namespace FEITS.View
 {
     partial class HalfBoxTester
     {

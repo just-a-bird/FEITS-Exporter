@@ -16,6 +16,7 @@ namespace FEITS.Model
     {
         //Font
         private static bool[] validCharacters;
+        public static bool[] ValidCharacters { get { return validCharacters; } }
         private static FontCharacter[] characters;
         private static Image[] Images = { Resources.Awakening_0, Resources.Awakening_1 };
 
@@ -29,7 +30,7 @@ namespace FEITS.Model
 
         static TextGeneration()
         {
-            //Set up font characters
+            //Set up font, generate list of valid chars
             validCharacters = new bool[0x10000];
             characters = new FontCharacter[0x10000];
             for (int i = 0; i < Resources.chars.Length / 0x10; i++)

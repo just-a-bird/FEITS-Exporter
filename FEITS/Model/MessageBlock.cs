@@ -99,8 +99,8 @@ namespace FEITS.Model
             {
                 if(trunc.StartsWith(delim))
                 {
-                    Console.WriteLine(delim);
-                    Console.WriteLine(trunc);
+                    //Console.WriteLine(delim);
+                    //Console.WriteLine(trunc);
                     newCmd.cmd = delim;
                     newCmd.numParams = 1;
                     newCmd.Params = new string[newCmd.numParams];
@@ -140,11 +140,15 @@ namespace FEITS.Model
         }
         #endregion
 
-        public string CompileMessage()
+        public string CompileMessage(bool includePrefix = true)
         {
             //Recompile the message with the prefix and all lines
-            string combinedLines = (prefix != string.Empty ? prefix + ": " : string.Empty);
-            foreach(MessageLine line in messageLines)
+            string combinedLines = string.Empty;
+
+            if (includePrefix)
+                combinedLines = (prefix != string.Empty ? prefix + ": " : string.Empty);
+
+            foreach (MessageLine line in messageLines)
             {
                 line.UpdateRawWithNewDialogue();
                 combinedLines += line.RawLine;

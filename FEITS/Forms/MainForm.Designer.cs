@@ -410,7 +410,7 @@
             // PB_TextBox
             // 
             this.PB_TextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.PB_TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PB_TextBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.PB_TextBox.Location = new System.Drawing.Point(16, 3);
             this.PB_TextBox.Name = "PB_TextBox";
             this.PB_TextBox.Size = new System.Drawing.Size(400, 240);
