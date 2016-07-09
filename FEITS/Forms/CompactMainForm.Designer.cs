@@ -45,6 +45,7 @@
             this.M_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_EditLine = new System.Windows.Forms.ToolStripMenuItem();
+            this.MI_Message = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_HalfBox = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_Options = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +60,6 @@
             this.B_NextLine = new System.Windows.Forms.Button();
             this.RTB_CurrentLine = new System.Windows.Forms.RichTextBox();
             this.PB_PreviewBox = new System.Windows.Forms.PictureBox();
-            this.MI_Message = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -212,6 +212,14 @@
             this.MI_EditLine.Text = "Edit Raw &Line";
             this.MI_EditLine.Click += new System.EventHandler(this.MI_EditLine_Click);
             // 
+            // MI_Message
+            // 
+            this.MI_Message.Name = "MI_Message";
+            this.MI_Message.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+            this.MI_Message.Size = new System.Drawing.Size(213, 22);
+            this.MI_Message.Text = "Edit Raw &Message";
+            this.MI_Message.Click += new System.EventHandler(this.MI_Message_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -341,9 +349,13 @@
             // RTB_CurrentLine
             // 
             this.RTB_CurrentLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.RTB_CurrentLine.DetectUrls = false;
+            this.RTB_CurrentLine.EnableAutoDragDrop = true;
+            this.RTB_CurrentLine.Enabled = false;
             this.RTB_CurrentLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RTB_CurrentLine.Location = new System.Drawing.Point(0, 246);
             this.RTB_CurrentLine.Name = "RTB_CurrentLine";
+            this.RTB_CurrentLine.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.RTB_CurrentLine.Size = new System.Drawing.Size(400, 99);
             this.RTB_CurrentLine.TabIndex = 8;
             this.RTB_CurrentLine.Text = "";
@@ -360,14 +372,6 @@
             this.PB_PreviewBox.Size = new System.Drawing.Size(400, 240);
             this.PB_PreviewBox.TabIndex = 7;
             this.PB_PreviewBox.TabStop = false;
-            // 
-            // MI_Message
-            // 
-            this.MI_Message.Name = "MI_Message";
-            this.MI_Message.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-            this.MI_Message.Size = new System.Drawing.Size(213, 22);
-            this.MI_Message.Text = "Edit Raw &Message";
-            this.MI_Message.Click += new System.EventHandler(this.MI_Message_Click);
             // 
             // CompactMainForm
             // 

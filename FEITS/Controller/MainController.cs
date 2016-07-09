@@ -133,8 +133,16 @@ namespace FEITS.Controller
         public void ExportMessageScript()
         {
             ScriptExport messageExporter = new ScriptExport();
-            ImportExportController exportCont = new ImportExportController(messageExporter, conv.CurrentMessage.CompileMessage(false));
-            DialogResult dialogResult = messageExporter.ShowDialog();
+
+            try
+            {
+                ImportExportController exportCont = new ImportExportController(messageExporter, conv.CurrentMessage.CompileMessage(false));
+                DialogResult dialogResult = messageExporter.ShowDialog();
+            }
+            catch
+            {
+                MessageBox.Show("Nothing to export.", "Error",);
+            }
 
             messageExporter.Dispose();
 
@@ -142,12 +150,61 @@ namespace FEITS.Controller
 
         public void EditMessageScript()
         {
+            DirectEdit messageEdit = new DirectEdit();
+            ImportExportController editCont = new ImportExportController(messageEdit, conv.CurrentMessage.CompileMessage(false));
+            DialogResult dialogResult = messageEdit.ShowDialog();
 
+            if(dialogResult == DialogResult.OK)
+            {
+                try
+                {
+                    MessageBlock updatedBlock = new MessageBlock();
+                    updatedBlock.ParseMessage(editCont.MessageScript);
+                    fileCont.MessageList[mainView.MsgListIndex] = updatedBlock;
+                    SetCurrentMessage();
+                }
+                catch
+                {
+                    MessageBox.Show("There was a problem updating the message with new edits. Please try again.", "Error: Could Not Apply Edits");
+                }
+            }
+
+            messageEdit.Dispose();
         }
 
         public void EditMessageLineScript()
         {
+            string rawLine = conv.CurrentMessage.MessageLines[conv.LineIndex].RawLine;
+            rawLine = rawLine.Replace(Environment.NewLine, "\\n").Replace("\n", "\\n");
+            Console.WriteLine(rawLine);
 
+            DirectEdit lineEdit = new DirectEdit();
+            ImportExportController editCont = new ImportExportController(lineEdit, rawLine);
+            DialogResult dialogResult = lineEdit.ShowDialog();
+
+            if(dialogResult == DialogResult.OK)
+            {
+                string newMessage = string.Empty;
+
+                foreach (MessageLine msg in fileCont.MessageList[mainView.MsgListIndex].MessageLines)
+                {
+                    msg.UpdateRawWithNewDialogue();
+                }
+
+                fileCont.MessageList[mainView.MsgListIndex].MessageLines[conv.LineIndex].RawLine = editCont.MessageScript;
+                
+                foreach(MessageLine msg in fileCont.MessageList[mainView.MsgListIndex].MessageLines)
+                {
+                    newMessage += msg.RawLine;
+                }
+
+                MessageBlock updatedBlock = new MessageBlock();
+                updatedBlock.ParseMessage(newMessage);
+                fileCont.MessageList[mainView.MsgListIndex] = updatedBlock;
+                SetCurrentLine();
+            }
+
+            lineEdit.Dispose();
         }
 
         public void OpenHalfBoxEditor()

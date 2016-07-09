@@ -21,11 +21,6 @@ namespace FEITS.View
             cont = controller;
         }
 
-        public int CharacterCount
-        {
-            get { return TB_ScriptInput.TextLength; }
-        }
-
         public string MessageText
         {
             get { return TB_ScriptInput.Text; }

@@ -90,7 +90,15 @@ namespace FEITS.View
 
         private void RTB_CurrentLine_TextChanged(object sender, EventArgs e)
         {
-            cont.OnMsgLineChanged();
+            if (RTB_CurrentLine.TextLength > 0)
+            {
+                RTB_CurrentLine.Enabled = true;
+                cont.OnMsgLineChanged();
+            }
+            else
+            {
+                RTB_CurrentLine.Enabled = false;
+            }
         }
 
         private void B_PrevLine_Click(object sender, EventArgs e)

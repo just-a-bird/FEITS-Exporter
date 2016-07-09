@@ -1,4 +1,4 @@
-﻿namespace FEITS
+﻿namespace FEITS.View
 {
     partial class DirectEdit
     {
@@ -57,7 +57,8 @@
             // 
             // TB_LineEdit
             // 
-            this.TB_LineEdit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TB_LineEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TB_LineEdit.Location = new System.Drawing.Point(12, 12);
             this.TB_LineEdit.MaxLength = 2147483647;
@@ -66,8 +67,7 @@
             this.TB_LineEdit.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.TB_LineEdit.Size = new System.Drawing.Size(390, 120);
             this.TB_LineEdit.TabIndex = 1;
-            //this.TB_LineEdit.TextChanged += new System.EventHandler(this.TB_LineEdit_TextChanged);
-            //this.TB_LineEdit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_LineEdit_KeyDown);
+            this.TB_LineEdit.TextChanged += new System.EventHandler(this.TB_LineEdit_TextChanged);
             // 
             // LBL_Warning
             // 
