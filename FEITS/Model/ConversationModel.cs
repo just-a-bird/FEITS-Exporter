@@ -214,7 +214,7 @@ namespace FEITS.Model
             line = line.Replace(Environment.NewLine, "\n");
 
             //Draw the line's text
-            Bitmap text = TextGeneration.DrawString(new Bitmap(312, 50), line, 0, 22, Color.FromArgb(68, 8, 0)) as Bitmap;
+            Bitmap text = AssetGeneration.DrawString(new Bitmap(312, 50), line, 0, 22, Color.FromArgb(68, 8, 0)) as Bitmap;
 
             using (Graphics g = Graphics.FromImage(tb))
             {
@@ -223,8 +223,8 @@ namespace FEITS.Model
 
             //Name box
             string name = names.ContainsKey(charActive) ? names[charActive] : (charActive == "username" ? PlayerName : charActive);
-            int nameLength = TextGeneration.GetLength(name);
-            Bitmap nb = TextGeneration.DrawString(Resources.NameBox, name, Resources.NameBox.Width / 2 - nameLength / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap;  //Center name in NameBox
+            int nameLength = AssetGeneration.GetLength(name);
+            Bitmap nb = AssetGeneration.DrawString(Resources.NameBox, name, Resources.NameBox.Width / 2 - nameLength / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap;  //Center name in NameBox
 
             using (Graphics g = Graphics.FromImage(box))
             {
@@ -235,14 +235,14 @@ namespace FEITS.Model
 
                 if (charA != string.Empty)
                 {
-                    Image ca = TextGeneration.GetCharacterStageImage(charA, emotionA, colorA, true);
-                    g.DrawImage((charActive == charA) ? ca : TextGeneration.Fade(ca), new Point(-28, box.Height - ca.Height + 14));
+                    Image ca = AssetGeneration.GetCharacterStageImage(charA, emotionA, colorA, true);
+                    g.DrawImage((charActive == charA) ? ca : AssetGeneration.Fade(ca), new Point(-28, box.Height - ca.Height + 14));
                 }
 
                 if (charB != string.Empty)
                 {
-                    Image cb = TextGeneration.GetCharacterStageImage(charB, emotionB, colorB, false);
-                    g.DrawImage((charActive == charB) ? cb : TextGeneration.Fade(cb), new Point(box.Width - cb.Width + 28, box.Height - cb.Height + 14));
+                    Image cb = AssetGeneration.GetCharacterStageImage(charB, emotionB, colorB, false);
+                    g.DrawImage((charActive == charB) ? cb : AssetGeneration.Fade(cb), new Point(box.Width - cb.Width + 28, box.Height - cb.Height + 14));
                 }
 
                 g.DrawImage(tb, new Point(10, box.Height - tb.Height + 2));
@@ -291,8 +291,8 @@ namespace FEITS.Model
                 topBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
                 using (Graphics g = Graphics.FromImage(topBox))
                 {
-                    g.DrawImage(TextGeneration.GetCharacterBUImage(charA, emotionA, colorA, true), new Point(2, 3));
-                    g.DrawImage(TextGeneration.DrawString(new Bitmap(282, 50), topLine, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
+                    g.DrawImage(AssetGeneration.GetCharacterBUImage(charA, emotionA, colorA, true), new Point(2, 3));
+                    g.DrawImage(AssetGeneration.DrawString(new Bitmap(282, 50), topLine, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
                 }
             }
 
@@ -301,8 +301,8 @@ namespace FEITS.Model
                 bottomBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
                 using (Graphics g = Graphics.FromImage(bottomBox))
                 {
-                    g.DrawImage(TextGeneration.GetCharacterBUImage(charB, emotionB, colorB, true), new Point(2, 3));
-                    g.DrawImage(TextGeneration.DrawString(new Bitmap(282, 50), bottomLine, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
+                    g.DrawImage(AssetGeneration.GetCharacterBUImage(charB, emotionB, colorB, true), new Point(2, 3));
+                    g.DrawImage(AssetGeneration.DrawString(new Bitmap(282, 50), bottomLine, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
                 }
             }
 
@@ -324,16 +324,16 @@ namespace FEITS.Model
                 if (topLine != string.Empty && charA != string.Empty)
                 {
                     string topName = names.ContainsKey(charA) ? names[charA] : (charA == "username" ? PlayerName : charA);
-                    int nameLen = TextGeneration.GetLength(topName);
-                    Bitmap topNameBox = TextGeneration.DrawString(Resources.NameBox, topName, Resources.NameBox.Width / 2 - nameLen / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap; //Center name in NameBox
+                    int nameLen = AssetGeneration.GetLength(topName);
+                    Bitmap topNameBox = AssetGeneration.DrawString(Resources.NameBox, topName, Resources.NameBox.Width / 2 - nameLen / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap; //Center name in NameBox
                     g.DrawImage(topNameBox, new Point(7, topBox.Height - (topNameBox.Height - 20)));
                 }
 
                 if (bottomLine != string.Empty && charB != string.Empty)
                 {
                     string bottomName = names.ContainsKey(charB) ? names[charB] : (charB == "username" ? PlayerName : charB);
-                    int nameLen = TextGeneration.GetLength(bottomName);
-                    Bitmap bottomNameBox = TextGeneration.DrawString(Resources.NameBox, bottomName, Resources.NameBox.Width / 2 - nameLen / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap;
+                    int nameLen = AssetGeneration.GetLength(bottomName);
+                    Bitmap bottomNameBox = AssetGeneration.DrawString(Resources.NameBox, bottomName, Resources.NameBox.Width / 2 - nameLen / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap;
                     g.DrawImage(bottomNameBox, new Point(7, box.Height - bottomBox.Height - 14));
                 }
             }

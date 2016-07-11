@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CompactMainForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.TSL_PageNumber = new System.Windows.Forms.ToolStripStatusLabel();
-            this.TSL_CharNumber = new System.Windows.Forms.ToolStripStatusLabel();
             this.TSL_Status = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +59,8 @@
             this.B_NextLine = new System.Windows.Forms.Button();
             this.RTB_CurrentLine = new System.Windows.Forms.RichTextBox();
             this.PB_PreviewBox = new System.Windows.Forms.PictureBox();
+            this.FD_Open = new System.Windows.Forms.OpenFileDialog();
+            this.FD_Save = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -73,7 +74,6 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TSL_PageNumber,
-            this.TSL_CharNumber,
             this.TSL_Status});
             this.statusStrip1.Location = new System.Drawing.Point(9, 410);
             this.statusStrip1.Name = "statusStrip1";
@@ -87,13 +87,6 @@
             this.TSL_PageNumber.Name = "TSL_PageNumber";
             this.TSL_PageNumber.Size = new System.Drawing.Size(66, 19);
             this.TSL_PageNumber.Text = "Page: 0 / 0";
-            // 
-            // TSL_CharNumber
-            // 
-            this.TSL_CharNumber.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
-            this.TSL_CharNumber.Name = "TSL_CharNumber";
-            this.TSL_CharNumber.Size = new System.Drawing.Size(110, 19);
-            this.TSL_CharNumber.Text = "Character Count: 0";
             // 
             // TSL_Status
             // 
@@ -328,11 +321,14 @@
             // 
             this.TB_CurrentPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.TB_CurrentPage.Location = new System.Drawing.Point(315, 353);
+            this.TB_CurrentPage.MaxLength = 3;
             this.TB_CurrentPage.Name = "TB_CurrentPage";
             this.TB_CurrentPage.Size = new System.Drawing.Size(24, 20);
             this.TB_CurrentPage.TabIndex = 10;
+            this.TB_CurrentPage.Text = "0";
             this.TB_CurrentPage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.TB_CurrentPage.Leave += new System.EventHandler(this.TB_CurrentPage_Leave);
+            this.TB_CurrentPage.WordWrap = false;
+            this.TB_CurrentPage.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_CurrentPage_KeyDown);
             // 
             // B_NextLine
             // 
@@ -373,6 +369,19 @@
             this.PB_PreviewBox.TabIndex = 7;
             this.PB_PreviewBox.TabStop = false;
             // 
+            // FD_Open
+            // 
+            this.FD_Open.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            this.FD_Open.InitialDirectory = "Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)";
+            this.FD_Open.RestoreDirectory = true;
+            this.FD_Open.FileOk += new System.ComponentModel.CancelEventHandler(this.FD_Open_FileOk);
+            // 
+            // FD_Save
+            // 
+            this.FD_Save.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            this.FD_Save.RestoreDirectory = true;
+            this.FD_Save.FileOk += new System.ComponentModel.CancelEventHandler(this.FD_Save_FileOk);
+            // 
             // CompactMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,7 +415,6 @@
 
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel TSL_PageNumber;
-        private System.Windows.Forms.ToolStripStatusLabel TSL_CharNumber;
         private System.Windows.Forms.ToolStripStatusLabel TSL_Status;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -435,5 +443,7 @@
         private System.Windows.Forms.RichTextBox RTB_CurrentLine;
         private System.Windows.Forms.PictureBox PB_PreviewBox;
         private System.Windows.Forms.ToolStripMenuItem MI_Message;
+        private System.Windows.Forms.OpenFileDialog FD_Open;
+        private System.Windows.Forms.SaveFileDialog FD_Save;
     }
 }

@@ -10,7 +10,7 @@ namespace FEITS.Model
     /// </summary>
     public class ParsedFileContainer
     {
-        public string FilePathAndName;
+        public string FilePath;
         public string[] Header;
         public List<MessageBlock> MessageList;
 
@@ -25,7 +25,7 @@ namespace FEITS.Model
         /// </summary>
         public void EmptyFileData()
         {
-            FilePathAndName = string.Empty;
+            FilePath = string.Empty;
             Header = null;
             MessageList = new List<MessageBlock>();
         }
@@ -35,18 +35,18 @@ namespace FEITS.Model
         /// Reads lines from specified file
         /// and parses the information
         /// </summary>
-        /// <param name="fileName">Specified file name</param>
-        public bool LoadFromFile(string fileName)
+        /// <param name="filePath">Specified file name</param>
+        public bool LoadFromFile(string filePath)
         {
-            if(fileName != string.Empty)
+            if(filePath != string.Empty)
             {
                 EmptyFileData();
 
                 //Store the file path
-                FilePathAndName = fileName;
+                FilePath = filePath;
 
                 //Store text into an array split by line breaks
-                string[] fileLines = File.ReadAllLines(fileName);
+                string[] fileLines = File.ReadAllLines(filePath);
                 //int messageProgress;
 
                 //Parse for header and message blocks
@@ -135,7 +135,6 @@ namespace FEITS.Model
             else
             {
                 EmptyFileData();
-                FilePathAndName = fileName;
                 Console.WriteLine("Opened file was empty; treating as a new object and keeping the file path.");
                 return true;
             }
@@ -168,13 +167,13 @@ namespace FEITS.Model
         /// Compiles the message list and
         /// writes contents with header to file.
         /// </summary>
-        /// <param name="fileName">File to save as</param>
-        public bool SaveToFile(string fileName)
+        /// <param name="filePath">File to save as</param>
+        public bool SaveToFile(string filePath)
         {
-            if(fileName != string.Empty)
+            if(filePath != string.Empty)
             {
                 //Update file path in case different
-                FilePathAndName = fileName;
+                FilePath = filePath;
 
                 //Start compiling a string to make up the new file
                 string newFileText = string.Empty;
@@ -189,7 +188,7 @@ namespace FEITS.Model
                     newFileText += (compiledMsg + Environment.NewLine);
                 }
 
-                File.WriteAllText(fileName, newFileText);
+                File.WriteAllText(filePath, newFileText);
                 return true;
             }
             else

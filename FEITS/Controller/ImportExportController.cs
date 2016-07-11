@@ -1,9 +1,6 @@
-﻿using System;
+﻿using FEITS.Model;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FEITS.Model;
 
 namespace FEITS.Controller
 {
@@ -13,7 +10,7 @@ namespace FEITS.Controller
         private string messageScript;
         public string MessageScript { get { return messageScript; } }
 
-        bool[] validChars = TextGeneration.ValidCharacters;
+        bool[] validChars = AssetGeneration.ValidCharacters;
 
         public ImportExportController(IExportImportView v, string currentMessage)
         {
@@ -40,7 +37,7 @@ namespace FEITS.Controller
         {
             bool containsInvalids = false;
             List<char> inv = new List<char>();
-            foreach(char c in messageScript.Where(c => !validChars[TextGeneration.GetValue(c)]))
+            foreach(char c in messageScript.Where(c => !validChars[AssetGeneration.GetValue(c)]))
             {
                 if (!containsInvalids)
                     containsInvalids = true;

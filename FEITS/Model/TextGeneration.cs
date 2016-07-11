@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -12,8 +13,10 @@ using System.Text;
 
 namespace FEITS.Model
 {
-    public class TextGeneration
+    public class AssetGeneration
     {
+        private static bool isInitialized = false;
+
         //Font
         private static bool[] validCharacters;
         public static bool[] ValidCharacters { get { return validCharacters; } }
@@ -28,35 +31,56 @@ namespace FEITS.Model
         private static string[] EyeStyles = { "a", "b", "c", "d", "e", "f", "g" };
         private static string[] Kamuis = { "マイユニ男1", "マイユニ男2", "マイユニ女1", "マイユニ女2" };
 
-        static TextGeneration()
+        static AssetGeneration()
         {
-            //Set up font, generate list of valid chars
-            validCharacters = new bool[0x10000];
-            characters = new FontCharacter[0x10000];
-            for (int i = 0; i < Resources.chars.Length / 0x10; i++)
-            {
-                FontCharacter fc = new FontCharacter(Resources.chars, i * 0x10);
-                validCharacters[fc.Value] = true;
-                fc.SetGlyph(Images[fc.IMG]);
-                characters[fc.Value] = fc;
-            }
+            
+        }
 
-            //Grab face data and assign to dictionary
-            faceData = new Dictionary<string, byte[]>();
-            string[] fids = Resources.FID.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < fids.Length; i++)
+        public static void Initialize(BackgroundWorker worker, DoWorkEventArgs e)
+        {
+            if(isInitialized)
             {
-                byte[] dat = new byte[0x48];
-                Array.Copy(Resources.faces, i * 0x48, dat, 0, 0x48);
-                faceData[fids[i]] = dat;
+                Console.WriteLine("Assets already initialized!");
             }
+            else
+            {
+                Console.WriteLine("Initializing assets...");
 
-            ResourceSet set = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
-            foreach (DictionaryEntry o in set)
-            {
-                resourceList.Add(o.Key as string);
+                //Set up font, generate list of valid chars
+                validCharacters = new bool[0x10000];
+                characters = new FontCharacter[0x10000];
+                for (int i = 0; i < Resources.chars.Length / 0x10; i++)
+                {
+                    FontCharacter fc = new FontCharacter(Resources.chars, i * 0x10);
+                    validCharacters[fc.Value] = true;
+                    fc.SetGlyph(Images[fc.IMG]);
+                    characters[fc.Value] = fc;
+                }
+
+                worker.ReportProgress(33);
+
+                //Grab face data and assign to dictionary
+                faceData = new Dictionary<string, byte[]>();
+                string[] fids = Resources.FID.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < fids.Length; i++)
+                {
+                    byte[] dat = new byte[0x48];
+                    Array.Copy(Resources.faces, i * 0x48, dat, 0, 0x48);
+                    faceData[fids[i]] = dat;
+                }
+
+                worker.ReportProgress(66);
+
+                ResourceSet set = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
+                foreach (DictionaryEntry o in set)
+                {
+                    resourceList.Add(o.Key as string);
+                }
+                Resources.ResourceManager.ReleaseAllResources();
+
+                worker.ReportProgress(100);
+                isInitialized = true;
             }
-            Resources.ResourceManager.ReleaseAllResources();
         }
 
         public static Image DrawString(Image BaseImage, string Message, int StartX, int StartY, Color? TC = null)

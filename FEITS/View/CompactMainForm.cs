@@ -1,9 +1,9 @@
-﻿using System;
+﻿using FEITS.Controller;
+using FEITS.Model;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using FEITS.Controller;
-using FEITS.Model;
 
 namespace FEITS.View
 {
@@ -36,6 +36,12 @@ namespace FEITS.View
         {
             get { return LB_MessageList.SelectedIndex; }
             set { LB_MessageList.SelectedIndex = value; }
+        }
+
+        public int CurrentPage
+        {
+            get { return int.Parse(TB_CurrentPage.Text); }
+            set { TB_CurrentPage.Text = (value + 1).ToString(); }
         }
 
         public string CurrentLine
@@ -81,6 +87,29 @@ namespace FEITS.View
             set;
         }
 
+        //Status
+        public string FormName
+        {
+            get { return Text; }
+            set
+            {
+                if (value != string.Empty)
+                    Text = value + " - FEITS Exporter";
+                else
+                    Text = "FEITS Exporter";
+            }
+        }
+
+        public string ApplicationStatus
+        {
+            set { TSL_Status.Text = value; }
+        }
+
+        public string PageCount
+        {
+            set { TSL_PageNumber.Text = "Page: " + CurrentPage.ToString() + " / " + value; }
+        }
+
         #endregion
 
         private void LB_MessageList_SelectedIndexChanged(object sender, EventArgs e)
@@ -103,17 +132,17 @@ namespace FEITS.View
 
         private void B_PrevLine_Click(object sender, EventArgs e)
         {
-            cont.PreviousLine();
+            cont.PreviousPage();
         }
 
         private void B_NextLine_Click(object sender, EventArgs e)
         {
-            cont.NextLine();
+            cont.NextPage();
         }
 
         private void TB_CurrentPage_Leave(object sender, EventArgs e)
         {
-            //Check for new number, change to page #
+            cont.GotoPage(int.Parse(TB_CurrentPage.Text) - 1);
         }
 
         private void TB_PlayerName_TextChanged(object sender, EventArgs e)
@@ -123,22 +152,34 @@ namespace FEITS.View
 
         private void MI_Open_Click(object sender, EventArgs e)
         {
-            cont.OpenFile();
+            FD_Open.ShowDialog();
         }
 
         private void MI_Save_Click(object sender, EventArgs e)
         {
-            cont.SaveFile();
+            if (!cont.SaveFile())
+                FD_Save.ShowDialog();
+            else
+                ApplicationStatus = "File saved at " + DateTime.Now.ToShortTimeString();
         }
 
         private void MI_SaveAs_Click(object sender, EventArgs e)
         {
-            cont.SaveFileAs();
+            FD_Save.ShowDialog();
         }
 
         private void MI_Import_Click(object sender, EventArgs e)
         {
-            cont.ImportMessageScript();
+            if (cont.ImportMessageScript())
+            {
+                FormName = "";
+                FD_Save.FileName = string.Empty;
+                ApplicationStatus = "Import successful";
+            }
+            else
+            {
+                ApplicationStatus = "Import failed";
+            }
         }
 
         private void MI_Export_Click(object sender, EventArgs e)
@@ -174,6 +215,34 @@ namespace FEITS.View
         private void M_Exit_Click(object sender, EventArgs e)
         {
             cont.ExitApplication();
+        }
+
+        private void FD_Open_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (cont.OpenFile(FD_Open.FileName))
+            {
+                string fileName = FD_Open.SafeFileName.Replace(".txt", "");
+                FD_Save.FileName = FormName = fileName;
+                ApplicationStatus = "File opened successfully";
+            }
+            else
+            {
+                ApplicationStatus = "Error opening file";
+            }
+        }
+
+        private void FD_Save_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (cont.SaveFileAs(FD_Save.FileName))
+                ApplicationStatus = "File saved at " + DateTime.Now.ToShortTimeString();
+            else
+                ApplicationStatus = "Could not save file";
+        }
+
+        private void TB_CurrentPage_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+                cont.GotoPage(int.Parse(TB_CurrentPage.Text) - 1);
         }
     }
 }

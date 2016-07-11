@@ -42,6 +42,7 @@ namespace FEITS.View
             get { return LB_MessageList.SelectedIndex; }
             set { LB_MessageList.SelectedIndex = value; }
         }
+        public int CurrentPage { get; set; }
 
         public string CurrentLine
         {
@@ -103,6 +104,22 @@ namespace FEITS.View
             get { return CB_Textbox.SelectedIndex; }
             set { CB_Textbox.SelectedIndex = value; }
         }
+
+        //Status
+        public string FormName
+        {
+            set
+            {
+                if (value != string.Empty)
+                    Text = value + " - FEITS Exporter";
+                else
+                    Text = "FEITS Exporter";
+            }
+        }
+
+        public string ApplicationStatus { get; set; }
+        public string PageCount { get; set; }
+        public string CharacterCount { get; set; }
         #endregion
 
         private void LB_MessageList_SelectedIndexChanged(object sender, EventArgs e)
@@ -117,12 +134,12 @@ namespace FEITS.View
 
         private void B_Prev_Click(object sender, EventArgs e)
         {
-            cont.PreviousLine();
+            cont.PreviousPage();
         }
 
         private void B_Next_Click(object sender, EventArgs e)
         {
-            cont.NextLine();
+            cont.NextPage();
         }
 
         private void TB_ProtagName_TextChanged(object sender, EventArgs e)
@@ -140,19 +157,19 @@ namespace FEITS.View
             cont.OnBackgroundEnabledChanged();
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            cont.OpenFile();
-        }
+        //private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    cont.OpenFile();
+        //}
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             cont.SaveFile();
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            cont.SaveFileAs();
-        }
+        //private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    if(cont.SaveFileAs())
+        //}
     }
 }

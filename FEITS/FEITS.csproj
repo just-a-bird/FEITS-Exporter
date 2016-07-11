@@ -13,8 +13,10 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
+    <Install>false</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
@@ -24,14 +26,12 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -73,11 +73,17 @@
     <Compile Include="Controller\IMainView.cs" />
     <Compile Include="Controller\ImportExportController.cs" />
     <Compile Include="Controller\MainController.cs" />
-    <Compile Include="Forms\CompactMainForm.cs">
+    <Compile Include="View\CompactMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CompactMainForm.Designer.cs">
+    <Compile Include="View\CompactMainForm.Designer.cs">
       <DependentUpon>CompactMainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoadingPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\LoadingPopup.Designer.cs">
+      <DependentUpon>LoadingPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\ConversationTypes.cs" />
@@ -86,61 +92,64 @@
     <Compile Include="Model\MessageBlock.cs" />
     <Compile Include="Model\ParsedFileContainer.cs" />
     <Compile Include="Model\FontCharacter.cs" />
-    <Compile Include="Forms\Form1.cs">
+    <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form1.Designer.cs">
+    <Compile Include="View\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DirectEdit.cs">
+    <Compile Include="View\DirectEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\DirectEdit.Designer.cs">
+    <Compile Include="View\DirectEdit.Designer.cs">
       <DependentUpon>DirectEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\HalfBoxTester.cs">
+    <Compile Include="View\HalfBoxTester.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\HalfBoxTester.Designer.cs">
+    <Compile Include="View\HalfBoxTester.Designer.cs">
       <DependentUpon>HalfBoxTester.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MainForm.cs">
+    <Compile Include="View\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MainForm.Designer.cs">
+    <Compile Include="View\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ScriptExport.cs">
+    <Compile Include="View\ScriptExport.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ScriptExport.Designer.cs">
+    <Compile Include="View\ScriptExport.Designer.cs">
       <DependentUpon>ScriptExport.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\TextGeneration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Forms\ScriptInput.cs">
+    <Compile Include="View\ScriptInput.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ScriptInput.Designer.cs">
+    <Compile Include="View\ScriptInput.Designer.cs">
       <DependentUpon>ScriptInput.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\CompactMainForm.resx">
+    <EmbeddedResource Include="View\CompactMainForm.resx">
       <DependentUpon>CompactMainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Form1.resx">
+    <EmbeddedResource Include="View\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DirectEdit.resx">
+    <EmbeddedResource Include="View\DirectEdit.resx">
       <DependentUpon>DirectEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\HalfBoxTester.resx">
+    <EmbeddedResource Include="View\HalfBoxTester.resx">
       <DependentUpon>HalfBoxTester.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MainForm.resx">
+    <EmbeddedResource Include="View\LoadingPopup.resx">
+      <DependentUpon>LoadingPopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ScriptExport.resx">
+    <EmbeddedResource Include="View\ScriptExport.resx">
       <DependentUpon>ScriptExport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -153,7 +162,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Forms\ScriptInput.resx">
+    <EmbeddedResource Include="View\ScriptInput.resx">
       <DependentUpon>ScriptInput.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />

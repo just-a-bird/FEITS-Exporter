@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Drawing;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using FEITS.Model;
+﻿using FEITS.Model;
 using FEITS.View;
-using System.Windows.Forms;
+using System;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace FEITS.Controller
 {
@@ -25,6 +19,7 @@ namespace FEITS.Controller
             mainView.SetController(this);
             mainView.SetMessageList(fileCont.MessageList);
             SetOptions();
+            StartLoadingAssets();
         }
 
         #region Menu Bar
@@ -33,107 +28,100 @@ namespace FEITS.Controller
             fileCont.EmptyFileData();
         }
 
-        public void OpenFile()
+        public bool OpenFile(string filePath)
         {
-            OpenFileDialog openDialog = new OpenFileDialog();
-            openDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-            openDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            if (fileCont.FilePathAndName != string.Empty)
-                openDialog.FileName = fileCont.FilePathAndName;
-
-            if (openDialog.ShowDialog() == DialogResult.OK)
+            try
             {
-                try
+                if (fileCont.LoadFromFile(filePath))
                 {
-                    if (fileCont.LoadFromFile(openDialog.FileName))
-                    {
-                        Console.WriteLine("File opened successfully.");
-                        mainView.SetMessageList(fileCont.MessageList);
-                    }
-                    else
-                    {
-                        Console.WriteLine("File could not be opened successfully.");
-                    }
+                    //Console.WriteLine("File opened successfully.");
+                    mainView.SetMessageList(fileCont.MessageList);
+                    return true;
                 }
-                catch(Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message, "Error: Could Not Read File");
+                    //Console.WriteLine("File could not be opened successfully.");
+                    return false;
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error: Could Not Read File");
+                return false;
             }
         }
 
         /// <summary>
-        /// If file path known, save to file.
-        /// If not, open Save As dialog.
+        /// Tries to save to a previous filepath.
+        /// Returns true if successful, false if not.
         /// </summary>
-        public void SaveFile()
+        public bool SaveFile()
         {
-            if(fileCont.FilePathAndName != string.Empty)
+            if(fileCont.FilePath != string.Empty)
             {
-                fileCont.SaveToFile(fileCont.FilePathAndName);
+                fileCont.SaveToFile(fileCont.FilePath);
+                return true;
             }
             else
             {
-                SaveFileAs();
+                return false;
             }
         }
 
-        public void SaveFileAs()
+        public bool SaveFileAs(string filePath)
         {
-            SaveFileDialog saveDialog = new SaveFileDialog();
-            saveDialog.Filter = "Text files (*.txt)|*.txt|All files(*.*)|*.*";
-            saveDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            if (fileCont.FilePathAndName != string.Empty)
-                saveDialog.FileName = fileCont.FilePathAndName;
-
-            if (saveDialog.ShowDialog() == DialogResult.OK)
+            try
             {
-                try
+                if (fileCont.SaveToFile(filePath))
                 {
-                    if(fileCont.SaveToFile(saveDialog.FileName))
-                    {
-                        Console.WriteLine("File saved successfully.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("File could not be saved successfully.");
-                    }
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show("Error: Could not save file. Original error: " + ex.Message);
-                }
-            }
-        }
-
-        public void ImportMessageScript()
-        {
-            ScriptInput messageImporter = new ScriptInput();
-            ImportExportController importCont = new ImportExportController(messageImporter, "");
-            DialogResult dialogResult = messageImporter.ShowDialog();
-
-            if(dialogResult == DialogResult.OK)
-            {
-                if (fileCont.LoadFromString(importCont.MessageScript))
-                {
-                    Console.WriteLine("Message Imported Successfully.");
-                    mainView.SetMessageList(fileCont.MessageList);
+                    //Console.WriteLine("File saved successfully.");
+                    return true;
                 }
                 else
                 {
-                    MessageBox.Show("There was a problem importing the message. Please double-check the text and try again.", "Error");
+                    //Console.WriteLine("File could not be saved successfully.");
+                    return false;
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error: File Not Saved");
+                return false;
+            }
+        }
 
-            messageImporter.Dispose();
+        public bool ImportMessageScript()
+        {
+            ScriptInput messageImporter = new ScriptInput();
+            try
+            {
+                ImportExportController importCont = new ImportExportController(messageImporter, "");
+                DialogResult dialogResult = messageImporter.ShowDialog();
+
+                if (dialogResult == DialogResult.OK)
+                {
+                    if (fileCont.LoadFromString(importCont.MessageScript))
+                    {
+                        mainView.SetMessageList(fileCont.MessageList);
+                    }
+                    else
+                    {
+                        MessageBox.Show("There was a problem parsing the message. Please double-check the text and try again.", "Error");
+                        return false;
+                    }
+                }
+            }
+            finally
+            {
+                if (messageImporter != null)
+                    messageImporter.Dispose();
+            }
+            return true;
         }
 
         public void ExportMessageScript()
         {
             ScriptExport messageExporter = new ScriptExport();
-
             try
             {
                 ImportExportController exportCont = new ImportExportController(messageExporter, conv.CurrentMessage.CompileMessage(false));
@@ -141,70 +129,72 @@ namespace FEITS.Controller
             }
             catch
             {
-                MessageBox.Show("Nothing to export.", "Error",);
+                MessageBox.Show("Nothing to export.", "Error");
             }
-
-            messageExporter.Dispose();
+            finally
+            {
+                if(messageExporter != null)
+                    messageExporter.Dispose();
+            }
 
         }
 
         public void EditMessageScript()
         {
-            DirectEdit messageEdit = new DirectEdit();
-            ImportExportController editCont = new ImportExportController(messageEdit, conv.CurrentMessage.CompileMessage(false));
-            DialogResult dialogResult = messageEdit.ShowDialog();
-
-            if(dialogResult == DialogResult.OK)
+            using (DirectEdit messageEdit = new DirectEdit())
             {
-                try
+                ImportExportController editCont = new ImportExportController(messageEdit, conv.CurrentMessage.CompileMessage(false));
+                DialogResult dialogResult = messageEdit.ShowDialog();
+
+                if (dialogResult == DialogResult.OK)
                 {
-                    MessageBlock updatedBlock = new MessageBlock();
-                    updatedBlock.ParseMessage(editCont.MessageScript);
-                    fileCont.MessageList[mainView.MsgListIndex] = updatedBlock;
-                    SetCurrentMessage();
-                }
-                catch
-                {
-                    MessageBox.Show("There was a problem updating the message with new edits. Please try again.", "Error: Could Not Apply Edits");
+                    try
+                    {
+                        MessageBlock updatedBlock = new MessageBlock();
+                        updatedBlock.ParseMessage(editCont.MessageScript);
+                        fileCont.MessageList[mainView.MsgListIndex] = updatedBlock;
+                        SetCurrentMessage();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("There was a problem updating the message with new edits. Please try again.", "Error: Could Not Apply Edits");
+                    }
                 }
             }
-
-            messageEdit.Dispose();
         }
 
         public void EditMessageLineScript()
         {
             string rawLine = conv.CurrentMessage.MessageLines[conv.LineIndex].RawLine;
             rawLine = rawLine.Replace(Environment.NewLine, "\\n").Replace("\n", "\\n");
-            Console.WriteLine(rawLine);
 
-            DirectEdit lineEdit = new DirectEdit();
-            ImportExportController editCont = new ImportExportController(lineEdit, rawLine);
-            DialogResult dialogResult = lineEdit.ShowDialog();
-
-            if(dialogResult == DialogResult.OK)
+            using (DirectEdit lineEdit = new DirectEdit())
             {
-                string newMessage = string.Empty;
+                ImportExportController editCont = new ImportExportController(lineEdit, rawLine);
+                DialogResult dialogResult = lineEdit.ShowDialog();
 
-                foreach (MessageLine msg in fileCont.MessageList[mainView.MsgListIndex].MessageLines)
+                if (dialogResult == DialogResult.OK)
                 {
-                    msg.UpdateRawWithNewDialogue();
-                }
+                    string newMessage = string.Empty;
 
-                fileCont.MessageList[mainView.MsgListIndex].MessageLines[conv.LineIndex].RawLine = editCont.MessageScript;
-                
-                foreach(MessageLine msg in fileCont.MessageList[mainView.MsgListIndex].MessageLines)
-                {
-                    newMessage += msg.RawLine;
-                }
+                    foreach (MessageLine msg in fileCont.MessageList[mainView.MsgListIndex].MessageLines)
+                    {
+                        msg.UpdateRawWithNewDialogue();
+                    }
 
-                MessageBlock updatedBlock = new MessageBlock();
-                updatedBlock.ParseMessage(newMessage);
-                fileCont.MessageList[mainView.MsgListIndex] = updatedBlock;
-                SetCurrentLine();
+                    fileCont.MessageList[mainView.MsgListIndex].MessageLines[conv.LineIndex].RawLine = editCont.MessageScript;
+
+                    foreach (MessageLine msg in fileCont.MessageList[mainView.MsgListIndex].MessageLines)
+                    {
+                        newMessage += msg.RawLine;
+                    }
+
+                    MessageBlock updatedBlock = new MessageBlock();
+                    updatedBlock.ParseMessage(newMessage);
+                    fileCont.MessageList[mainView.MsgListIndex] = updatedBlock;
+                    SetCurrentLine();
+                }
             }
-
-            lineEdit.Dispose();
         }
 
         public void OpenHalfBoxEditor()
@@ -235,27 +225,46 @@ namespace FEITS.Controller
             mainView.EnableBackgrounds = conv.EnableBackgrounds;
         }
 
+        private void StartLoadingAssets()
+        {
+            LoadingPopup loader = new LoadingPopup();
+            loader.BeginLoading();
+            loader.ShowDialog();
+        }
+
         public void SetCurrentMessage()
         {
             conv.CurrentMessage = fileCont.MessageList[mainView.MsgListIndex];
             SetCurrentLine();
         }
 
-        public void NextLine()
+        public void NextPage()
         {
             conv.LineIndex++;
             SetCurrentLine();
         }
 
-        public void PreviousLine()
+        public void PreviousPage()
         {
             conv.LineIndex--;
             conv.GetCommandsBeforeIndex();
             SetCurrentLine();
         }
 
+        public void GotoPage(int page)
+        {
+            Console.WriteLine("New page number typed in; changing page!");
+            if (page >= conv.CurrentMessage.MessageLines.Count)
+                page = conv.CurrentMessage.MessageLines.Count - 1;
+
+            conv.LineIndex = page;
+            SetCurrentLine();
+        }
+
         private void SetCurrentLine()
         {
+            mainView.CurrentPage = conv.LineIndex;
+            mainView.PageCount = conv.CurrentMessage.MessageLines.Count.ToString();
             mainView.CurrentLine = conv.GetParsedCommands(conv.CurrentMessage.MessageLines[conv.LineIndex]);
             mainView.PrevLine = (conv.LineIndex > 0) ? true : false;
             mainView.NextLine = (conv.LineIndex < conv.CurrentMessage.MessageLines.Count - 1) ? true : false;
