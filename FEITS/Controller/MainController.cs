@@ -1,7 +1,6 @@
 ﻿using FEITS.Model;
 using FEITS.View;
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Media;
@@ -92,7 +91,7 @@ namespace FEITS.Controller
 
         public bool ImportMessageScript()
         {
-            ScriptInput messageImporter = new ScriptInput();
+            ScriptImport messageImporter = new ScriptImport();
             try
             {
                 ImportExportController importCont = new ImportExportController(messageImporter, "");
@@ -309,6 +308,27 @@ namespace FEITS.Controller
             if (mainView.EnableBackgrounds)
             {
                 MessageBox.Show("Backgrounds enabled." + Environment.NewLine + "Drag/drop an image onto the Picture Box to change the background." + Environment.NewLine + "Disable and then re-enable to reset the background to the default one.", "Alert");
+            }
+        }
+
+        public void HandleNewBackgroundImage(DragEventArgs e)
+        {
+            string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+
+            if(File.Exists(file))
+            {
+                try
+                {
+                    Image img = Image.FromFile(file);
+                    if(img.Width > 1 && img.Height > 1)
+                    {
+                        conv.BackgroundImage = img;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("This is not a valid background image.", "Error");
+                }
             }
         }
 

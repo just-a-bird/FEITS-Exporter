@@ -1,6 +1,6 @@
 ﻿namespace FEITS.View
 {
-    public partial class ScriptInput
+    public partial class ScriptImport
     {
         /// <summary>
         /// Required designer variable.
@@ -69,6 +69,8 @@
             this.TB_ScriptInput.Size = new System.Drawing.Size(390, 206);
             this.TB_ScriptInput.TabIndex = 1;
             this.TB_ScriptInput.TextChanged += new System.EventHandler(this.TB_ScriptInput_TextChanged);
+            this.TB_ScriptInput.DragDrop += new System.Windows.Forms.DragEventHandler(this.TB_ScriptInput_DragDrop);
+            this.TB_ScriptInput.DragEnter += new System.Windows.Forms.DragEventHandler(this.TB_ScriptInput_DragEnter);
             this.TB_ScriptInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_ScriptInput_KeyDown);
             // 
             // LBL_Warning
@@ -79,9 +81,10 @@
             this.LBL_Warning.Size = new System.Drawing.Size(218, 26);
             this.LBL_Warning.TabIndex = 4;
             // 
-            // ScriptInput
+            // ScriptImport
             // 
             this.AcceptButton = this.B_LoadScript;
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
@@ -93,7 +96,7 @@
             this.Controls.Add(this.B_LoadScript);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(430, 300);
-            this.Name = "ScriptInput";
+            this.Name = "ScriptImport";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

@@ -186,8 +186,15 @@ namespace FEITS.View
 
         private void MI_SaveAs_Click(object sender, EventArgs e)
         {
-            FD_Save.Filter = "Text files (*.txt)|*.txt";
-            FD_Save.ShowDialog();
+            if(CurrentLine != string.Empty)
+            {
+                FD_Save.Filter = "Text files (*.txt)|*.txt";
+                FD_Save.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("There is no file to save.", "Alert");
+            }
         }
 
         private void MI_Import_Click(object sender, EventArgs e)
@@ -327,6 +334,11 @@ namespace FEITS.View
 
             string fileName = FD_Open.SafeFileName.Replace(".txt", "");
             FD_Save.FileName = FormName = fileName;
+        }
+
+        private void PB_PreviewBox_DragDrop(object sender, DragEventArgs e)
+        {
+            cont.HandleNewBackgroundImage(e);
         }
     }
 }

@@ -426,6 +426,7 @@
             this.PB_PreviewBox.TabIndex = 7;
             this.PB_PreviewBox.TabStop = false;
             this.PB_PreviewBox.Click += new System.EventHandler(this.PB_PreviewBox_Click);
+            this.PB_PreviewBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragDrop);
             // 
             // FD_Open
             // 

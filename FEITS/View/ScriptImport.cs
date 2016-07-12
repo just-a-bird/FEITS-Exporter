@@ -7,11 +7,11 @@ using FEITS.Controller;
 
 namespace FEITS.View
 {
-    public partial class ScriptInput : Form, IExportImportView
+    public partial class ScriptImport : Form, IExportImportView
     {
         private ImportExportController cont;
 
-        public ScriptInput()
+        public ScriptImport()
         {
             InitializeComponent();
         }
@@ -56,6 +56,24 @@ namespace FEITS.View
         {
             if (e.Control && e.KeyCode == Keys.A)
                 TB_ScriptInput.SelectAll();
+        }
+
+        private void TB_ScriptInput_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.Text))
+            {
+                MessageText = (string)e.Data.GetData(DataFormats.UnicodeText); ;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void TB_ScriptInput_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.Text))
+                e.Effect = DragDropEffects.All;
         }
     }
 }
