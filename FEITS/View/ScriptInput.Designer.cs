@@ -97,7 +97,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Script Input";
+            this.Text = "Script Import";
             this.ResumeLayout(false);
             this.PerformLayout();
 

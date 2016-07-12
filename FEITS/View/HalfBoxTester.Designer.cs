@@ -114,7 +114,7 @@
             this.Name = "HalfBoxTester";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Half-Size TextBox Tester";
+            this.Text = "Half-Size Text Box";
             ((System.ComponentModel.ISupportInitialize)(this.PB_TextBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

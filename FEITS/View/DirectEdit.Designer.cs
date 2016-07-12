@@ -96,7 +96,8 @@
             this.Name = "DirectEdit";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Direct Line Edit";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Raw Edit";
             this.ResumeLayout(false);
             this.PerformLayout();
 
