@@ -323,12 +323,19 @@ namespace FEITS.Controller
                     if(img.Width > 1 && img.Height > 1)
                     {
                         conv.BackgroundImage = img;
+
+                        if (conv.CurrentMessage != null)
+                            mainView.PreviewImage = conv.RenderPreviewBox(mainView.CurrentLine);
                     }
                 }
                 catch
                 {
                     MessageBox.Show("This is not a valid background image.", "Error");
                 }
+            }
+            else
+            {
+                //e.Effect = DragDropEffects.None;
             }
         }
 

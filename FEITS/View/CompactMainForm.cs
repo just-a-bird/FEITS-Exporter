@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
 
 namespace FEITS.View
@@ -15,6 +16,7 @@ namespace FEITS.View
         public CompactMainForm()
         {
             InitializeComponent();
+            PB_PreviewBox.AllowDrop = true;
         }
 
         public void SetController(MainController controller)
@@ -178,10 +180,18 @@ namespace FEITS.View
 
         private void MI_Save_Click(object sender, EventArgs e)
         {
-            if (!cont.SaveFile())
-                FD_Save.ShowDialog();
+            if (CurrentLine != string.Empty)
+            {
+                if (!cont.SaveFile())
+                    FD_Save.ShowDialog();
+                else
+                    ApplicationStatus = "File saved at " + DateTime.Now.ToShortTimeString();
+            }
             else
-                ApplicationStatus = "File saved at " + DateTime.Now.ToShortTimeString();
+            {
+                MessageBox.Show("There is no file to save.", "Alert");
+                return;
+            }
         }
 
         private void MI_SaveAs_Click(object sender, EventArgs e)
@@ -339,6 +349,12 @@ namespace FEITS.View
         private void PB_PreviewBox_DragDrop(object sender, DragEventArgs e)
         {
             cont.HandleNewBackgroundImage(e);
+        }
+
+        private void PB_PreviewBox_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
         }
     }
 }

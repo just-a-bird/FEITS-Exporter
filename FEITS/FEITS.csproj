@@ -28,6 +28,7 @@
     <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -54,6 +55,18 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>FEITS Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>51F00953051C6930E241C30CD58AF5E4ED0018A9</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>FEITS_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -176,6 +189,7 @@
     <EmbeddedResource Include="View\ScriptImport.resx">
       <DependentUpon>ScriptImport.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="FEITS_TemporaryKey.pfx" />
     <None Include="Properties\DataSources\FEITS.Properties.Resources.datasource" />
     <None Include="Properties\DataSources\FEITS.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">

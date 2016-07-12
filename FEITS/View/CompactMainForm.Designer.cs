@@ -427,6 +427,7 @@
             this.PB_PreviewBox.TabStop = false;
             this.PB_PreviewBox.Click += new System.EventHandler(this.PB_PreviewBox_Click);
             this.PB_PreviewBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragDrop);
+            this.PB_PreviewBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragEnter);
             // 
             // FD_Open
             // 
@@ -443,6 +444,7 @@
             // 
             // CompactMainForm
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(574, 443);
