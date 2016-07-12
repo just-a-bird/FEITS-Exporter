@@ -68,6 +68,7 @@
             this.TB_LineEdit.Size = new System.Drawing.Size(390, 120);
             this.TB_LineEdit.TabIndex = 1;
             this.TB_LineEdit.TextChanged += new System.EventHandler(this.TB_LineEdit_TextChanged);
+            this.TB_LineEdit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_LineEdit_KeyDown);
             // 
             // LBL_Warning
             // 

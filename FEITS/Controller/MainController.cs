@@ -2,6 +2,9 @@
 using FEITS.View;
 using System;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Media;
 using System.Windows.Forms;
 
 namespace FEITS.Controller
@@ -12,6 +15,9 @@ namespace FEITS.Controller
         private ConversationModel conv;
         private ParsedFileContainer fileCont = new ParsedFileContainer();
 
+        private bool reminderOpen;
+        public bool ReminderOpen { set { reminderOpen = value; } }
+
         public MainController(IMainView view, ConversationModel model)
         {
             mainView = view;
@@ -19,7 +25,7 @@ namespace FEITS.Controller
             mainView.SetController(this);
             mainView.SetMessageList(fileCont.MessageList);
             SetOptions();
-            StartLoadingAssets();
+            //StartLoadingAssets();
         }
 
         #region Menu Bar
@@ -73,15 +79,9 @@ namespace FEITS.Controller
             try
             {
                 if (fileCont.SaveToFile(filePath))
-                {
-                    //Console.WriteLine("File saved successfully.");
                     return true;
-                }
                 else
-                {
-                    //Console.WriteLine("File could not be saved successfully.");
                     return false;
-                }
             }
             catch (Exception ex)
             {
@@ -125,7 +125,7 @@ namespace FEITS.Controller
             try
             {
                 ImportExportController exportCont = new ImportExportController(messageExporter, conv.CurrentMessage.CompileMessage(false));
-                DialogResult dialogResult = messageExporter.ShowDialog();
+                messageExporter.ShowDialog();
             }
             catch
             {
@@ -199,17 +199,22 @@ namespace FEITS.Controller
 
         public void OpenHalfBoxEditor()
         {
-
-        }
-
-        public void OpenSettingsMenu()
-        {
-
+            using (HalfBoxTester halfBox = new HalfBoxTester())
+            {
+                HalfBoxController hbCont = new HalfBoxController(halfBox);
+                halfBox.ShowDialog();
+            }
         }
 
         public void ShowFriendlyReminder()
         {
-
+            if(!reminderOpen)
+            {
+                reminderOpen = true;
+                FriendlyReminder reminder = new FriendlyReminder();
+                reminder.SetController(this);
+                reminder.Show();
+            }
         }
 
         public void ExitApplication()
@@ -225,7 +230,7 @@ namespace FEITS.Controller
             mainView.EnableBackgrounds = conv.EnableBackgrounds;
         }
 
-        private void StartLoadingAssets()
+        public void StartLoadingAssets()
         {
             LoadingPopup loader = new LoadingPopup();
             loader.BeginLoading();
@@ -300,6 +305,26 @@ namespace FEITS.Controller
 
             if (conv.CurrentMessage != null)
                 mainView.PreviewImage = conv.RenderPreviewBox(mainView.CurrentLine);
+
+            if (mainView.EnableBackgrounds)
+            {
+                MessageBox.Show("Backgrounds enabled." + Environment.NewLine + "Drag/drop an image onto the Picture Box to change the background." + Environment.NewLine + "Disable and then re-enable to reset the background to the default one.", "Alert");
+            }
+        }
+
+        public Image GetConversationImage()
+        {
+            Image convToSave = conv.RenderConversation();
+            SetCurrentLine();
+
+            return convToSave;
+        }
+
+        public DialogResult Prompt(MessageBoxButtons btn, params string[] lines)
+        {
+            SystemSounds.Question.Play();
+            string msg = string.Join(Environment.NewLine + Environment.NewLine, lines);
+            return MessageBox.Show(msg, "Prompt", btn, MessageBoxIcon.Asterisk);
         }
     }
 }

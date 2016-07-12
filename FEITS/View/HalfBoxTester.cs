@@ -5,82 +5,79 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using FEITS.Controller;
 
 namespace FEITS.View
 {
-    public partial class HalfBoxTester : Form
+    public partial class HalfBoxTester : Form, IHalfBoxView
     {
-        //private bool[] m_validCharacters;
-        //private FontCharacter[] m_characters;
+        private HalfBoxController cont;
 
-        //private Image[] m_textBoxes = { Resources.HalfBox, Resources.HalfBox_Nohr, Resources.HalfBox_Hoshido };
+        public HalfBoxTester()
+        {
+            InitializeComponent();
+        }
 
-        //public HalfBoxTester(bool[] vc, FontCharacter[] c)
-        //{
-        //    InitializeComponent();
+        public void SetController(HalfBoxController controller)
+        {
+            cont = controller;
+        }
 
-        //    m_validCharacters = vc;
-        //    m_characters = c;
-        //    CB_TB.Items.AddRange(new[] { "Standard", "Nohrian", "Hoshido" });
-        //    CB_TB.SelectedIndex = 0;
+        public string CurrentLine
+        {
+            get { return TB_Line.Text; }
+            set { TB_Line.Text = value; }
+        }
 
-        //    //LoadText
-        //    string line = "This is an example\r\nmessage.";
-        //    TB_Line.Text = line;
-        //}
+        public Image PreviewImage
+        {
+            get { return PB_TextBox.Image; }
+            set { PB_TextBox.Image = value; }
+        }
 
-        //private void TB_Line_TextChanged(object sender, EventArgs e)
-        //{
-        //    HandleEmptyTextBox();
-        //    UpdateBox();
-        //}
+        public int CurrentTextboxIndex
+        {
+            get { return CB_TB.SelectedIndex; }
+            set { CB_TB.SelectedIndex = value; }
+        }
 
-        //private void UpdateBox()
-        //{
-        //    Image hb = m_textBoxes[CB_TB.SelectedIndex].Clone() as Bitmap;
-        //    Image text = Tools.DrawString(m_characters, new Bitmap(165, 50), TB_Line.Text.Replace(Environment.NewLine, "\n"), 0, 22, Color.FromArgb(68, 8, 0)) as Bitmap;
+        public bool CanExport
+        {
+            get { return B_Export.Enabled; }
+            set { B_Export.Enabled = value; }
+        }
 
-        //    using (Graphics g = Graphics.FromImage(hb))
-        //    {
-        //        g.DrawImage(text, new Point(10, 0));
-        //        g.DrawImage(Resources.KeyPress, new Point(PB_TextBox.Width - 30, PB_TextBox.Height - hb.Height + 32));
-        //    }
+        private void TB_Line_TextChanged(object sender, EventArgs e)
+        {
+            if(TB_Line.Text == string.Empty)
+            {
+                CanExport = false;
+            }
+            else
+            {
+                CanExport = true;
+            }
 
-        //    PB_TextBox.Image = hb;
-        //}
+            PB_TextBox.Image = cont.UpdatePreview();
+        }
 
-        //private void HandleEmptyTextBox()
-        //{
-        //    if(TB_Line.Text == string.Empty)
-        //    {
-        //        B_Export.Enabled = false;
-        //    }
-        //    else
-        //    {
-        //        B_Export.Enabled = true;
-        //    }
-        //}
+        private void B_Export_Click(object sender, EventArgs e)
+        {
+            if (CurrentLine == string.Empty)
+                return;
 
-        //private void B_Export_Click(object sender, EventArgs e)
-        //{
-        //    if (TB_Line.Text == string.Empty)
-        //        return;
+            cont.ExportText();
+        }
 
-        //    ScriptExport lineExport = new ScriptExport(m_validCharacters, TB_Line.Text.Replace(Environment.NewLine, "\n"));
-        //    DialogResult dialogResult = lineExport.ShowDialog();
+        private void CB_TB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PB_TextBox.Image = cont.UpdatePreview();
+        }
 
-        //    lineExport.Dispose();
-        //}
-
-        //private void CB_TB_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    UpdateBox();
-        //}
-
-        //private void TB_Line_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (e.Control && e.KeyCode == Keys.A)
-        //        TB_Line.SelectAll();
-        //}
+        private void TB_Line_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.A)
+                TB_Line.SelectAll();
+        }
     }
 }

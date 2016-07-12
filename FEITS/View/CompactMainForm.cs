@@ -3,6 +3,7 @@ using FEITS.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace FEITS.View
@@ -77,14 +78,34 @@ namespace FEITS.View
 
         public bool EnableBackgrounds
         {
-            get;
-            set;
+            get { return MI_EnableBackgrounds.Checked; }
+            set { MI_EnableBackgrounds.Checked = value; }
         }
 
         public int CurrentTextbox
         {
-            get;
-            set;
+            get
+            {
+                foreach(ToolStripMenuItem mi in MI_TBStyles.DropDownItems)
+                {
+                    if (mi.Checked)
+                        return MI_TBStyles.DropDownItems.IndexOf(mi);
+                }
+
+                return -1;
+            }
+            set
+            {
+                ToolStripMenuItem menuItem = (ToolStripMenuItem)MI_TBStyles.DropDownItems[value];
+
+                foreach(ToolStripMenuItem mi in MI_TBStyles.DropDownItems)
+                {
+                    if (mi == menuItem)
+                        mi.Checked = true;
+                    else
+                        mi.Checked = false;
+                }
+            }
         }
 
         //Status
@@ -165,6 +186,7 @@ namespace FEITS.View
 
         private void MI_SaveAs_Click(object sender, EventArgs e)
         {
+            FD_Save.Filter = "Text files (*.txt)|*.txt";
             FD_Save.ShowDialog();
         }
 
@@ -197,14 +219,26 @@ namespace FEITS.View
             cont.EditMessageScript();
         }
 
+        private void MI_TBItem_CheckedChanged(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            if (!item.Checked)
+                return;
+
+            foreach (ToolStripMenuItem mi in MI_TBStyles.DropDownItems)
+            {
+                if(mi != item)
+                {
+                    mi.Checked = false;
+                }
+            }
+
+            cont.OnTextboxChanged();
+        }
+
         private void MI_HalfBox_Click(object sender, EventArgs e)
         {
             cont.OpenHalfBoxEditor();
-        }
-
-        private void MI_Options_Click(object sender, EventArgs e)
-        {
-            cont.OpenSettingsMenu();
         }
 
         private void MI_Reminder_Click(object sender, EventArgs e)
@@ -233,16 +267,66 @@ namespace FEITS.View
 
         private void FD_Save_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (cont.SaveFileAs(FD_Save.FileName))
-                ApplicationStatus = "File saved at " + DateTime.Now.ToShortTimeString();
-            else
-                ApplicationStatus = "Could not save file";
+            if(FD_Open.SafeFileName.Contains(".txt"))
+            {
+                if (cont.SaveFileAs(FD_Save.FileName))
+                    ApplicationStatus = "File saved at " + DateTime.Now.ToShortTimeString();
+                else
+                    ApplicationStatus = "Could not save file";
+            }
         }
 
         private void TB_CurrentPage_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
                 cont.GotoPage(int.Parse(TB_CurrentPage.Text) - 1);
+        }
+
+        private void CompactMainForm_Shown(object sender, EventArgs e)
+        {
+            cont.StartLoadingAssets();
+        }
+
+        private void MI_EnableBackgrounds_CheckedChanged(object sender, EventArgs e)
+        {
+            cont.OnBackgroundEnabledChanged();
+        }
+
+        private void PB_PreviewBox_Click(object sender, EventArgs e)
+        {
+            if((e as MouseEventArgs).Button == MouseButtons.Right)
+            {
+                if (cont.Prompt(MessageBoxButtons.YesNo, "Save the current conversation?") != DialogResult.Yes)
+                    return;
+
+                FD_Save.Filter = "PNG Files (*.png)|*.png";
+                FD_Save.FileName = FD_Save.FileName + "_Conversation";
+                DialogResult result = FD_Save.ShowDialog();
+
+                if(result == DialogResult.OK)
+                {
+                    Image imageFile = cont.GetConversationImage();
+                    imageFile.Save(FD_Save.FileName, ImageFormat.Png);
+                }
+            }
+            else if((e as MouseEventArgs).Button == MouseButtons.Left)
+            {
+                if (cont.Prompt(MessageBoxButtons.YesNo,"Save the current image?") != DialogResult.Yes)
+                    return;
+
+                FD_Save.Filter = "PNG Files (*.png)|*.png";
+                FD_Save.FileName = FD_Save.FileName + "_Page" + CurrentPage.ToString();
+                DialogResult result = FD_Save.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    Image imageFile = PreviewImage;
+                    imageFile.Save(FD_Save.FileName, ImageFormat.Png);
+                }
+            }
+
+            string fileName = FD_Open.SafeFileName.Replace(".txt", "");
+            FD_Save.FileName = FormName = fileName;
         }
     }
 }

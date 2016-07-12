@@ -51,5 +51,11 @@ namespace FEITS.View
         {
             cont.OnImportMsgChanged();
         }
+
+        private void TB_ScriptInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.A)
+                TB_ScriptInput.SelectAll();
+        }
     }
 }

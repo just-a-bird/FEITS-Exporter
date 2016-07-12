@@ -45,9 +45,15 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_EditLine = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_Message = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MI_TBStyles = new System.Windows.Forms.ToolStripMenuItem();
+            this.MI_TBStandard = new System.Windows.Forms.ToolStripMenuItem();
+            this.MI_TBNohr = new System.Windows.Forms.ToolStripMenuItem();
+            this.MI_TBHoshido = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.MI_EnableBackgrounds = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_HalfBox = new System.Windows.Forms.ToolStripMenuItem();
-            this.MI_Options = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_Reminder = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -99,6 +105,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
+            this.viewToolStripMenuItem,
             this.toolsToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(9, 0);
@@ -213,11 +220,69 @@
             this.MI_Message.Text = "Edit Raw &Message";
             this.MI_Message.Click += new System.EventHandler(this.MI_Message_Click);
             // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MI_TBStyles,
+            this.toolStripSeparator3,
+            this.MI_EnableBackgrounds});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // MI_TBStyles
+            // 
+            this.MI_TBStyles.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MI_TBStandard,
+            this.MI_TBNohr,
+            this.MI_TBHoshido});
+            this.MI_TBStyles.Name = "MI_TBStyles";
+            this.MI_TBStyles.Size = new System.Drawing.Size(181, 22);
+            this.MI_TBStyles.Text = "Textbox Style";
+            // 
+            // MI_TBStandard
+            // 
+            this.MI_TBStandard.Checked = true;
+            this.MI_TBStandard.CheckOnClick = true;
+            this.MI_TBStandard.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.MI_TBStandard.Name = "MI_TBStandard";
+            this.MI_TBStandard.Size = new System.Drawing.Size(121, 22);
+            this.MI_TBStandard.Text = "Standard";
+            this.MI_TBStandard.CheckedChanged += new System.EventHandler(this.MI_TBItem_CheckedChanged);
+            // 
+            // MI_TBNohr
+            // 
+            this.MI_TBNohr.CheckOnClick = true;
+            this.MI_TBNohr.Name = "MI_TBNohr";
+            this.MI_TBNohr.Size = new System.Drawing.Size(121, 22);
+            this.MI_TBNohr.Text = "Nohr";
+            this.MI_TBNohr.CheckedChanged += new System.EventHandler(this.MI_TBItem_CheckedChanged);
+            // 
+            // MI_TBHoshido
+            // 
+            this.MI_TBHoshido.CheckOnClick = true;
+            this.MI_TBHoshido.Name = "MI_TBHoshido";
+            this.MI_TBHoshido.Size = new System.Drawing.Size(121, 22);
+            this.MI_TBHoshido.Text = "Hoshido";
+            this.MI_TBHoshido.CheckedChanged += new System.EventHandler(this.MI_TBItem_CheckedChanged);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(178, 6);
+            // 
+            // MI_EnableBackgrounds
+            // 
+            this.MI_EnableBackgrounds.CheckOnClick = true;
+            this.MI_EnableBackgrounds.Name = "MI_EnableBackgrounds";
+            this.MI_EnableBackgrounds.Size = new System.Drawing.Size(181, 22);
+            this.MI_EnableBackgrounds.Text = "Enable &Backgrounds";
+            this.MI_EnableBackgrounds.CheckedChanged += new System.EventHandler(this.MI_EnableBackgrounds_CheckedChanged);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MI_HalfBox,
-            this.MI_Options});
+            this.MI_HalfBox});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
@@ -225,17 +290,9 @@
             // MI_HalfBox
             // 
             this.MI_HalfBox.Name = "MI_HalfBox";
-            this.MI_HalfBox.Size = new System.Drawing.Size(159, 22);
+            this.MI_HalfBox.Size = new System.Drawing.Size(154, 22);
             this.MI_HalfBox.Text = "&Half-Box Editor";
             this.MI_HalfBox.Click += new System.EventHandler(this.MI_HalfBox_Click);
-            // 
-            // MI_Options
-            // 
-            this.MI_Options.Name = "MI_Options";
-            this.MI_Options.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.MI_Options.Size = new System.Drawing.Size(159, 22);
-            this.MI_Options.Text = "&Options";
-            this.MI_Options.Click += new System.EventHandler(this.MI_Options_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -368,6 +425,7 @@
             this.PB_PreviewBox.Size = new System.Drawing.Size(400, 240);
             this.PB_PreviewBox.TabIndex = 7;
             this.PB_PreviewBox.TabStop = false;
+            this.PB_PreviewBox.Click += new System.EventHandler(this.PB_PreviewBox_Click);
             // 
             // FD_Open
             // 
@@ -378,7 +436,7 @@
             // 
             // FD_Save
             // 
-            this.FD_Save.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            this.FD_Save.Filter = "Text files (*.txt)|*.txt";
             this.FD_Save.RestoreDirectory = true;
             this.FD_Save.FileOk += new System.ComponentModel.CancelEventHandler(this.FD_Save_FileOk);
             // 
@@ -396,6 +454,7 @@
             this.Name = "CompactMainForm";
             this.Padding = new System.Windows.Forms.Padding(9, 0, 9, 9);
             this.Text = "FEITS Exporter";
+            this.Shown += new System.EventHandler(this.CompactMainForm_Shown);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -430,7 +489,6 @@
         private System.Windows.Forms.ToolStripMenuItem MI_EditLine;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MI_HalfBox;
-        private System.Windows.Forms.ToolStripMenuItem MI_Options;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MI_Reminder;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -445,5 +503,12 @@
         private System.Windows.Forms.ToolStripMenuItem MI_Message;
         private System.Windows.Forms.OpenFileDialog FD_Open;
         private System.Windows.Forms.SaveFileDialog FD_Save;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MI_TBStyles;
+        private System.Windows.Forms.ToolStripMenuItem MI_TBStandard;
+        private System.Windows.Forms.ToolStripMenuItem MI_TBNohr;
+        private System.Windows.Forms.ToolStripMenuItem MI_TBHoshido;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem MI_EnableBackgrounds;
     }
 }

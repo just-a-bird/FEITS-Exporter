@@ -1,6 +1,6 @@
 ﻿using FEITS.Properties;
 using System;
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -20,7 +20,17 @@ namespace FEITS.Model
 
         //Settings
         public string PlayerName = "Kamui";
-        public bool EnableBackgrounds;
+        private bool enableBackgrounds;
+        public bool EnableBackgrounds
+        {
+            get { return enableBackgrounds; }
+            set
+            {
+                //Changing the value should set the background image to default
+                enableBackgrounds = value;
+                BackgroundImage = Resources.SupportBG;
+            }
+        }
         public Image BackgroundImage;
         public Image[] TextBoxes = { Resources.TextBox, Resources.TextBox_Nohr, Resources.TextBox_Hoshido };
         public int TextboxIndex;
@@ -228,7 +238,7 @@ namespace FEITS.Model
 
             using (Graphics g = Graphics.FromImage(box))
             {
-                if (EnableBackgrounds)
+                if (enableBackgrounds)
                 {
                     g.DrawImage(BackgroundImage, new Point(0, 0));
                 }
@@ -316,7 +326,7 @@ namespace FEITS.Model
                     }
                 }
 
-                if (EnableBackgrounds)
+                if (enableBackgrounds)
                     g.DrawImage(BackgroundImage, new Point(0, 0));
                 g.DrawImage(topBox, new Point(10, 3));
                 g.DrawImage(bottomBox, new Point(10, box.Height - bottomBox.Height + 2));
@@ -340,5 +350,37 @@ namespace FEITS.Model
             return box;
         }
         #endregion
+
+        public Image RenderConversation()
+        {
+            foreach(MessageLine line in currentMessage.MessageLines)
+                line.UpdateRawWithNewDialogue();
+
+            List<Image> images = new List<Image>();
+            int index = lineIndex;
+            ResetParameters();
+            for(int i = 0; i < currentMessage.MessageLines.Count; i++)
+            {
+                GetParsedCommands(currentMessage.MessageLines[i]);
+                string parsed = currentMessage.MessageLines[i].SpokenText;
+                if(!string.IsNullOrWhiteSpace(parsed) && !string.IsNullOrEmpty(parsed))
+                {
+                    images.Add(RenderPreviewBox(parsed));
+                }
+            }
+            lineIndex = index;
+            Bitmap bmp = new Bitmap(images.Max(i => i.Width), images.Sum(i => i.Height));
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                int h = 0;
+                foreach(Image img in images)
+                {
+                    g.DrawImage(img, new Point(0, h));
+                    h += img.Height;
+                }
+            }
+
+            return bmp;
+        }
     }
 }

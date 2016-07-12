@@ -69,6 +69,7 @@
             this.TB_ScriptInput.Size = new System.Drawing.Size(390, 206);
             this.TB_ScriptInput.TabIndex = 1;
             this.TB_ScriptInput.TextChanged += new System.EventHandler(this.TB_ScriptInput_TextChanged);
+            this.TB_ScriptInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_ScriptInput_KeyDown);
             // 
             // LBL_Warning
             // 
