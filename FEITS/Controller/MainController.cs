@@ -24,7 +24,7 @@ namespace FEITS.Controller
             mainView.SetController(this);
             mainView.SetMessageList(fileCont.MessageList);
             SetOptions();
-            //StartLoadingAssets();
+            StartLoadingAssets();
         }
 
         #region Menu Bar

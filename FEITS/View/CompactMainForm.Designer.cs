@@ -346,42 +346,44 @@
             // 
             // TB_PlayerName
             // 
+            this.TB_PlayerName.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.TB_PlayerName.Location = new System.Drawing.Point(79, 353);
             this.TB_PlayerName.Name = "TB_PlayerName";
             this.TB_PlayerName.Size = new System.Drawing.Size(100, 20);
-            this.TB_PlayerName.TabIndex = 13;
+            this.TB_PlayerName.TabIndex = 6;
             this.TB_PlayerName.TextChanged += new System.EventHandler(this.TB_PlayerName_TextChanged);
             // 
             // LBL_PlayerName
             // 
+            this.LBL_PlayerName.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.LBL_PlayerName.AutoSize = true;
             this.LBL_PlayerName.Location = new System.Drawing.Point(3, 356);
             this.LBL_PlayerName.Name = "LBL_PlayerName";
             this.LBL_PlayerName.Size = new System.Drawing.Size(70, 13);
-            this.LBL_PlayerName.TabIndex = 12;
+            this.LBL_PlayerName.TabIndex = 5;
             this.LBL_PlayerName.Text = "Player Name:";
             this.LBL_PlayerName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // B_PrevLine
             // 
-            this.B_PrevLine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.B_PrevLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.B_PrevLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.B_PrevLine.Location = new System.Drawing.Point(259, 351);
             this.B_PrevLine.Name = "B_PrevLine";
             this.B_PrevLine.Size = new System.Drawing.Size(50, 23);
-            this.B_PrevLine.TabIndex = 11;
+            this.B_PrevLine.TabIndex = 2;
             this.B_PrevLine.Text = "<---";
             this.B_PrevLine.UseVisualStyleBackColor = true;
             this.B_PrevLine.Click += new System.EventHandler(this.B_PrevLine_Click);
             // 
             // TB_CurrentPage
             // 
-            this.TB_CurrentPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.TB_CurrentPage.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.TB_CurrentPage.Location = new System.Drawing.Point(315, 353);
             this.TB_CurrentPage.MaxLength = 3;
             this.TB_CurrentPage.Name = "TB_CurrentPage";
             this.TB_CurrentPage.Size = new System.Drawing.Size(24, 20);
-            this.TB_CurrentPage.TabIndex = 10;
+            this.TB_CurrentPage.TabIndex = 4;
             this.TB_CurrentPage.Text = "0";
             this.TB_CurrentPage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.TB_CurrentPage.WordWrap = false;
@@ -389,12 +391,12 @@
             // 
             // B_NextLine
             // 
-            this.B_NextLine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.B_NextLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.B_NextLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.B_NextLine.Location = new System.Drawing.Point(345, 351);
             this.B_NextLine.Name = "B_NextLine";
             this.B_NextLine.Size = new System.Drawing.Size(50, 23);
-            this.B_NextLine.TabIndex = 9;
+            this.B_NextLine.TabIndex = 3;
             this.B_NextLine.Text = "--->";
             this.B_NextLine.UseVisualStyleBackColor = true;
             this.B_NextLine.Click += new System.EventHandler(this.B_NextLine_Click);
@@ -410,7 +412,7 @@
             this.RTB_CurrentLine.Name = "RTB_CurrentLine";
             this.RTB_CurrentLine.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.RTB_CurrentLine.Size = new System.Drawing.Size(400, 99);
-            this.RTB_CurrentLine.TabIndex = 8;
+            this.RTB_CurrentLine.TabIndex = 1;
             this.RTB_CurrentLine.Text = "";
             this.RTB_CurrentLine.TextChanged += new System.EventHandler(this.RTB_CurrentLine_TextChanged);
             // 
@@ -457,7 +459,6 @@
             this.Name = "CompactMainForm";
             this.Padding = new System.Windows.Forms.Padding(9, 0, 9, 9);
             this.Text = "FEITS Exporter";
-            this.Shown += new System.EventHandler(this.CompactMainForm_Shown);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);

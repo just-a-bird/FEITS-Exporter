@@ -224,7 +224,7 @@ namespace FEITS.Model
             line = line.Replace(Environment.NewLine, "\n");
 
             //Draw the line's text
-            Bitmap text = AssetGeneration.DrawString(new Bitmap(312, 50), line, 0, 22, Color.FromArgb(68, 8, 0)) as Bitmap;
+            Bitmap text = AssetGeneration.DrawString(new Bitmap(310, 50), line, 0, 22, Color.FromArgb(68, 8, 0)) as Bitmap;
 
             using (Graphics g = Graphics.FromImage(tb))
             {
@@ -302,7 +302,7 @@ namespace FEITS.Model
                 using (Graphics g = Graphics.FromImage(topBox))
                 {
                     g.DrawImage(AssetGeneration.GetCharacterBUImage(charA, emotionA, colorA, true), new Point(2, 3));
-                    g.DrawImage(AssetGeneration.DrawString(new Bitmap(282, 50), topLine, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
+                    g.DrawImage(AssetGeneration.DrawString(new Bitmap(260, 50), topLine, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
                 }
             }
 
