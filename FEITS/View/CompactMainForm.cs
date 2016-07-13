@@ -144,8 +144,11 @@ namespace FEITS.View
         {
             if (RTB_CurrentLine.TextLength > 0)
             {
+                RTB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
                 RTB_CurrentLine.Enabled = true;
                 cont.OnMsgLineChanged();
+                //RTB_CurrentLine.Rtf = RTB_CurrentLine.Text;
+                Console.WriteLine(RTB_CurrentLine.Rtf);
             }
             else
             {

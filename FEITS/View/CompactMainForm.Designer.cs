@@ -405,7 +405,6 @@
             // 
             this.RTB_CurrentLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.RTB_CurrentLine.DetectUrls = false;
-            this.RTB_CurrentLine.EnableAutoDragDrop = true;
             this.RTB_CurrentLine.Enabled = false;
             this.RTB_CurrentLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RTB_CurrentLine.Location = new System.Drawing.Point(0, 246);
