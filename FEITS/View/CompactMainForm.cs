@@ -138,37 +138,39 @@ namespace FEITS.View
         private void LB_MessageList_SelectedIndexChanged(object sender, EventArgs e)
         {
             cont.SetCurrentMessage();
+            RTB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
         }
 
         private void RTB_CurrentLine_TextChanged(object sender, EventArgs e)
         {
-            if (RTB_CurrentLine.TextLength > 0)
+            if (RTB_CurrentLine.TextLength <= 0 && LB_MessageList.Items.Count <= 0)
             {
-                RTB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
-                RTB_CurrentLine.Enabled = true;
-                cont.OnMsgLineChanged();
-                //RTB_CurrentLine.Rtf = RTB_CurrentLine.Text;
-                Console.WriteLine(RTB_CurrentLine.Rtf);
+                RTB_CurrentLine.Enabled = false;
             }
             else
             {
-                RTB_CurrentLine.Enabled = false;
+                RTB_CurrentLine.Enabled = true;
+                cont.OnMsgLineChanged();
+                Console.WriteLine(RTB_CurrentLine.Rtf);
             }
         }
 
         private void B_PrevLine_Click(object sender, EventArgs e)
         {
             cont.PreviousPage();
+            RTB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
         }
 
         private void B_NextLine_Click(object sender, EventArgs e)
         {
             cont.NextPage();
+            RTB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
         }
 
         private void TB_CurrentPage_Leave(object sender, EventArgs e)
         {
             cont.GotoPage(int.Parse(TB_CurrentPage.Text) - 1);
+            RTB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
         }
 
         private void TB_PlayerName_TextChanged(object sender, EventArgs e)
@@ -358,6 +360,11 @@ namespace FEITS.View
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Copy;
+        }
+
+        private void LB_MessageList_MouseDown(object sender, MouseEventArgs e)
+        {
+            LB_MessageList.Focus();
         }
     }
 }

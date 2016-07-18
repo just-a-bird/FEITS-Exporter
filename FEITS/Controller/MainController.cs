@@ -149,9 +149,8 @@ namespace FEITS.Controller
                 {
                     try
                     {
-                        MessageBlock updatedBlock = new MessageBlock();
-                        updatedBlock.ParseMessage(editCont.MessageScript);
-                        fileCont.MessageList[mainView.MsgListIndex] = updatedBlock;
+                        fileCont.MessageList[mainView.MsgListIndex].MessageLines.Clear();
+                        fileCont.MessageList[mainView.MsgListIndex].ParseMessage(editCont.MessageScript);
                         SetCurrentMessage();
                     }
                     catch
@@ -164,6 +163,7 @@ namespace FEITS.Controller
 
         public void EditMessageLineScript()
         {
+            conv.CurrentMessage.MessageLines[conv.LineIndex].UpdateRawWithNewDialogue();
             string rawLine = conv.CurrentMessage.MessageLines[conv.LineIndex].RawLine;
             rawLine = rawLine.Replace(Environment.NewLine, "\\n").Replace("\n", "\\n");
 
@@ -176,10 +176,10 @@ namespace FEITS.Controller
                 {
                     string newMessage = string.Empty;
 
-                    foreach (MessageLine msg in fileCont.MessageList[mainView.MsgListIndex].MessageLines)
-                    {
-                        msg.UpdateRawWithNewDialogue();
-                    }
+                    //foreach (MessageLine msg in fileCont.MessageList[mainView.MsgListIndex].MessageLines)
+                    //{
+                    //    msg.UpdateRawWithNewDialogue();
+                    //}
 
                     fileCont.MessageList[mainView.MsgListIndex].MessageLines[conv.LineIndex].RawLine = editCont.MessageScript;
 
@@ -188,9 +188,8 @@ namespace FEITS.Controller
                         newMessage += msg.RawLine;
                     }
 
-                    MessageBlock updatedBlock = new MessageBlock();
-                    updatedBlock.ParseMessage(newMessage);
-                    fileCont.MessageList[mainView.MsgListIndex] = updatedBlock;
+                    fileCont.MessageList[mainView.MsgListIndex].MessageLines.Clear();
+                    fileCont.MessageList[mainView.MsgListIndex].ParseMessage(newMessage);
                     SetCurrentLine();
                 }
             }

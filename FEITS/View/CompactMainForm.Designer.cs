@@ -343,6 +343,7 @@
             this.LB_MessageList.Size = new System.Drawing.Size(150, 386);
             this.LB_MessageList.TabIndex = 0;
             this.LB_MessageList.SelectedIndexChanged += new System.EventHandler(this.LB_MessageList_SelectedIndexChanged);
+            this.LB_MessageList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LB_MessageList_MouseDown);
             // 
             // TB_PlayerName
             // 
