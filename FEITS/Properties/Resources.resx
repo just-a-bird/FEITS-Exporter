@@ -10269,6 +10269,7 @@
   </data>
   <data name="陰陽師男_st_照" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img\face\陰陽師男_st_照.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+<<<<<<< HEAD
   </data>
   <data name="陰陽師男_st_笑" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img\face\陰陽師男_st_笑.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -10410,5 +10411,154 @@
   </data>
   <data name="TextBox_Nohr" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img\TextBox_Nohr.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+=======
+  </data>
+  <data name="陰陽師男_st_笑" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\陰陽師男_st_笑.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="陰陽師男_st_苦" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\陰陽師男_st_苦.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="陰陽師男_st_通常" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\陰陽師男_st_通常.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_bu_キメ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_bu_キメ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_bu_囚" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_bu_囚.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_bu_怒" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_bu_怒.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_bu_汗" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_bu_汗.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_bu_照" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_bu_照.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_bu_笑" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_bu_笑.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_bu_苦" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_bu_苦.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_bu_通常" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_bu_通常.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_st_キメ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_st_キメ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_st_囚" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_st_囚.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_st_怒" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_st_怒.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_st_汗" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_st_汗.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_st_照" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_st_照.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_st_笑" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_st_笑.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_st_苦" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_st_苦.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="面をつけた透魔竜_st_通常" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\面をつけた透魔竜_st_通常.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_bu_キメ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_bu_キメ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_bu_囚" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_bu_囚.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_bu_怒" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_bu_怒.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_bu_汗" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_bu_汗.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_bu_照" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_bu_照.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_bu_笑" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_bu_笑.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_bu_苦" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_bu_苦.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_bu_通常" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_bu_通常.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_st_キメ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_st_キメ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_st_囚" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_st_囚.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_st_怒" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_st_怒.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_st_汗" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_st_汗.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_st_照" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_st_照.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_st_笑" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_st_笑.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_st_苦" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_st_苦.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="鬼人男_st_通常" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\face\鬼人男_st_通常.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Awakening_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\Awakening_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Awakening_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\Awakening_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FEITS_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\FEITS Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HalfBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\HalfBox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HalfBox_Hoshido" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\HalfBox_Hoshido.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HalfBox_Nohr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\HalfBox_Nohr.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="KeyPress" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\KeyPress.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NameBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\NameBox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SupportBG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\SupportBG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TextBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\TextBox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TextBox_Hoshido" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\TextBox_Hoshido.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TextBox_Nohr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\TextBox_Nohr.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Reminder_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\Reminder_0.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Reminder_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img\Reminder_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+>>>>>>> refs/remotes/origin/File-Support
   </data>
 </root>

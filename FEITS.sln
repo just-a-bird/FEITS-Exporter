@@ -11,8 +11,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+<<<<<<< HEAD
 		{1DDD4FB1-C846-4F39-877E-385623C263DE}.Debug|Any CPU.ActiveCfg = Release|Any CPU
 		{1DDD4FB1-C846-4F39-877E-385623C263DE}.Debug|Any CPU.Build.0 = Release|Any CPU
+=======
+		{1DDD4FB1-C846-4F39-877E-385623C263DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DDD4FB1-C846-4F39-877E-385623C263DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+>>>>>>> refs/remotes/origin/File-Support
 		{1DDD4FB1-C846-4F39-877E-385623C263DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DDD4FB1-C846-4F39-877E-385623C263DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

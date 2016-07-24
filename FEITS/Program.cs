@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using FEITS.Model;
+using FEITS.View;
+using FEITS.Controller;
 
 namespace FEITS
 {
@@ -13,7 +16,14 @@ namespace FEITS
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+<<<<<<< HEAD
             Application.Run(new MainForm());
+=======
+            CompactMainForm mainView = new CompactMainForm();
+            ConversationModel model = new ConversationModel();
+            MainController controller = new MainController(mainView, model);
+            Application.Run(mainView);
+>>>>>>> refs/remotes/origin/File-Support
         }
     }
 }
