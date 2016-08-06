@@ -151,7 +151,7 @@ namespace FEITS.View
             {
                 RTB_CurrentLine.Enabled = true;
                 cont.OnMsgLineChanged();
-                Console.WriteLine(RTB_CurrentLine.Rtf);
+                //Console.WriteLine(RTB_CurrentLine.Rtf);
             }
         }
 

@@ -158,6 +158,14 @@ namespace FEITS.Model
                 return false;
             }
 
+            foreach(MessageBlock mb in MessageList)
+            {
+                foreach(MessageLine ml in mb.MessageLines)
+                {
+                    //Console.WriteLine(ml.RawLine);
+                }
+            }
+
             return true;
         }
         #endregion

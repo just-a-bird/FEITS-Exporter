@@ -30,10 +30,10 @@ namespace FEITS.Model
             string pattern = "(?<=" + string.Join("|", delimiters.Select(d => Regex.Escape(d)).ToArray()) + ")";
             string[] splits = Regex.Split(message, pattern);
 
-            List<string> lines = new List<string>();
-            lines.AddRange(splits.Where(s => (!string.IsNullOrWhiteSpace(Parse(s)) && !string.IsNullOrEmpty(Parse(s)))));
+            //List<string> lines = new List<string>();
+            //lines.AddRange(splits.Where(s => (!string.IsNullOrWhiteSpace(Parse(s)) && !string.IsNullOrEmpty(Parse(s)))));
 
-            foreach(string str in lines)
+            foreach(string str in splits)
             {
                 MessageLine newLine = new MessageLine();
                 newLine.RawLine = str;
@@ -78,9 +78,9 @@ namespace FEITS.Model
         public static Tuple<string, Command> ParseCommand(string line, int offset)
         {
             string trunc = line.Substring(offset);
-            string[] NoParams = { "$Wa", "$Wc", "$a", "$Nu", "$N0", "$N1", "$k\\n", "$k", "$t0", "$t1", "$p" };
-            string[] SingleParams = { "$E", "$Sbs", "$Svp", "$Sre", "$Fw", "$Ws", "$VF", "$Ssp", "$Fo", "$VNMPID", "$Fi", "$b", "$Wd", "$w", "$l" };
-            string[] DoubleParams = { "$Wm", "$Sbv", "$Sbp", "$Sls", "$Slp" };
+            string[] NoParams = { "$Wa", "$Wc", "$a", "$Nu", "$N0", "$N1", "$k\\n", "$k", "$t0", "$t1", "$p", "$Wd", "$Wv" };
+            string[] SingleParams = { "$E", "$Sbs", "$Svp", "$Sre", "$Fw", "$Ws", "$VF", "$Ssp", "$Fo", "$VNMPID", "$Fi", "$b", "$w", "$l" };
+            string[] DoubleParams = { "$Wm", "$Sbv", "$Sbp", "$Sls", "$Slp", "$Srp" };
             Command newCmd = new Command();
 
             foreach(string delim in NoParams)
@@ -119,6 +119,11 @@ namespace FEITS.Model
                     newCmd.Params = new string[newCmd.numParams];
                     int index = line.IndexOf("|", offset);
                     int index2 = line.IndexOf("|", index + 1);
+
+                    if(delim == "$Srp")
+                    {
+                        Console.WriteLine("$Srp processed!");
+                    }
 
                     if(delim == "$Wm")
                     {

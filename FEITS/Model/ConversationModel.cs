@@ -190,9 +190,13 @@ namespace FEITS.Model
                         default:
                             break;
                     }
-
                     i--;
                 }
+            }
+
+            if(string.IsNullOrWhiteSpace(line.SpokenText))
+            {
+                line.SpokenText = string.Empty;
             }
 
             line.SpeechIndex = line.RawLine.LastIndexOf(line.SpokenText);
