@@ -9,6 +9,7 @@ namespace FEITS.Controller
         private IExportImportView view;
         private string messageScript;
         public string MessageScript { get { return messageScript; } }
+        private bool isMale;
 
         bool[] validChars = AssetGeneration.ValidCharacters;
 
@@ -23,6 +24,7 @@ namespace FEITS.Controller
         private void SetupView()
         {
             view.MessageText = messageScript;
+            CheckForGender();
         }
 
         public void OnImportMsgChanged()
@@ -35,6 +37,13 @@ namespace FEITS.Controller
 
         private void CheckForValidChars()
         {
+            if (messageScript.StartsWith("MESS_"))
+            {
+                view.AllowImport = true;
+                view.StatusText = "";
+                return;
+            }
+
             bool containsInvalids = false;
             List<char> inv = new List<char>();
             foreach(char c in messageScript.Where(c => !validChars[AssetGeneration.GetValue(c)]))
@@ -55,6 +64,47 @@ namespace FEITS.Controller
                 view.AllowImport = true;
                 view.StatusText = "";
             }
+        }
+
+        private void CheckForGender()
+        {
+            if(messageScript.Contains("VOICE_PLAYER"))
+            {
+                view.ReversibleGenderCode = true;
+
+                if(messageScript.Contains("VOICE_PLAYER_M#"))
+                {
+                    isMale = true;
+                }
+                else
+                {
+                    isMale = false;
+                }
+            }
+            else
+            {
+                view.ReversibleGenderCode = false;
+            }
+        }
+
+        public void ReverseGenderCode(bool reverseFromOriginal)
+        {
+            if(isMale)
+            {
+                if(reverseFromOriginal)
+                    view.MessageText = messageScript.Replace("VOICE_PLAYER_M#", "VOICE_PLAYER_F#");
+                else
+                    view.MessageText = messageScript.Replace("VOICE_PLAYER_F#", "VOICE_PLAYER_M#");
+            }
+            else
+            {
+                if(reverseFromOriginal)
+                    view.MessageText = messageScript.Replace("VOICE_PLAYER_F#", "VOICE_PLAYER_M#");
+                else
+                    view.MessageText = messageScript.Replace("VOICE_PLAYER_M#", "VOICE_PLAYER_F#");
+            }
+
+            view.StatusText = "NOTE: Gender has been swapped in code, but dialogue remains unchanged.";
         }
     }
 }

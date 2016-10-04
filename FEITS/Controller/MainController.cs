@@ -2,6 +2,7 @@
 using FEITS.View;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Media;
 using System.Windows.Forms;
@@ -13,6 +14,9 @@ namespace FEITS.Controller
         private IMainView mainView;
         private ConversationModel conv;
         private ParsedFileContainer fileCont = new ParsedFileContainer();
+
+        private OpenFileDialog ofd = new OpenFileDialog();
+        private SaveFileDialog sfd = new SaveFileDialog();
 
         private bool reminderOpen;
         public bool ReminderOpen { set { reminderOpen = value; } }
@@ -33,27 +37,30 @@ namespace FEITS.Controller
             fileCont.EmptyFileData();
         }
 
-        public bool OpenFile(string filePath)
+        public bool OpenFile()
         {
-            try
+            ofd.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            ofd.FilterIndex = 1;
+
+            if(ofd.ShowDialog() == DialogResult.OK)
             {
-                if (fileCont.LoadFromFile(filePath))
+                try
                 {
-                    //Console.WriteLine("File opened successfully.");
-                    mainView.SetMessageList(fileCont.MessageList);
-                    return true;
+                    if (fileCont.LoadFromFile(ofd.FileName))
+                    {
+                        mainView.FormName = fileCont.FileName = Path.GetFileNameWithoutExtension(ofd.FileName);
+                        mainView.SetMessageList(fileCont.MessageList);
+                        return true;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    //Console.WriteLine("File could not be opened successfully.");
+                    MessageBox.Show(ex.Message, "Error: Could Not Read File");
                     return false;
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error: Could Not Read File");
-                return false;
-            }
+
+            return false;
         }
 
         /// <summary>
@@ -73,20 +80,33 @@ namespace FEITS.Controller
             }
         }
 
-        public bool SaveFileAs(string filePath)
+        public bool SaveFileAs()
         {
-            try
+            sfd.Filter = "Text files (*.txt)|*.txt";
+            sfd.FilterIndex = 1;
+
+            if(sfd.ShowDialog() == DialogResult.OK)
             {
-                if (fileCont.SaveToFile(filePath))
-                    return true;
-                else
+                try
+                {
+                    if (fileCont.SaveToFile(sfd.FileName))
+                    {
+                        mainView.FormName = fileCont.FileName = Path.GetFileNameWithoutExtension(sfd.FileName);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error: File Not Saved");
                     return false;
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error: File Not Saved");
-                return false;
-            }
+
+            return false;
         }
 
         public bool ImportMessageScript()
@@ -135,7 +155,25 @@ namespace FEITS.Controller
                 if(messageExporter != null)
                     messageExporter.Dispose();
             }
+        }
 
+        public void ExportAllMessages()
+        {
+            ScriptExport messageExporter = new ScriptExport();
+            try
+            {
+                ImportExportController exportCont = new ImportExportController(messageExporter, fileCont.CompileFileText());
+                messageExporter.ShowDialog();
+            }
+            catch
+            {
+                MessageBox.Show("Nothing to export.", "Error");
+            }
+            finally
+            {
+                if (messageExporter != null)
+                    messageExporter.Dispose();
+            }
         }
 
         public void EditMessageScript()
@@ -338,12 +376,32 @@ namespace FEITS.Controller
             }
         }
 
-        public Image GetConversationImage()
+        public void SavePreview(bool fullConversation)
         {
-            Image convToSave = conv.RenderConversation();
-            SetCurrentLine();
+            sfd.Filter = "PNG Files (*.png)|*.png";
+            
+            if(fullConversation)
+            {
+                sfd.FileName = fileCont.FileName + "_Conversation";
 
-            return convToSave;
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    Image imageFile = conv.RenderConversation();
+                    SetCurrentLine();
+
+                    imageFile.Save(sfd.FileName, ImageFormat.Png);
+                }
+            }
+            else
+            {
+                sfd.FileName = fileCont.FileName + "_Page" + mainView.CurrentPage.ToString();
+                
+                if(sfd.ShowDialog() == DialogResult.OK)
+                {
+                    Image imageFile = mainView.PreviewImage;
+                    imageFile.Save(sfd.FileName, ImageFormat.Png);
+                }
+            }
         }
 
         public DialogResult Prompt(MessageBoxButtons btn, params string[] lines)

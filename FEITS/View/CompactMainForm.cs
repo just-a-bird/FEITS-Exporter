@@ -180,7 +180,10 @@ namespace FEITS.View
 
         private void MI_Open_Click(object sender, EventArgs e)
         {
-            FD_Open.ShowDialog();
+            if(cont.OpenFile())
+                ApplicationStatus = "File opened successfully";
+            else
+                ApplicationStatus = "Error opening file";
         }
 
         private void MI_Save_Click(object sender, EventArgs e)
@@ -188,9 +191,16 @@ namespace FEITS.View
             if (CurrentLine != string.Empty)
             {
                 if (!cont.SaveFile())
-                    FD_Save.ShowDialog();
-                else
-                    ApplicationStatus = "File saved at " + DateTime.Now.ToShortTimeString();
+                {
+                    if (!cont.SaveFileAs())
+                    {
+                        MessageBox.Show("File could not be saved.", "Error");
+                        ApplicationStatus = "Could not save file";
+                        return;
+                    }
+                }
+
+                ApplicationStatus = "File saved at " + DateTime.Now.ToShortTimeString();
             }
             else
             {
@@ -203,8 +213,10 @@ namespace FEITS.View
         {
             if(CurrentLine != string.Empty)
             {
-                FD_Save.Filter = "Text files (*.txt)|*.txt";
-                FD_Save.ShowDialog();
+                if (cont.SaveFileAs())
+                    ApplicationStatus = "File saved at " + DateTime.Now.ToShortTimeString();
+                else
+                    ApplicationStatus = "Could not save file";
             }
             else
             {
@@ -217,7 +229,7 @@ namespace FEITS.View
             if (cont.ImportMessageScript())
             {
                 FormName = "";
-                FD_Save.FileName = string.Empty;
+                //FD_Save.FileName = string.Empty;
                 ApplicationStatus = "Import successful";
             }
             else
@@ -229,6 +241,11 @@ namespace FEITS.View
         private void MI_Export_Click(object sender, EventArgs e)
         {
             cont.ExportMessageScript();
+        }
+
+        private void exportAllMessagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            cont.ExportAllMessages();
         }
 
         private void MI_EditLine_Click(object sender, EventArgs e)
@@ -273,31 +290,6 @@ namespace FEITS.View
             cont.ExitApplication();
         }
 
-        private void FD_Open_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (cont.OpenFile(FD_Open.FileName))
-            {
-                string fileName = FD_Open.SafeFileName.Replace(".txt", "");
-                FD_Save.FileName = FormName = fileName;
-                ApplicationStatus = "File opened successfully";
-            }
-            else
-            {
-                ApplicationStatus = "Error opening file";
-            }
-        }
-
-        private void FD_Save_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if(FD_Open.SafeFileName.Contains(".txt"))
-            {
-                if (cont.SaveFileAs(FD_Save.FileName))
-                    ApplicationStatus = "File saved at " + DateTime.Now.ToShortTimeString();
-                else
-                    ApplicationStatus = "Could not save file";
-            }
-        }
-
         private void TB_CurrentPage_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
@@ -321,34 +313,15 @@ namespace FEITS.View
                 if (cont.Prompt(MessageBoxButtons.YesNo, "Save the current conversation?") != DialogResult.Yes)
                     return;
 
-                FD_Save.Filter = "PNG Files (*.png)|*.png";
-                FD_Save.FileName = FD_Save.FileName + "_Conversation";
-                DialogResult result = FD_Save.ShowDialog();
-
-                if(result == DialogResult.OK)
-                {
-                    Image imageFile = cont.GetConversationImage();
-                    imageFile.Save(FD_Save.FileName, ImageFormat.Png);
-                }
+                cont.SavePreview(true);
             }
             else if((e as MouseEventArgs).Button == MouseButtons.Left)
             {
                 if (cont.Prompt(MessageBoxButtons.YesNo,"Save the current image?") != DialogResult.Yes)
                     return;
 
-                FD_Save.Filter = "PNG Files (*.png)|*.png";
-                FD_Save.FileName = FD_Save.FileName + "_Page" + CurrentPage.ToString();
-                DialogResult result = FD_Save.ShowDialog();
-
-                if (result == DialogResult.OK)
-                {
-                    Image imageFile = PreviewImage;
-                    imageFile.Save(FD_Save.FileName, ImageFormat.Png);
-                }
+                cont.SavePreview(false);
             }
-
-            string fileName = FD_Open.SafeFileName.Replace(".txt", "");
-            FD_Save.FileName = FormName = fileName;
         }
 
         private void PB_PreviewBox_DragDrop(object sender, DragEventArgs e)
@@ -365,6 +338,41 @@ namespace FEITS.View
         private void LB_MessageList_MouseDown(object sender, MouseEventArgs e)
         {
             LB_MessageList.Focus();
+        }
+
+        private void RTB_CurrentLine_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.Shift && e.KeyCode == Keys.Enter)
+            {
+                if (!RTB_CurrentLine.ReadOnly)
+                    RTB_CurrentLine.ReadOnly = true;
+
+                if (PrevLine)
+                    cont.PreviousPage();
+            }
+            else if (e.Shift && e.KeyCode == Keys.Enter)
+            {
+                if (!RTB_CurrentLine.ReadOnly)
+                    RTB_CurrentLine.ReadOnly = true;
+
+                if (NextLine)
+                    cont.NextPage();
+            }
+            //else if((e.Control || e.Shift) && e.KeyCode != Keys.Enter)
+            //{
+            //    if (RTB_CurrentLine.ReadOnly)
+            //        RTB_CurrentLine.ReadOnly = false;
+            //}
+            //else if(e.Control || e.Shift)
+            //{
+            //    if(!RTB_CurrentLine.ReadOnly)
+            //        RTB_CurrentLine.ReadOnly = true;
+            //}
+            else
+            {
+                if (RTB_CurrentLine.ReadOnly)
+                    RTB_CurrentLine.ReadOnly = false;
+            }
         }
     }
 }

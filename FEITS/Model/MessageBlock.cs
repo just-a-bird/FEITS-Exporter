@@ -30,9 +30,6 @@ namespace FEITS.Model
             string pattern = "(?<=" + string.Join("|", delimiters.Select(d => Regex.Escape(d)).ToArray()) + ")";
             string[] splits = Regex.Split(message, pattern);
 
-            //List<string> lines = new List<string>();
-            //lines.AddRange(splits.Where(s => (!string.IsNullOrWhiteSpace(Parse(s)) && !string.IsNullOrEmpty(Parse(s)))));
-
             foreach(string str in splits)
             {
                 MessageLine newLine = new MessageLine();
@@ -41,45 +38,11 @@ namespace FEITS.Model
             }
         }
 
-        private string Parse(string line)
-        {
-            for(int i = 0; i < line.Length; i++)
-            {
-                if(line[i] == '$')
-                {
-                    Tuple<string, Command> res = ParseCommand(line, i);
-                    line = res.Item1;
-                    switch(res.Item2.cmd)
-                    {
-                        case "$E":
-                        case "$Ws":
-                        case "$Wm":
-                        case "$Wd":
-                        case "$a":
-                        case "$t0":
-                        case "$t1":
-                        case "$Nu":
-                            i += 2;
-                            break;
-                        case "$Wa":
-                        case "$Wc":
-                        default:
-                            break;
-                    }
-
-                    i--;
-                }
-            }
-
-            line = line.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
-            return line;
-        }
-
         public static Tuple<string, Command> ParseCommand(string line, int offset)
         {
             string trunc = line.Substring(offset);
             string[] NoParams = { "$Wa", "$Wc", "$a", "$Nu", "$N0", "$N1", "$k\\n", "$k", "$t0", "$t1", "$p", "$Wd", "$Wv" };
-            string[] SingleParams = { "$E", "$Sbs", "$Svp", "$Sre", "$Fw", "$Ws", "$VF", "$Ssp", "$Fo", "$VNMPID", "$Fi", "$b", "$w", "$l" };
+            string[] SingleParams = { "\n$E", "$E", "$Sbs", "$Svp", "$Sre", "$Fw", "$Ws", "$VF", "$Ssp", "$Fo", "$VNMPID", "$Fi", "$b", "$w", "$l" };
             string[] DoubleParams = { "$Wm", "$Sbv", "$Sbp", "$Sls", "$Slp", "$Srp" };
             Command newCmd = new Command();
 
@@ -99,8 +62,6 @@ namespace FEITS.Model
             {
                 if(trunc.StartsWith(delim))
                 {
-                    //Console.WriteLine(delim);
-                    //Console.WriteLine(trunc);
                     newCmd.cmd = delim;
                     newCmd.numParams = 1;
                     newCmd.Params = new string[newCmd.numParams];

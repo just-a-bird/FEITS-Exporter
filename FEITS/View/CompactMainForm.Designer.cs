@@ -40,6 +40,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.MI_Import = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_Export = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportAllMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.M_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,8 +66,6 @@
             this.B_NextLine = new System.Windows.Forms.Button();
             this.RTB_CurrentLine = new System.Windows.Forms.RichTextBox();
             this.PB_PreviewBox = new System.Windows.Forms.PictureBox();
-            this.FD_Open = new System.Windows.Forms.OpenFileDialog();
-            this.FD_Save = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -84,6 +83,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(9, 410);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(556, 24);
+            this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -125,6 +125,7 @@
             this.toolStripSeparator1,
             this.MI_Import,
             this.MI_Export,
+            this.exportAllMessagesToolStripMenuItem,
             this.toolStripSeparator2,
             this.M_Exit});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -171,7 +172,7 @@
             this.MI_Import.Name = "MI_Import";
             this.MI_Import.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
             this.MI_Import.Size = new System.Drawing.Size(196, 22);
-            this.MI_Import.Text = "&Import Message";
+            this.MI_Import.Text = "&Import";
             this.MI_Import.Click += new System.EventHandler(this.MI_Import_Click);
             // 
             // MI_Export
@@ -180,8 +181,17 @@
             this.MI_Export.Name = "MI_Export";
             this.MI_Export.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
             this.MI_Export.Size = new System.Drawing.Size(196, 22);
-            this.MI_Export.Text = "Ex&port Message";
+            this.MI_Export.Text = "Ex&port";
             this.MI_Export.Click += new System.EventHandler(this.MI_Export_Click);
+            // 
+            // exportAllMessagesToolStripMenuItem
+            // 
+            this.exportAllMessagesToolStripMenuItem.Name = "exportAllMessagesToolStripMenuItem";
+            this.exportAllMessagesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.E)));
+            this.exportAllMessagesToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.exportAllMessagesToolStripMenuItem.Text = "Expo&rt All";
+            this.exportAllMessagesToolStripMenuItem.Click += new System.EventHandler(this.exportAllMessagesToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -368,6 +378,7 @@
             // B_PrevLine
             // 
             this.B_PrevLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.B_PrevLine.Enabled = false;
             this.B_PrevLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.B_PrevLine.Location = new System.Drawing.Point(259, 351);
             this.B_PrevLine.Name = "B_PrevLine";
@@ -393,6 +404,7 @@
             // B_NextLine
             // 
             this.B_NextLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.B_NextLine.Enabled = false;
             this.B_NextLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.B_NextLine.Location = new System.Drawing.Point(345, 351);
             this.B_NextLine.Name = "B_NextLine";
@@ -430,19 +442,6 @@
             this.PB_PreviewBox.Click += new System.EventHandler(this.PB_PreviewBox_Click);
             this.PB_PreviewBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragDrop);
             this.PB_PreviewBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragEnter);
-            // 
-            // FD_Open
-            // 
-            this.FD_Open.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-            this.FD_Open.InitialDirectory = "Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)";
-            this.FD_Open.RestoreDirectory = true;
-            this.FD_Open.FileOk += new System.ComponentModel.CancelEventHandler(this.FD_Open_FileOk);
-            // 
-            // FD_Save
-            // 
-            this.FD_Save.Filter = "Text files (*.txt)|*.txt";
-            this.FD_Save.RestoreDirectory = true;
-            this.FD_Save.FileOk += new System.ComponentModel.CancelEventHandler(this.FD_Save_FileOk);
             // 
             // CompactMainForm
             // 
@@ -505,8 +504,6 @@
         private System.Windows.Forms.RichTextBox RTB_CurrentLine;
         private System.Windows.Forms.PictureBox PB_PreviewBox;
         private System.Windows.Forms.ToolStripMenuItem MI_Message;
-        private System.Windows.Forms.OpenFileDialog FD_Open;
-        private System.Windows.Forms.SaveFileDialog FD_Save;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MI_TBStyles;
         private System.Windows.Forms.ToolStripMenuItem MI_TBStandard;
@@ -514,5 +511,6 @@
         private System.Windows.Forms.ToolStripMenuItem MI_TBHoshido;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem MI_EnableBackgrounds;
+        private System.Windows.Forms.ToolStripMenuItem exportAllMessagesToolStripMenuItem;
     }
 }

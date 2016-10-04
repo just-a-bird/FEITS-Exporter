@@ -11,6 +11,7 @@ namespace FEITS.Controller
         string MessageText { get; set; }
         string StatusText { get; set; }
         bool AllowImport { get; set; }
+        bool ReversibleGenderCode { get; set; }
 
         void SetController(ImportExportController controller);
     }

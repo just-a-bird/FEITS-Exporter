@@ -33,11 +33,9 @@ namespace FEITS.View
             set { LBL_CharInfo.Text = value; }
         }
 
-        public bool AllowImport
-        {
-            get;
-            set;
-        }
+        public bool AllowImport { get; set; }
+
+        public bool ReversibleGenderCode { get; set; }
 
         private void TB_ScriptInput_KeyDown(object sender, KeyEventArgs e)
         {

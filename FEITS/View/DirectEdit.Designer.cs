@@ -32,12 +32,13 @@
             this.B_Cancel = new System.Windows.Forms.Button();
             this.TB_LineEdit = new System.Windows.Forms.TextBox();
             this.LBL_Warning = new System.Windows.Forms.Label();
+            this.CB_ReverseGenders = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // B_LoadScript
             // 
             this.B_LoadScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.B_LoadScript.Location = new System.Drawing.Point(236, 151);
+            this.B_LoadScript.Location = new System.Drawing.Point(236, 164);
             this.B_LoadScript.Name = "B_LoadScript";
             this.B_LoadScript.Size = new System.Drawing.Size(80, 25);
             this.B_LoadScript.TabIndex = 2;
@@ -48,7 +49,7 @@
             // 
             this.B_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.B_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.B_Cancel.Location = new System.Drawing.Point(322, 152);
+            this.B_Cancel.Location = new System.Drawing.Point(322, 164);
             this.B_Cancel.Name = "B_Cancel";
             this.B_Cancel.Size = new System.Drawing.Size(80, 25);
             this.B_Cancel.TabIndex = 3;
@@ -72,12 +73,26 @@
             // 
             // LBL_Warning
             // 
-            this.LBL_Warning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LBL_Warning.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.LBL_Warning.ForeColor = System.Drawing.Color.Red;
-            this.LBL_Warning.Location = new System.Drawing.Point(12, 150);
+            this.LBL_Warning.Location = new System.Drawing.Point(12, 138);
             this.LBL_Warning.Name = "LBL_Warning";
-            this.LBL_Warning.Size = new System.Drawing.Size(218, 26);
+            this.LBL_Warning.Size = new System.Drawing.Size(218, 54);
             this.LBL_Warning.TabIndex = 4;
+            this.LBL_Warning.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // CB_ReverseGenders
+            // 
+            this.CB_ReverseGenders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.CB_ReverseGenders.AutoSize = true;
+            this.CB_ReverseGenders.Location = new System.Drawing.Point(295, 138);
+            this.CB_ReverseGenders.Name = "CB_ReverseGenders";
+            this.CB_ReverseGenders.Size = new System.Drawing.Size(107, 17);
+            this.CB_ReverseGenders.TabIndex = 5;
+            this.CB_ReverseGenders.Text = "Reverse genders";
+            this.CB_ReverseGenders.UseVisualStyleBackColor = true;
+            this.CB_ReverseGenders.CheckedChanged += new System.EventHandler(this.CB_ReverseGenders_CheckedChanged);
             // 
             // DirectEdit
             // 
@@ -86,13 +101,15 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.CancelButton = this.B_Cancel;
-            this.ClientSize = new System.Drawing.Size(414, 186);
+            this.ClientSize = new System.Drawing.Size(414, 201);
+            this.Controls.Add(this.CB_ReverseGenders);
             this.Controls.Add(this.LBL_Warning);
             this.Controls.Add(this.TB_LineEdit);
             this.Controls.Add(this.B_Cancel);
             this.Controls.Add(this.B_LoadScript);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(430, 150);
             this.Name = "DirectEdit";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -108,5 +125,6 @@
         private System.Windows.Forms.Button B_Cancel;
         private System.Windows.Forms.TextBox TB_LineEdit;
         private System.Windows.Forms.Label LBL_Warning;
+        private System.Windows.Forms.CheckBox CB_ReverseGenders;
     }
 }

@@ -47,6 +47,12 @@ namespace FEITS.View
             }
         }
 
+        public bool ReversibleGenderCode
+        {
+            get { return CB_ReverseGenders.Enabled; }
+            set { CB_ReverseGenders.Enabled = value; }
+        }
+
         private void TB_LineEdit_TextChanged(object sender, EventArgs e)
         {
             cont.OnImportMsgChanged();
@@ -56,6 +62,11 @@ namespace FEITS.View
         {
             if (e.Control && e.KeyCode == Keys.A)
                 TB_LineEdit.SelectAll();
+        }
+
+        private void CB_ReverseGenders_CheckedChanged(object sender, EventArgs e)
+        {
+            cont.ReverseGenderCode(CB_ReverseGenders.Checked);
         }
     }
 }

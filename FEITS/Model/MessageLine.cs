@@ -9,7 +9,7 @@ namespace FEITS.Model
     {
         public string RawLine = string.Empty;
         public string SpokenText = string.Empty;
-        public int SpeechIndex = -1;
+        public int SpeechIndex;
 
         public ConversationTypes ConversationType = ConversationTypes.Type1;
 
@@ -19,6 +19,7 @@ namespace FEITS.Model
             {
                 SpokenText = SpokenText.Replace('’', '\'').Replace('~', '～').Replace("  ", " ");
 
+                //Find where the end of the old dialogue text should be
                 int lineIndex;
                 if(RawLine.Contains("$Nu"))
                 {

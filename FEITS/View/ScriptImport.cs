@@ -47,6 +47,8 @@ namespace FEITS.View
             }
         }
 
+        public bool ReversibleGenderCode { get; set; }
+
         private void TB_ScriptInput_TextChanged(object sender, EventArgs e)
         {
             cont.OnImportMsgChanged();
