@@ -158,6 +158,7 @@
     <Compile Include="View\ScriptImport.Designer.cs">
       <DependentUpon>ScriptImport.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\SpellBox.cs" />
     <EmbeddedResource Include="View\CompactMainForm.resx">
       <DependentUpon>CompactMainForm.cs</DependentUpon>
     </EmbeddedResource>

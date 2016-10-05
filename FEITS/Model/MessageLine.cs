@@ -9,7 +9,7 @@ namespace FEITS.Model
     {
         public string RawLine = string.Empty;
         public string SpokenText = string.Empty;
-        public int SpeechIndex;
+        public int SpeechIndex = -1;
 
         public ConversationTypes ConversationType = ConversationTypes.Type1;
 

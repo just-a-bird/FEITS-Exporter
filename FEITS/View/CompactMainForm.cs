@@ -3,9 +3,8 @@ using FEITS.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 namespace FEITS.View
 {
@@ -16,6 +15,7 @@ namespace FEITS.View
         public CompactMainForm()
         {
             InitializeComponent();
+            TB_CurrentLine.InitializeChild();
             PB_PreviewBox.AllowDrop = true;
         }
 
@@ -49,8 +49,8 @@ namespace FEITS.View
 
         public string CurrentLine
         {
-            get { return RTB_CurrentLine.Text; }
-            set { RTB_CurrentLine.Text = value; }
+            get { return TB_CurrentLine.Text; }
+            set { TB_CurrentLine.Text = value; TB_CurrentLine.ClearUndo(); }
         }
 
         public bool PrevLine
@@ -138,39 +138,89 @@ namespace FEITS.View
         private void LB_MessageList_SelectedIndexChanged(object sender, EventArgs e)
         {
             cont.SetCurrentMessage();
-            RTB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
+            //TB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
         }
 
-        private void RTB_CurrentLine_TextChanged(object sender, EventArgs e)
+        private void TB_CurrentLine_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (RTB_CurrentLine.TextLength <= 0 && LB_MessageList.Items.Count <= 0)
+            if (TB_CurrentLine.Text.Length <= 0 && LB_MessageList.Items.Count <= 0)
             {
-                RTB_CurrentLine.Enabled = false;
+                TB_CurrentLine.Enabled = false;
             }
             else
             {
-                RTB_CurrentLine.Enabled = true;
+                TB_CurrentLine.Enabled = true;
                 cont.OnMsgLineChanged();
-                //Console.WriteLine(RTB_CurrentLine.Rtf);
             }
+        }
+
+        private void TB_CurrentLine_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift))
+            {
+                if (e.Key == System.Windows.Input.Key.Enter && System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control))
+                {
+                    TB_CurrentLine.ReadOnly = true;
+
+                    if (PrevLine)
+                        cont.PreviousPage();
+                }
+                else if(e.Key == System.Windows.Input.Key.Enter)
+                {
+                    TB_CurrentLine.ReadOnly = true;
+
+                    if (NextLine)
+                        cont.NextPage();
+                }
+            }
+
+            if (e.Key == System.Windows.Input.Key.PageUp)
+            {
+                if (LB_MessageList.SelectedIndex > 0)
+                    LB_MessageList.SelectedIndex--;
+            }
+            else if (e.Key == System.Windows.Input.Key.PageDown)
+            {
+                if (LB_MessageList.SelectedIndex < LB_MessageList.Items.Count - 1)
+                    LB_MessageList.SelectedIndex++;
+            }
+        }
+
+        private void TB_CurrentLine_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key == System.Windows.Input.Key.Enter)
+            {
+                if (TB_CurrentLine.ReadOnly)
+                    TB_CurrentLine.ReadOnly = false;
+            }
+        }
+
+        private void TB_CurrentLine_ChildChanged(object sender, ChildChangedEventArgs e)
+        {
+            var ctr = (TB_CurrentLine.Child as System.Windows.Controls.TextBox);
+            if (ctr == null)
+                return;
+            ctr.TextChanged += TB_CurrentLine_TextChanged;
+            ctr.PreviewKeyDown += TB_CurrentLine_PreviewKeyDown;
+            ctr.PreviewKeyUp += TB_CurrentLine_PreviewKeyUp;
         }
 
         private void B_PrevLine_Click(object sender, EventArgs e)
         {
             cont.PreviousPage();
-            RTB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
+            TB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
         }
 
         private void B_NextLine_Click(object sender, EventArgs e)
         {
             cont.NextPage();
-            RTB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
+            TB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
         }
 
         private void TB_CurrentPage_Leave(object sender, EventArgs e)
         {
             cont.GotoPage(int.Parse(TB_CurrentPage.Text) - 1);
-            RTB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
+            TB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
         }
 
         private void TB_PlayerName_TextChanged(object sender, EventArgs e)
@@ -296,11 +346,6 @@ namespace FEITS.View
                 cont.GotoPage(int.Parse(TB_CurrentPage.Text) - 1);
         }
 
-        private void CompactMainForm_Shown(object sender, EventArgs e)
-        {
-            cont.StartLoadingAssets();
-        }
-
         private void MI_EnableBackgrounds_CheckedChanged(object sender, EventArgs e)
         {
             cont.OnBackgroundEnabledChanged();
@@ -340,38 +385,36 @@ namespace FEITS.View
             LB_MessageList.Focus();
         }
 
-        private void RTB_CurrentLine_KeyDown(object sender, KeyEventArgs e)
+        private void CompactMainForm_Shown(object sender, EventArgs e)
+        {
+            cont.StartLoadingAssets();
+        }
+
+        private void CompactMainForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.Shift && e.KeyCode == Keys.Enter)
             {
-                if (!RTB_CurrentLine.ReadOnly)
-                    RTB_CurrentLine.ReadOnly = true;
-
                 if (PrevLine)
                     cont.PreviousPage();
             }
             else if (e.Shift && e.KeyCode == Keys.Enter)
             {
-                if (!RTB_CurrentLine.ReadOnly)
-                    RTB_CurrentLine.ReadOnly = true;
-
                 if (NextLine)
                     cont.NextPage();
             }
-            //else if((e.Control || e.Shift) && e.KeyCode != Keys.Enter)
-            //{
-            //    if (RTB_CurrentLine.ReadOnly)
-            //        RTB_CurrentLine.ReadOnly = false;
-            //}
-            //else if(e.Control || e.Shift)
-            //{
-            //    if(!RTB_CurrentLine.ReadOnly)
-            //        RTB_CurrentLine.ReadOnly = true;
-            //}
-            else
+        }
+
+        private void CompactMainForm_KeyPress(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.PageUp)
             {
-                if (RTB_CurrentLine.ReadOnly)
-                    RTB_CurrentLine.ReadOnly = false;
+                if (LB_MessageList.SelectedIndex > 0)
+                    LB_MessageList.SelectedIndex--;
+            }
+            else if (e.Control && e.KeyCode == Keys.PageDown)
+            {
+                if (LB_MessageList.SelectedIndex < LB_MessageList.Items.Count - 1)
+                    LB_MessageList.SelectedIndex++;
             }
         }
     }

@@ -41,6 +41,7 @@ namespace FEITS.Controller
         {
             ofd.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             ofd.FilterIndex = 1;
+            ofd.FileName = string.Empty;
 
             if(ofd.ShowDialog() == DialogResult.OK)
             {
@@ -84,6 +85,9 @@ namespace FEITS.Controller
         {
             sfd.Filter = "Text files (*.txt)|*.txt";
             sfd.FilterIndex = 1;
+
+            if (fileCont.FileName != string.Empty)
+                sfd.FileName = fileCont.FileName;
 
             if(sfd.ShowDialog() == DialogResult.OK)
             {
@@ -313,10 +317,17 @@ namespace FEITS.Controller
 
         public void OnMsgLineChanged()
         {
-            conv.CurrentMessage.MessageLines[conv.LineIndex].SpokenText = mainView.CurrentLine;
+            try
+            {
+                conv.CurrentMessage.MessageLines[conv.LineIndex].SpokenText = mainView.CurrentLine;
 
-            if (conv.CurrentMessage != null)
-                mainView.PreviewImage = conv.RenderPreviewBox(mainView.CurrentLine);
+                if (conv.CurrentMessage != null)
+                    mainView.PreviewImage = conv.RenderPreviewBox(mainView.CurrentLine);
+            }
+            catch
+            {
+                
+            }
         }
 
         public void OnNameChanged()
@@ -387,6 +398,7 @@ namespace FEITS.Controller
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     Image imageFile = conv.RenderConversation();
+                    conv.GetCommandsBeforeIndex();
                     SetCurrentLine();
 
                     imageFile.Save(sfd.FileName, ImageFormat.Png);

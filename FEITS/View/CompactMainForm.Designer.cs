@@ -64,8 +64,8 @@
             this.B_PrevLine = new System.Windows.Forms.Button();
             this.TB_CurrentPage = new System.Windows.Forms.TextBox();
             this.B_NextLine = new System.Windows.Forms.Button();
-            this.RTB_CurrentLine = new System.Windows.Forms.RichTextBox();
             this.PB_PreviewBox = new System.Windows.Forms.PictureBox();
+            this.TB_CurrentLine = new FEITS.View.SpellBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -332,12 +332,12 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.TB_CurrentLine);
             this.splitContainer1.Panel2.Controls.Add(this.TB_PlayerName);
             this.splitContainer1.Panel2.Controls.Add(this.LBL_PlayerName);
             this.splitContainer1.Panel2.Controls.Add(this.B_PrevLine);
             this.splitContainer1.Panel2.Controls.Add(this.TB_CurrentPage);
             this.splitContainer1.Panel2.Controls.Add(this.B_NextLine);
-            this.splitContainer1.Panel2.Controls.Add(this.RTB_CurrentLine);
             this.splitContainer1.Panel2.Controls.Add(this.PB_PreviewBox);
             this.splitContainer1.Panel2MinSize = 400;
             this.splitContainer1.Size = new System.Drawing.Size(556, 386);
@@ -414,20 +414,6 @@
             this.B_NextLine.UseVisualStyleBackColor = true;
             this.B_NextLine.Click += new System.EventHandler(this.B_NextLine_Click);
             // 
-            // RTB_CurrentLine
-            // 
-            this.RTB_CurrentLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.RTB_CurrentLine.DetectUrls = false;
-            this.RTB_CurrentLine.Enabled = false;
-            this.RTB_CurrentLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RTB_CurrentLine.Location = new System.Drawing.Point(0, 246);
-            this.RTB_CurrentLine.Name = "RTB_CurrentLine";
-            this.RTB_CurrentLine.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.RTB_CurrentLine.Size = new System.Drawing.Size(400, 99);
-            this.RTB_CurrentLine.TabIndex = 1;
-            this.RTB_CurrentLine.Text = "";
-            this.RTB_CurrentLine.TextChanged += new System.EventHandler(this.RTB_CurrentLine_TextChanged);
-            // 
             // PB_PreviewBox
             // 
             this.PB_PreviewBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
@@ -443,6 +429,20 @@
             this.PB_PreviewBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragDrop);
             this.PB_PreviewBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragEnter);
             // 
+            // TB_CurrentLine
+            // 
+            this.TB_CurrentLine.AllowDrop = true;
+            this.TB_CurrentLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.TB_CurrentLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_CurrentLine.Location = new System.Drawing.Point(-1, 246);
+            this.TB_CurrentLine.Multiline = true;
+            this.TB_CurrentLine.Name = "TB_CurrentLine";
+            this.TB_CurrentLine.Size = new System.Drawing.Size(400, 99);
+            this.TB_CurrentLine.TabIndex = 1;
+            this.TB_CurrentLine.WordWrap = false;
+            this.TB_CurrentLine.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.TB_CurrentLine_ChildChanged);
+            this.TB_CurrentLine.Child = null;
+            // 
             // CompactMainForm
             // 
             this.AllowDrop = true;
@@ -453,11 +453,13 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(590, 482);
             this.Name = "CompactMainForm";
             this.Padding = new System.Windows.Forms.Padding(9, 0, 9, 9);
             this.Text = "FEITS Exporter";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CompactMainForm_KeyDown);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -501,7 +503,6 @@
         private System.Windows.Forms.Button B_PrevLine;
         private System.Windows.Forms.TextBox TB_CurrentPage;
         private System.Windows.Forms.Button B_NextLine;
-        private System.Windows.Forms.RichTextBox RTB_CurrentLine;
         private System.Windows.Forms.PictureBox PB_PreviewBox;
         private System.Windows.Forms.ToolStripMenuItem MI_Message;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
@@ -512,5 +513,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem MI_EnableBackgrounds;
         private System.Windows.Forms.ToolStripMenuItem exportAllMessagesToolStripMenuItem;
+        private SpellBox TB_CurrentLine;
     }
 }
