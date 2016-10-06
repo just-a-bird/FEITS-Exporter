@@ -415,12 +415,5 @@ namespace FEITS.Controller
                 }
             }
         }
-
-        public DialogResult Prompt(MessageBoxButtons btn, params string[] lines)
-        {
-            SystemSounds.Question.Play();
-            string msg = string.Join(Environment.NewLine + Environment.NewLine, lines);
-            return MessageBox.Show(msg, "Prompt", btn, MessageBoxIcon.Asterisk);
-        }
     }
 }

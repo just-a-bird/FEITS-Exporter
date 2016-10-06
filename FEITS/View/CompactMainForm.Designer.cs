@@ -46,6 +46,8 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_EditLine = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_Message = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.MI_SpellCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_TBStyles = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_TBStandard = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,13 +61,13 @@
             this.MI_Reminder = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.LB_MessageList = new System.Windows.Forms.ListBox();
+            this.TB_CurrentLine = new FEITS.View.SpellBox();
             this.TB_PlayerName = new System.Windows.Forms.TextBox();
             this.LBL_PlayerName = new System.Windows.Forms.Label();
             this.B_PrevLine = new System.Windows.Forms.Button();
             this.TB_CurrentPage = new System.Windows.Forms.TextBox();
             this.B_NextLine = new System.Windows.Forms.Button();
             this.PB_PreviewBox = new System.Windows.Forms.PictureBox();
-            this.TB_CurrentLine = new FEITS.View.SpellBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -209,7 +211,9 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MI_EditLine,
-            this.MI_Message});
+            this.MI_Message,
+            this.toolStripSeparator4,
+            this.MI_SpellCheck});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -229,6 +233,21 @@
             this.MI_Message.Size = new System.Drawing.Size(213, 22);
             this.MI_Message.Text = "Edit Raw &Message";
             this.MI_Message.Click += new System.EventHandler(this.MI_Message_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(210, 6);
+            // 
+            // MI_SpellCheck
+            // 
+            this.MI_SpellCheck.Checked = true;
+            this.MI_SpellCheck.CheckOnClick = true;
+            this.MI_SpellCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.MI_SpellCheck.Name = "MI_SpellCheck";
+            this.MI_SpellCheck.Size = new System.Drawing.Size(213, 22);
+            this.MI_SpellCheck.Text = "Spell Check";
+            this.MI_SpellCheck.CheckedChanged += new System.EventHandler(this.MI_SpellCheck_CheckedChanged);
             // 
             // viewToolStripMenuItem
             // 
@@ -355,6 +374,19 @@
             this.LB_MessageList.SelectedIndexChanged += new System.EventHandler(this.LB_MessageList_SelectedIndexChanged);
             this.LB_MessageList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LB_MessageList_MouseDown);
             // 
+            // TB_CurrentLine
+            // 
+            this.TB_CurrentLine.AllowDrop = true;
+            this.TB_CurrentLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.TB_CurrentLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_CurrentLine.Location = new System.Drawing.Point(-1, 246);
+            this.TB_CurrentLine.Multiline = true;
+            this.TB_CurrentLine.Name = "TB_CurrentLine";
+            this.TB_CurrentLine.Size = new System.Drawing.Size(400, 99);
+            this.TB_CurrentLine.TabIndex = 1;
+            this.TB_CurrentLine.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.TB_CurrentLine_ChildChanged);
+            this.TB_CurrentLine.Child = null;
+            // 
             // TB_PlayerName
             // 
             this.TB_PlayerName.Anchor = System.Windows.Forms.AnchorStyles.Top;
@@ -429,20 +461,6 @@
             this.PB_PreviewBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragDrop);
             this.PB_PreviewBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragEnter);
             // 
-            // TB_CurrentLine
-            // 
-            this.TB_CurrentLine.AllowDrop = true;
-            this.TB_CurrentLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.TB_CurrentLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_CurrentLine.Location = new System.Drawing.Point(-1, 246);
-            this.TB_CurrentLine.Multiline = true;
-            this.TB_CurrentLine.Name = "TB_CurrentLine";
-            this.TB_CurrentLine.Size = new System.Drawing.Size(400, 99);
-            this.TB_CurrentLine.TabIndex = 1;
-            this.TB_CurrentLine.WordWrap = false;
-            this.TB_CurrentLine.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.TB_CurrentLine_ChildChanged);
-            this.TB_CurrentLine.Child = null;
-            // 
             // CompactMainForm
             // 
             this.AllowDrop = true;
@@ -459,7 +477,7 @@
             this.Name = "CompactMainForm";
             this.Padding = new System.Windows.Forms.Padding(9, 0, 9, 9);
             this.Text = "FEITS Exporter";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CompactMainForm_KeyDown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CompactMainForm_KeyDown_1);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -514,5 +532,7 @@
         private System.Windows.Forms.ToolStripMenuItem MI_EnableBackgrounds;
         private System.Windows.Forms.ToolStripMenuItem exportAllMessagesToolStripMenuItem;
         private SpellBox TB_CurrentLine;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem MI_SpellCheck;
     }
 }

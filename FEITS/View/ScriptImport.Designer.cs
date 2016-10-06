@@ -75,6 +75,8 @@
             // 
             // LBL_Warning
             // 
+            this.LBL_Warning.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.LBL_Warning.ForeColor = System.Drawing.Color.Red;
             this.LBL_Warning.Location = new System.Drawing.Point(12, 226);
             this.LBL_Warning.Name = "LBL_Warning";

@@ -215,6 +215,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\txt\FE_Dictionary.lex" />
     <None Include="Resources\img\Awakening_0.png" />
   </ItemGroup>
   <ItemGroup>

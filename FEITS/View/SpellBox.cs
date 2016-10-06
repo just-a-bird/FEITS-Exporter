@@ -19,6 +19,7 @@ namespace FEITS.View
             box = new TextBox();
             box.TextChanged += (s, e) => OnTextChanged(EventArgs.Empty);
             box.SpellCheck.IsEnabled = true;
+            box.TextWrapping = TextWrapping.Wrap;
             box.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             this.Size = new System.Drawing.Size(100, 20);
         }
@@ -38,6 +39,13 @@ namespace FEITS.View
         {
             box.IsUndoEnabled = false;
             box.IsUndoEnabled = true;
+        }
+
+        [DefaultValue(true)]
+        public bool SpellCheckEnabled
+        {
+            get { return box.SpellCheck.IsEnabled; }
+            set { box.SpellCheck.IsEnabled = value; }
         }
 
         [DefaultValue(false)]

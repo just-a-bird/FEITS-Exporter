@@ -1,6 +1,8 @@
 ﻿using FEITS.Controller;
 using FEITS.Model;
+using FEITS.Properties;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -16,6 +18,8 @@ namespace FEITS.View
         {
             InitializeComponent();
             TB_CurrentLine.InitializeChild();
+            SetCustomDictionary();
+
             PB_PreviewBox.AllowDrop = true;
         }
 
@@ -31,6 +35,12 @@ namespace FEITS.View
 
             LB_MessageList.ValueMember = "Prefix";
             LB_MessageList.DataSource = bs;
+        }
+
+        private void SetCustomDictionary()
+        {
+            IList dictionary = System.Windows.Controls.SpellCheck.GetCustomDictionaries(TB_CurrentLine.Child as System.Windows.Controls.TextBox);
+            dictionary.Add(new Uri(@"pack://application:,,,/FEITS Exporter;component/Resources/txt/FE_Dictionary.lex"));
         }
 
         #region Properties
@@ -355,14 +365,14 @@ namespace FEITS.View
         {
             if((e as MouseEventArgs).Button == MouseButtons.Right)
             {
-                if (cont.Prompt(MessageBoxButtons.YesNo, "Save the current conversation?") != DialogResult.Yes)
+                if (MessageBox.Show("Save the current conversation?", "Save Conversation As Image", MessageBoxButtons.YesNo) != DialogResult.Yes)
                     return;
 
                 cont.SavePreview(true);
             }
             else if((e as MouseEventArgs).Button == MouseButtons.Left)
             {
-                if (cont.Prompt(MessageBoxButtons.YesNo,"Save the current image?") != DialogResult.Yes)
+                if (MessageBox.Show("Save the current image?", "Save Preview as Image", MessageBoxButtons.YesNo) != DialogResult.Yes)
                     return;
 
                 cont.SavePreview(false);
@@ -404,14 +414,22 @@ namespace FEITS.View
             }
         }
 
-        private void CompactMainForm_KeyPress(object sender, KeyEventArgs e)
+        private void MI_SpellCheck_CheckedChanged(object sender, EventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.PageUp)
+            if (MI_SpellCheck.Checked)
+                TB_CurrentLine.SpellCheckEnabled = true;
+            else
+                TB_CurrentLine.SpellCheckEnabled = false;
+        }
+
+        private void CompactMainForm_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.PageUp)
             {
                 if (LB_MessageList.SelectedIndex > 0)
                     LB_MessageList.SelectedIndex--;
             }
-            else if (e.Control && e.KeyCode == Keys.PageDown)
+            else if (e.KeyCode == Keys.PageDown)
             {
                 if (LB_MessageList.SelectedIndex < LB_MessageList.Items.Count - 1)
                     LB_MessageList.SelectedIndex++;
