@@ -42,7 +42,7 @@ namespace FEITS.Model
         {
             string trunc = line.Substring(offset);
             string[] NoParams = { "$Wa", "$Wc", "$a", "$Nu", "$N0", "$N1", "$k\\n", "$k", "$t0", "$t1", "$p", "$Wd", "$Wv" };
-            string[] SingleParams = { "\n$E", "$E", "$Sbs", "$Svp", "$Sre", "$Fw", "$Ws", "$VF", "$Ssp", "$Fo", "$VNMPID", "$Fi", "$b", "$w", "$l" };
+            string[] SingleParams = { "$E", "$Sbs", "$Svp", "$Sre", "$Fw", "$Ws", "$VF", "$Ssp", "$Fo", "$VNMPID", "$Fi", "$b", "$w", "$l" };
             string[] DoubleParams = { "$Wm", "$Sbv", "$Sbp", "$Sls", "$Slp", "$Srp" };
             Command newCmd = new Command();
 
