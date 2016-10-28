@@ -29,7 +29,7 @@ namespace FEITS.Model
 
         //Kamui
         private static string[] EyeStyles = { "a", "b", "c", "d", "e", "f", "g" };
-        private static string[] Kamuis = { "マイユニ男1", "マイユニ男2", "マイユニ女1", "マイユニ女2" };
+        private static string[] Kamuis = { "マイユニ男1", "マイユニ女2" };
 
         static AssetGeneration()
         {
@@ -109,15 +109,15 @@ namespace FEITS.Model
             return NewImage;
         }
 
-        public static Image GetCharacterStageImage(string CName, string CEmo, Color HairColor, bool Slot1)
+        public static Image GetCharacterStageImage(string CName, string CEmo, Color HairColor, bool Slot1, int PGender)
         {
             bool USER = CName == "username";
             string hairname = "_st_髪";
             string dat_id = "FSID_ST_" + CName;
             if (USER)
             {
-                dat_id = "FSID_ST_" + (new[] { "マイユニ_男1", "マイユニ_男2", "マイユニ_女1", "マイユニ_女2" })[0] + "_顔" + EyeStyles[0].ToUpper();
-                CName = EyeStyles[0] + Kamuis[0];
+                dat_id = "FSID_ST_" + (new[] { "マイユニ_男1", "マイユニ_女2" })[PGender] + "_顔" + EyeStyles[0].ToUpper();
+                CName = EyeStyles[0] + Kamuis[PGender];
                 hairname = CName.Substring(1) + hairname + 0;
             }
             else
@@ -133,7 +133,7 @@ namespace FEITS.Model
             {
                 if (USER && 0 > 0)
                 {
-                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ男2", "マイユニ女1", "マイユニ女2" })[0] + "_st_アクセサリ1_" + 0) as Image, new Point(0, 0));
+                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ女2" })[PGender] + "_st_アクセサリ1_" + 0) as Image, new Point(0, 0));
                 }
                 for (int i = 1; i < Emos.Length; i++)
                 {
@@ -154,7 +154,7 @@ namespace FEITS.Model
                 }
                 if (USER && 0 > 0)
                 {
-                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ男2", "マイユニ女1", "マイユニ女2" })[0] + "_st_アクセサリ2_" + 0) as Image, new Point(133, 28));
+                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ女2" })[PGender] + "_st_アクセサリ2_" + 0) as Image, new Point(133, 28));
                 }
             }
             if (Slot1)
@@ -162,15 +162,15 @@ namespace FEITS.Model
             return C;
         }
 
-        public static Image GetCharacterBUImage(string CName, string CEmo, Color HairColor, bool Crop)
+        public static Image GetCharacterBUImage(string CName, string CEmo, Color HairColor, bool Crop, int PGender)
         {
             string hairname = "_bu_髪";
             string dat_id = "FSID_BU_" + CName;
             bool USER = CName == "username";
             if (USER)
             {
-                dat_id = "FSID_BU_" + (new[] { "マイユニ_男1", "マイユニ_男2", "マイユニ_女1", "マイユニ_女2" })[0] + "_顔" + EyeStyles[0].ToUpper();
-                CName = EyeStyles[0] + Kamuis[0];
+                dat_id = "FSID_BU_" + (new[] { "マイユニ_男1", "マイユニ_女2" })[PGender] + "_顔" + EyeStyles[0].ToUpper();
+                CName = EyeStyles[0] + Kamuis[PGender];
                 hairname = CName.Substring(1) + hairname + 0;
             }
             else
@@ -186,7 +186,7 @@ namespace FEITS.Model
             {
                 if (USER && 0 > 0)
                 {
-                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ男2", "マイユニ女1", "マイユニ女2" })[0] + "_bu_アクセサリ1_" + 0) as Image, new Point(0, 0));
+                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ女2" })[PGender] + "_bu_アクセサリ1_" + 0) as Image, new Point(0, 0));
                 }
                 for (int i = 1; i < Emos.Length; i++)
                 {
@@ -208,7 +208,7 @@ namespace FEITS.Model
                 if (USER && 0 > 0)
                 {
                     Point Acc = new[] { new Point(66, 5), new Point(65, 21) }[0 - 2];
-                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ男2", "マイユニ女1", "マイユニ女2" })[0] + "_bu_アクセサリ2_" + 0) as Image, Acc);
+                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ女2" })[PGender] + "_bu_アクセサリ2_" + 0) as Image, Acc);
                 }
             }
             if (Crop)

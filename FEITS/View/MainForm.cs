@@ -99,6 +99,12 @@ namespace FEITS.View
             set { CHK_Backgrounds.Checked = value; }
         }
 
+        public int PlayerGender
+        {
+            get;
+            set;
+        }
+
         public int CurrentTextbox
         {
             get { return CB_Textbox.SelectedIndex; }

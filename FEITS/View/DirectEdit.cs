@@ -47,10 +47,10 @@ namespace FEITS.View
             }
         }
 
-        public bool ReversibleGenderCode
+        public bool ContainsGenderCode
         {
-            get { return CB_ReverseGenders.Enabled; }
-            set { CB_ReverseGenders.Enabled = value; }
+            get { return B_SwapGenders.Enabled; }
+            set { B_SwapGenders.Enabled = value; }
         }
 
         private void TB_LineEdit_TextChanged(object sender, EventArgs e)
@@ -64,9 +64,9 @@ namespace FEITS.View
                 TB_LineEdit.SelectAll();
         }
 
-        private void CB_ReverseGenders_CheckedChanged(object sender, EventArgs e)
+        private void B_SwapGenders_Click(object sender, EventArgs e)
         {
-            cont.ReverseGenderCode(CB_ReverseGenders.Checked);
+            cont.SwapGenderCode();
         }
     }
 }

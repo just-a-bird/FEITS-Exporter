@@ -32,7 +32,7 @@
             this.B_Cancel = new System.Windows.Forms.Button();
             this.TB_LineEdit = new System.Windows.Forms.TextBox();
             this.LBL_Warning = new System.Windows.Forms.Label();
-            this.CB_ReverseGenders = new System.Windows.Forms.CheckBox();
+            this.B_SwapGenders = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // B_LoadScript
@@ -66,7 +66,7 @@
             this.TB_LineEdit.Multiline = true;
             this.TB_LineEdit.Name = "TB_LineEdit";
             this.TB_LineEdit.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TB_LineEdit.Size = new System.Drawing.Size(390, 120);
+            this.TB_LineEdit.Size = new System.Drawing.Size(390, 117);
             this.TB_LineEdit.TabIndex = 1;
             this.TB_LineEdit.TextChanged += new System.EventHandler(this.TB_LineEdit_TextChanged);
             this.TB_LineEdit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_LineEdit_KeyDown);
@@ -82,17 +82,15 @@
             this.LBL_Warning.TabIndex = 4;
             this.LBL_Warning.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
-            // CB_ReverseGenders
+            // B_SwapGenders
             // 
-            this.CB_ReverseGenders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CB_ReverseGenders.AutoSize = true;
-            this.CB_ReverseGenders.Location = new System.Drawing.Point(295, 138);
-            this.CB_ReverseGenders.Name = "CB_ReverseGenders";
-            this.CB_ReverseGenders.Size = new System.Drawing.Size(107, 17);
-            this.CB_ReverseGenders.TabIndex = 5;
-            this.CB_ReverseGenders.Text = "Reverse genders";
-            this.CB_ReverseGenders.UseVisualStyleBackColor = true;
-            this.CB_ReverseGenders.CheckedChanged += new System.EventHandler(this.CB_ReverseGenders_CheckedChanged);
+            this.B_SwapGenders.Location = new System.Drawing.Point(236, 135);
+            this.B_SwapGenders.Name = "B_SwapGenders";
+            this.B_SwapGenders.Size = new System.Drawing.Size(166, 23);
+            this.B_SwapGenders.TabIndex = 6;
+            this.B_SwapGenders.Text = "Swap Genders";
+            this.B_SwapGenders.UseVisualStyleBackColor = true;
+            this.B_SwapGenders.Click += new System.EventHandler(this.B_SwapGenders_Click);
             // 
             // DirectEdit
             // 
@@ -102,7 +100,7 @@
             this.AutoScroll = true;
             this.CancelButton = this.B_Cancel;
             this.ClientSize = new System.Drawing.Size(414, 201);
-            this.Controls.Add(this.CB_ReverseGenders);
+            this.Controls.Add(this.B_SwapGenders);
             this.Controls.Add(this.LBL_Warning);
             this.Controls.Add(this.TB_LineEdit);
             this.Controls.Add(this.B_Cancel);
@@ -125,6 +123,6 @@
         private System.Windows.Forms.Button B_Cancel;
         private System.Windows.Forms.TextBox TB_LineEdit;
         private System.Windows.Forms.Label LBL_Warning;
-        private System.Windows.Forms.CheckBox CB_ReverseGenders;
+        private System.Windows.Forms.Button B_SwapGenders;
     }
 }

@@ -281,6 +281,8 @@ namespace FEITS.Controller
         {
             conv.CurrentMessage = fileCont.MessageList[mainView.MsgListIndex];
             SetCurrentLine();
+
+            mainView.PlayerGender = conv.CurrentMessage.Prefix.Contains("PCF") ? 1 : 0;
         }
 
         public void NextPage()
@@ -341,6 +343,14 @@ namespace FEITS.Controller
         public void OnTextboxChanged()
         {
             conv.TextboxIndex = mainView.CurrentTextbox;
+
+            if (conv.CurrentMessage != null)
+                mainView.PreviewImage = conv.RenderPreviewBox(mainView.CurrentLine);
+        }
+
+        public void OnPlayerGenderChanged()
+        {
+            conv.PlayerGender = mainView.PlayerGender;
 
             if (conv.CurrentMessage != null)
                 mainView.PreviewImage = conv.RenderPreviewBox(mainView.CurrentLine);

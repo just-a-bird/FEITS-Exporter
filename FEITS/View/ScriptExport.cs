@@ -35,7 +35,7 @@ namespace FEITS.View
 
         public bool AllowImport { get; set; }
 
-        public bool ReversibleGenderCode { get; set; }
+        public bool ContainsGenderCode { get; set; }
 
         private void TB_ScriptInput_KeyDown(object sender, KeyEventArgs e)
         {

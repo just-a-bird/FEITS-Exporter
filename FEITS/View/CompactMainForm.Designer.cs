@@ -53,6 +53,9 @@
             this.MI_TBStandard = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_TBNohr = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_TBHoshido = new System.Windows.Forms.ToolStripMenuItem();
+            this.MI_PlayerGender = new System.Windows.Forms.ToolStripMenuItem();
+            this.MI_PlayerMale = new System.Windows.Forms.ToolStripMenuItem();
+            this.MI_PlayerFemale = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.MI_EnableBackgrounds = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,13 +64,13 @@
             this.MI_Reminder = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.LB_MessageList = new System.Windows.Forms.ListBox();
-            this.TB_CurrentLine = new FEITS.View.SpellBox();
             this.TB_PlayerName = new System.Windows.Forms.TextBox();
             this.LBL_PlayerName = new System.Windows.Forms.Label();
             this.B_PrevLine = new System.Windows.Forms.Button();
             this.TB_CurrentPage = new System.Windows.Forms.TextBox();
             this.B_NextLine = new System.Windows.Forms.Button();
             this.PB_PreviewBox = new System.Windows.Forms.PictureBox();
+            this.TB_CurrentLine = new FEITS.View.SpellBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -253,6 +256,7 @@
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MI_TBStyles,
+            this.MI_PlayerGender,
             this.toolStripSeparator3,
             this.MI_EnableBackgrounds});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
@@ -275,25 +279,55 @@
             this.MI_TBStandard.CheckOnClick = true;
             this.MI_TBStandard.CheckState = System.Windows.Forms.CheckState.Checked;
             this.MI_TBStandard.Name = "MI_TBStandard";
-            this.MI_TBStandard.Size = new System.Drawing.Size(121, 22);
+            this.MI_TBStandard.Size = new System.Drawing.Size(152, 22);
             this.MI_TBStandard.Text = "Standard";
             this.MI_TBStandard.CheckedChanged += new System.EventHandler(this.MI_TBItem_CheckedChanged);
+            this.MI_TBStandard.Click += new System.EventHandler(this.MI_CheckableItem_Click);
             // 
             // MI_TBNohr
             // 
             this.MI_TBNohr.CheckOnClick = true;
             this.MI_TBNohr.Name = "MI_TBNohr";
-            this.MI_TBNohr.Size = new System.Drawing.Size(121, 22);
+            this.MI_TBNohr.Size = new System.Drawing.Size(152, 22);
             this.MI_TBNohr.Text = "Nohr";
             this.MI_TBNohr.CheckedChanged += new System.EventHandler(this.MI_TBItem_CheckedChanged);
+            this.MI_TBNohr.Click += new System.EventHandler(this.MI_CheckableItem_Click);
             // 
             // MI_TBHoshido
             // 
             this.MI_TBHoshido.CheckOnClick = true;
             this.MI_TBHoshido.Name = "MI_TBHoshido";
-            this.MI_TBHoshido.Size = new System.Drawing.Size(121, 22);
+            this.MI_TBHoshido.Size = new System.Drawing.Size(152, 22);
             this.MI_TBHoshido.Text = "Hoshido";
             this.MI_TBHoshido.CheckedChanged += new System.EventHandler(this.MI_TBItem_CheckedChanged);
+            this.MI_TBHoshido.Click += new System.EventHandler(this.MI_CheckableItem_Click);
+            // 
+            // MI_PlayerGender
+            // 
+            this.MI_PlayerGender.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MI_PlayerMale,
+            this.MI_PlayerFemale});
+            this.MI_PlayerGender.Name = "MI_PlayerGender";
+            this.MI_PlayerGender.Size = new System.Drawing.Size(181, 22);
+            this.MI_PlayerGender.Text = "Player Gender";
+            // 
+            // MI_PlayerMale
+            // 
+            this.MI_PlayerMale.Checked = true;
+            this.MI_PlayerMale.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.MI_PlayerMale.Name = "MI_PlayerMale";
+            this.MI_PlayerMale.Size = new System.Drawing.Size(152, 22);
+            this.MI_PlayerMale.Text = "Male";
+            this.MI_PlayerMale.CheckedChanged += new System.EventHandler(this.MI_PlayerGender_CheckedChanged);
+            this.MI_PlayerMale.Click += new System.EventHandler(this.MI_CheckableItem_Click);
+            // 
+            // MI_PlayerFemale
+            // 
+            this.MI_PlayerFemale.Name = "MI_PlayerFemale";
+            this.MI_PlayerFemale.Size = new System.Drawing.Size(152, 22);
+            this.MI_PlayerFemale.Text = "Female";
+            this.MI_PlayerFemale.CheckedChanged += new System.EventHandler(this.MI_PlayerGender_CheckedChanged);
+            this.MI_PlayerFemale.Click += new System.EventHandler(this.MI_CheckableItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -374,19 +408,6 @@
             this.LB_MessageList.SelectedIndexChanged += new System.EventHandler(this.LB_MessageList_SelectedIndexChanged);
             this.LB_MessageList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LB_MessageList_MouseDown);
             // 
-            // TB_CurrentLine
-            // 
-            this.TB_CurrentLine.AllowDrop = true;
-            this.TB_CurrentLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.TB_CurrentLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_CurrentLine.Location = new System.Drawing.Point(-1, 246);
-            this.TB_CurrentLine.Multiline = true;
-            this.TB_CurrentLine.Name = "TB_CurrentLine";
-            this.TB_CurrentLine.Size = new System.Drawing.Size(400, 99);
-            this.TB_CurrentLine.TabIndex = 1;
-            this.TB_CurrentLine.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.TB_CurrentLine_ChildChanged);
-            this.TB_CurrentLine.Child = null;
-            // 
             // TB_PlayerName
             // 
             this.TB_PlayerName.Anchor = System.Windows.Forms.AnchorStyles.Top;
@@ -461,6 +482,19 @@
             this.PB_PreviewBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragDrop);
             this.PB_PreviewBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.PB_PreviewBox_DragEnter);
             // 
+            // TB_CurrentLine
+            // 
+            this.TB_CurrentLine.AllowDrop = true;
+            this.TB_CurrentLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.TB_CurrentLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_CurrentLine.Location = new System.Drawing.Point(-1, 246);
+            this.TB_CurrentLine.Multiline = true;
+            this.TB_CurrentLine.Name = "TB_CurrentLine";
+            this.TB_CurrentLine.Size = new System.Drawing.Size(400, 99);
+            this.TB_CurrentLine.TabIndex = 1;
+            this.TB_CurrentLine.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.TB_CurrentLine_ChildChanged);
+            this.TB_CurrentLine.Child = null;
+            // 
             // CompactMainForm
             // 
             this.AllowDrop = true;
@@ -477,6 +511,7 @@
             this.Name = "CompactMainForm";
             this.Padding = new System.Windows.Forms.Padding(9, 0, 9, 9);
             this.Text = "FEITS Exporter";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CompactMainForm_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CompactMainForm_KeyDown_1);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -534,5 +569,8 @@
         private SpellBox TB_CurrentLine;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem MI_SpellCheck;
+        private System.Windows.Forms.ToolStripMenuItem MI_PlayerGender;
+        private System.Windows.Forms.ToolStripMenuItem MI_PlayerMale;
+        private System.Windows.Forms.ToolStripMenuItem MI_PlayerFemale;
     }
 }

@@ -20,6 +20,7 @@ namespace FEITS.Model
 
         //Settings
         public string PlayerName = "Kamui";
+        public int PlayerGender = 0;
         private bool enableBackgrounds;
         public bool EnableBackgrounds
         {
@@ -249,13 +250,13 @@ namespace FEITS.Model
 
                 if (charA != string.Empty)
                 {
-                    Image ca = AssetGeneration.GetCharacterStageImage(charA, emotionA, colorA, true);
+                    Image ca = AssetGeneration.GetCharacterStageImage(charA, emotionA, colorA, true, PlayerGender);
                     g.DrawImage((charActive == charA) ? ca : AssetGeneration.Fade(ca), new Point(-28, box.Height - ca.Height + 14));
                 }
 
                 if (charB != string.Empty)
                 {
-                    Image cb = AssetGeneration.GetCharacterStageImage(charB, emotionB, colorB, false);
+                    Image cb = AssetGeneration.GetCharacterStageImage(charB, emotionB, colorB, false, PlayerGender);
                     g.DrawImage((charActive == charB) ? cb : AssetGeneration.Fade(cb), new Point(box.Width - cb.Width + 28, box.Height - cb.Height + 14));
                 }
 
@@ -305,7 +306,7 @@ namespace FEITS.Model
                 topBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
                 using (Graphics g = Graphics.FromImage(topBox))
                 {
-                    g.DrawImage(AssetGeneration.GetCharacterBUImage(charA, emotionA, colorA, true), new Point(2, 3));
+                    g.DrawImage(AssetGeneration.GetCharacterBUImage(charA, emotionA, colorA, true, PlayerGender), new Point(2, 3));
                     g.DrawImage(AssetGeneration.DrawString(new Bitmap(260, 50), topLine, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
                 }
             }
@@ -315,7 +316,7 @@ namespace FEITS.Model
                 bottomBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
                 using (Graphics g = Graphics.FromImage(bottomBox))
                 {
-                    g.DrawImage(AssetGeneration.GetCharacterBUImage(charB, emotionB, colorB, true), new Point(2, 3));
+                    g.DrawImage(AssetGeneration.GetCharacterBUImage(charB, emotionB, colorB, true, PlayerGender), new Point(2, 3));
                     g.DrawImage(AssetGeneration.DrawString(new Bitmap(282, 50), bottomLine, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
                 }
             }

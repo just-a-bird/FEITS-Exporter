@@ -94,6 +94,32 @@ namespace FEITS.View
             set { MI_EnableBackgrounds.Checked = value; }
         }
 
+        public int PlayerGender
+        {
+            get
+            {
+                foreach(ToolStripMenuItem mi in MI_PlayerGender.DropDownItems)
+                {
+                    if (mi.Checked)
+                        return MI_PlayerGender.DropDownItems.IndexOf(mi);
+                }
+
+                return -1;
+            }
+            set
+            {
+                ToolStripMenuItem menuItem = (ToolStripMenuItem)MI_PlayerGender.DropDownItems[value];
+
+                foreach(ToolStripMenuItem mi in MI_PlayerGender.DropDownItems)
+                {
+                    if (mi == menuItem)
+                        mi.Checked = true;
+                    else
+                        mi.Checked = false;
+                }
+            }
+        }
+
         public int CurrentTextbox
         {
             get
@@ -148,7 +174,6 @@ namespace FEITS.View
         private void LB_MessageList_SelectedIndexChanged(object sender, EventArgs e)
         {
             cont.SetCurrentMessage();
-            //TB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
         }
 
         private void TB_CurrentLine_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -318,9 +343,33 @@ namespace FEITS.View
             cont.EditMessageScript();
         }
 
+        private void MI_CheckableItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            if (!item.Checked)
+                item.Checked = true;
+        }
+
+        private void MI_PlayerGender_CheckedChanged(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+
+            if (!item.Checked)
+                return;
+
+            foreach(ToolStripMenuItem mi in MI_PlayerGender.DropDownItems)
+            {
+                if (mi != item)
+                    mi.Checked = false;
+            }
+
+            cont.OnPlayerGenderChanged();
+        }
+
         private void MI_TBItem_CheckedChanged(object sender, EventArgs e)
         {
             ToolStripMenuItem item = (ToolStripMenuItem)sender;
+
             if (!item.Checked)
                 return;
 
@@ -434,6 +483,14 @@ namespace FEITS.View
                 if (LB_MessageList.SelectedIndex < LB_MessageList.Items.Count - 1)
                     LB_MessageList.SelectedIndex++;
             }
+        }
+
+        private void CompactMainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to exit? Any unsaved changes will be lost.", "Exit Application", MessageBoxButtons.YesNo);
+
+            if (result == DialogResult.No)
+                e.Cancel = true;
         }
     }
 }
