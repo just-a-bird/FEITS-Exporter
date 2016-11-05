@@ -1,6 +1,5 @@
 ﻿using FEITS.Controller;
 using FEITS.Model;
-using FEITS.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +25,7 @@ namespace FEITS.View
         public void SetController(MainController controller)
         {
             cont = controller;
+            cont.SetOptions();
         }
 
         public void SetMessageList(List<MessageBlock> messages)
@@ -254,7 +254,7 @@ namespace FEITS.View
 
         private void TB_CurrentPage_Leave(object sender, EventArgs e)
         {
-            cont.GotoPage(int.Parse(TB_CurrentPage.Text) - 1);
+            cont.GoToPage(int.Parse(TB_CurrentPage.Text) - 1);
             TB_CurrentLine.Font = new Font(Font.OriginalFontName, 12f, FontStyle.Regular);
         }
 
@@ -325,22 +325,22 @@ namespace FEITS.View
 
         private void MI_Export_Click(object sender, EventArgs e)
         {
-            cont.ExportMessageScript();
+            cont.ExportMessageScript(false);
         }
 
         private void exportAllMessagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            cont.ExportAllMessages();
+            cont.ExportMessageScript(true);
         }
 
         private void MI_EditLine_Click(object sender, EventArgs e)
         {
-            cont.EditMessageLineScript();
+            cont.EditMessageScript(true);
         }
 
         private void MI_Message_Click(object sender, EventArgs e)
         {
-            cont.EditMessageScript();
+            cont.EditMessageScript(false);
         }
 
         private void MI_CheckableItem_Click(object sender, EventArgs e)
@@ -402,7 +402,7 @@ namespace FEITS.View
         private void TB_CurrentPage_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
-                cont.GotoPage(int.Parse(TB_CurrentPage.Text) - 1);
+                cont.GoToPage(int.Parse(TB_CurrentPage.Text) - 1);
         }
 
         private void MI_EnableBackgrounds_CheckedChanged(object sender, EventArgs e)
@@ -412,6 +412,11 @@ namespace FEITS.View
 
         private void PB_PreviewBox_Click(object sender, EventArgs e)
         {
+            PictureBox box = (PictureBox)sender;
+
+            if (box.Image == null)
+                return;
+
             if((e as MouseEventArgs).Button == MouseButtons.Right)
             {
                 if (MessageBox.Show("Save the current conversation?", "Save Conversation As Image", MessageBoxButtons.YesNo) != DialogResult.Yes)
@@ -442,11 +447,6 @@ namespace FEITS.View
         private void LB_MessageList_MouseDown(object sender, MouseEventArgs e)
         {
             LB_MessageList.Focus();
-        }
-
-        private void CompactMainForm_Shown(object sender, EventArgs e)
-        {
-            cont.StartLoadingAssets();
         }
 
         private void CompactMainForm_KeyDown(object sender, KeyEventArgs e)
@@ -487,10 +487,15 @@ namespace FEITS.View
 
         private void CompactMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to exit? Any unsaved changes will be lost.", "Exit Application", MessageBoxButtons.YesNo);
+            DialogResult result = MessageBox.Show("Are you sure you want to exit? All unsaved changes will be lost.", "Exit Application", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.No)
                 e.Cancel = true;
+        }
+
+        private void MI_CompareMode_Click(object sender, EventArgs e)
+        {
+            cont.SetupCompareMode();
         }
     }
 }
