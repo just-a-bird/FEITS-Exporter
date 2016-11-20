@@ -120,9 +120,19 @@ namespace FEITS.Model
                     {
                         case "$E":
                             if (charActive != string.Empty && charActive == charB)
-                                emotionB = res.Item2.Params[0];
+                            {
+                                if (res.Item2.Params[0] != ",")
+                                    emotionB = res.Item2.Params[0];
+                                else
+                                    emotionB = defaultEmotion;
+                            }
                             else
-                                emotionA = res.Item2.Params[0];
+                            {
+                                if (res.Item2.Params[0] != ",")
+                                    emotionA = res.Item2.Params[0];
+                                else
+                                    emotionA = defaultEmotion;
+                            }
                             break;
                         case "$Ws":
                             charActive = res.Item2.Params[0];

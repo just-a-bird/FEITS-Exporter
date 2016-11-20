@@ -1,6 +1,7 @@
 ﻿using FEITS.Model;
 using FEITS.View;
 using System;
+using System.Collections;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -240,8 +241,9 @@ namespace FEITS.Controller
 
         public void LoadAssets()
         {
+            IList dictList = ((CompactMainForm)mainView).GetCustomDictionary();
             LoadingPopup loader = new LoadingPopup();
-            loader.BeginLoading();
+            loader.BeginLoading(dictList);
             loader.ShowDialog();
         }
 
@@ -412,11 +414,11 @@ namespace FEITS.Controller
         {
             TwoFileForm compareForm = new TwoFileForm();
             TwoFileController controller = new TwoFileController(compareForm, conv);
-            compareForm.Show();
-
             CompactMainForm form = (CompactMainForm)mainView;
             controller.SetNormalFormRefs(form);
             form.Hide();
+
+            compareForm.Show();
         }
     }
 }

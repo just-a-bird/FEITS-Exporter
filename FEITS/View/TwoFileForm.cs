@@ -19,7 +19,6 @@ namespace FEITS.View
             InitializeComponent();
             TB_CurrentLine_Source.InitializeChild();
             TB_CurrentLine_Target.InitializeChild();
-            SetCustomDictionary();
 
             PB_PreviewBox_Source.AllowDrop = true;
             PB_PreviewBox_Target.AllowDrop = true;
@@ -52,15 +51,6 @@ namespace FEITS.View
 
             LB_MessageList_Source.ValueMember = "Prefix";
             LB_MessageList_Source.DataSource = bs;
-        }
-
-        private void SetCustomDictionary()
-        {
-            IList dictionary = System.Windows.Controls.SpellCheck.GetCustomDictionaries(TB_CurrentLine_Target.Child as System.Windows.Controls.TextBox);
-            dictionary.Add(new Uri(@"pack://application:,,,/FEITS Exporter;component/Resources/txt/FE_Dictionary.lex"));
-
-            IList sourceDictionary = System.Windows.Controls.SpellCheck.GetCustomDictionaries(TB_CurrentLine_Source.Child as System.Windows.Controls.TextBox);
-            sourceDictionary.Add(new Uri(@"pack://application:,,,/FEITS Exporter;component/Resources/txt/FE_Dictionary.lex"));
         }
 
         #region Properties
@@ -493,28 +483,50 @@ namespace FEITS.View
         {
             cont.GoToPage(int.Parse(TB_CurrentPage_Target.Text) - 1);
 
-            if (SimultaneousControl)
+            if (SimultaneousControl && TB_CurrentPage_Source.Text != TB_CurrentPage_Target.Text)
+            {
+                TB_CurrentPage_Source.Text = TB_CurrentPage_Target.Text;
                 cont.GoToSourcePage(int.Parse(TB_CurrentPage_Source.Text) - 1);
+            }
         }
 
         private void TB_CurrentPage_Source_Leave(object sender, EventArgs e)
         {
             cont.GoToSourcePage(int.Parse(TB_CurrentPage_Source.Text) - 1);
-            
-            if(SimultaneousControl)
+
+            if (SimultaneousControl && TB_CurrentPage_Target.Text != TB_CurrentPage_Source.Text)
+            {
+                TB_CurrentPage_Target.Text = TB_CurrentPage_Source.Text;
                 cont.GoToPage(int.Parse(TB_CurrentPage_Target.Text) - 1);
+            }
         }
 
         private void TB_CurrentPage_Target_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
+            {
                 cont.GoToPage(int.Parse(TB_CurrentPage_Target.Text) - 1);
+
+                if (SimultaneousControl && TB_CurrentPage_Source.Text != TB_CurrentPage_Target.Text)
+                {
+                    TB_CurrentPage_Source.Text = TB_CurrentPage_Target.Text;
+                    cont.GoToSourcePage(int.Parse(TB_CurrentPage_Source.Text) - 1);
+                }
+            }
         }
 
         private void TB_CurrentPage_Source_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
+            {
                 cont.GoToSourcePage(int.Parse(TB_CurrentPage_Source.Text) - 1);
+
+                if (SimultaneousControl && TB_CurrentPage_Target.Text != TB_CurrentPage_Source.Text)
+                {
+                    TB_CurrentPage_Target.Text = TB_CurrentPage_Source.Text;
+                    cont.GoToPage(int.Parse(TB_CurrentPage_Target.Text) - 1);
+                }
+            }
         }
 
         private void TB_PlayerName_TextChanged(object sender, EventArgs e)
@@ -851,6 +863,14 @@ namespace FEITS.View
         {
             if(setClose)
                 return;
+
+            if(LB_MessageList_Source.Items.Count < 1)
+            {
+                e.Cancel = true;
+                setClose = true;
+                cont.ReturnToSingleFile();
+                return;
+            }
 
             DialogResult result = MessageBox.Show("Stop the comparison? All unsaved changes to the source will be lost, but target data will be retained.", "End Comparison", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 

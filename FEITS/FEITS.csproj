@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FEITS</RootNamespace>
     <AssemblyName>FEITS Exporter</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -11005,6 +11005,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FEITS Icon.ico" />
+    <None Include="Resources\txt\FEDict.txt" />
     <None Include="Resources\img\Reminder_1.png" />
     <None Include="Resources\img\Reminder_0.jpg" />
   </ItemGroup>

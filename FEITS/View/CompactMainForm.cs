@@ -17,7 +17,7 @@ namespace FEITS.View
         {
             InitializeComponent();
             TB_CurrentLine.InitializeChild();
-            SetCustomDictionary();
+            //SetCustomDictionary();
 
             PB_PreviewBox.AllowDrop = true;
         }
@@ -41,6 +41,11 @@ namespace FEITS.View
         {
             IList dictionary = System.Windows.Controls.SpellCheck.GetCustomDictionaries(TB_CurrentLine.Child as System.Windows.Controls.TextBox);
             dictionary.Add(new Uri(@"pack://application:,,,/FEITS Exporter;component/Resources/txt/FE_Dictionary.lex"));
+        }
+
+        public IList GetCustomDictionary()
+        {
+            return System.Windows.Controls.SpellCheck.GetCustomDictionaries(TB_CurrentLine.Child as System.Windows.Controls.TextBox);
         }
 
         #region Properties
