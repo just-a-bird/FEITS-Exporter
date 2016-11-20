@@ -1,4 +1,5 @@
 ﻿using FEITS.Model;
+using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -6,14 +7,18 @@ namespace FEITS.View
 {
     public partial class LoadingPopup : Form
     {
+        public IList dictList;
+
         public LoadingPopup()
         {
             InitializeComponent();
+            //BeginLoading();
         }
 
-        public void BeginLoading()
+        public void BeginLoading(IList list)
         {
             assetLoader.RunWorkerAsync();
+            dictList = list;
         }
 
         private void assetLoader_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -36,7 +41,7 @@ namespace FEITS.View
         private void assetLoader_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            AssetGeneration.Initialize(worker, e);
+            AssetGeneration.Initialize(worker, e, dictList);
         }
     }
 }

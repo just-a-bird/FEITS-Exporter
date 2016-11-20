@@ -8,12 +8,13 @@ namespace FEITS.Model
 {
     public class ConversationModel
     {
-        //Message reference
-        private MessageBlock currentMessage;
-        public MessageBlock CurrentMessage
+        //File container
+        public ParsedFileContainer File { get; set; } = new ParsedFileContainer();
+        private int messageIndex;
+        public int MessageIndex
         {
-            get { return currentMessage; }
-            set { currentMessage = value; lineIndex = 0; ResetParameters(); }
+            get { return messageIndex; }
+            set { messageIndex = value;  lineIndex = 0; ResetParameters(); }
         }
         private int lineIndex;
         public int LineIndex { get { return lineIndex; } set { lineIndex = value; } }
@@ -84,13 +85,13 @@ namespace FEITS.Model
             ConversationType = ConversationTypes.Type1;
         }
 
-        public void GetCommandsBeforeIndex()
+        public void GetCommandsUpUntilIndex()
         {
             ResetParameters();
 
             for(int i = 0; i < lineIndex; i++)
             {
-                GetParsedCommands(currentMessage.MessageLines[i]);
+                GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
             }
         }
 
@@ -119,9 +120,19 @@ namespace FEITS.Model
                     {
                         case "$E":
                             if (charActive != string.Empty && charActive == charB)
-                                emotionB = res.Item2.Params[0];
+                            {
+                                if (res.Item2.Params[0] != ",")
+                                    emotionB = res.Item2.Params[0];
+                                else
+                                    emotionB = defaultEmotion;
+                            }
                             else
-                                emotionA = res.Item2.Params[0];
+                            {
+                                if (res.Item2.Params[0] != ",")
+                                    emotionA = res.Item2.Params[0];
+                                else
+                                    emotionA = defaultEmotion;
+                            }
                             break;
                         case "$Ws":
                             charActive = res.Item2.Params[0];
@@ -267,7 +278,7 @@ namespace FEITS.Model
                     g.DrawImage(nb, charActive == charB ? new Point(box.Width - nb.Width - 6, box.Height - tb.Height - 14) : new Point(7, box.Height - tb.Height - 14));
                 }
 
-                if (lineIndex > currentMessage.MessageLines.Count - 1)
+                if (lineIndex > File.MessageList[messageIndex].MessageLines.Count - 1)
                 {
                     g.DrawImage(Resources.KeyPress, new Point(box.Width - 33, box.Height - tb.Height + 32));
                 }
@@ -283,7 +294,7 @@ namespace FEITS.Model
 
             for (int i = 0; i <= lineIndex; i++)
             {
-                string line = GetParsedCommands(currentMessage.MessageLines[i]);
+                string line = GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
 
                 if (line.Contains("$Nu") && hasPerms)
                 {
@@ -323,7 +334,7 @@ namespace FEITS.Model
 
             using (Graphics g = Graphics.FromImage(box))
             {
-                if (lineIndex < currentMessage.MessageLines.Count - 1)
+                if (lineIndex < File.MessageList[messageIndex].MessageLines.Count - 1)
                 {
                     using (Graphics g2 = Graphics.FromImage(charActive == charA ? topBox : bottomBox))
                     {
@@ -358,16 +369,16 @@ namespace FEITS.Model
 
         public Image RenderConversation()
         {
-            foreach(MessageLine line in currentMessage.MessageLines)
+            foreach(MessageLine line in File.MessageList[messageIndex].MessageLines)
                 line.UpdateRawWithNewDialogue();
 
             List<Image> images = new List<Image>();
             int index = lineIndex;
             ResetParameters();
-            for(int i = 0; i < currentMessage.MessageLines.Count; i++)
+            for(int i = 0; i < File.MessageList[messageIndex].MessageLines.Count; i++)
             {
-                GetParsedCommands(currentMessage.MessageLines[i]);
-                string parsed = currentMessage.MessageLines[i].SpokenText;
+                GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
+                string parsed = File.MessageList[messageIndex].MessageLines[i].SpokenText;
                 if(!string.IsNullOrWhiteSpace(parsed) && !string.IsNullOrEmpty(parsed))
                 {
                     images.Add(RenderPreviewBox(parsed));

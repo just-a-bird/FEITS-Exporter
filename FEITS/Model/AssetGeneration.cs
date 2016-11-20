@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Resources;
 using System.Runtime.InteropServices;
@@ -27,6 +28,10 @@ namespace FEITS.Model
         private static Dictionary<string, byte[]> faceData;
         private static List<string> resourceList = new List<string>();
 
+        //Lexicon
+        private static readonly string tempPath = Path.Combine(Path.GetTempPath(), "FEITS\\");
+        private static Uri lexUri;
+
         //Kamui
         private static string[] EyeStyles = { "a", "b", "c", "d", "e", "f", "g" };
         private static string[] Kamuis = { "マイユニ男1", "マイユニ女2" };
@@ -36,7 +41,7 @@ namespace FEITS.Model
             
         }
 
-        public static void Initialize(BackgroundWorker worker, DoWorkEventArgs e)
+        public static void Initialize(BackgroundWorker worker, DoWorkEventArgs e, IList dictList)
         {
             if(isInitialized)
             {
@@ -57,7 +62,7 @@ namespace FEITS.Model
                     characters[fc.Value] = fc;
                 }
 
-                worker.ReportProgress(33);
+                worker.ReportProgress(25);
 
                 //Grab face data and assign to dictionary
                 faceData = new Dictionary<string, byte[]>();
@@ -69,16 +74,20 @@ namespace FEITS.Model
                     faceData[fids[i]] = dat;
                 }
 
-                worker.ReportProgress(66);
+                worker.ReportProgress(50);
+
+                dictList.Add(new Uri(@"pack://application:,,,/FEITS Exporter;component/Resources/txt/FE_Dictionary.lex"));
+                worker.ReportProgress(75);
 
                 ResourceSet set = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
                 foreach (DictionaryEntry o in set)
                 {
                     resourceList.Add(o.Key as string);
                 }
-                Resources.ResourceManager.ReleaseAllResources();
 
                 worker.ReportProgress(100);
+                Resources.ResourceManager.ReleaseAllResources();
+
                 isInitialized = true;
             }
         }

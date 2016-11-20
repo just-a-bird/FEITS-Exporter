@@ -9,7 +9,6 @@ namespace FEITS.Controller
         private IExportImportView view;
         private string messageScript;
         public string MessageScript { get { return messageScript; } }
-        private bool isMale;
 
         bool[] validChars = AssetGeneration.ValidCharacters;
 

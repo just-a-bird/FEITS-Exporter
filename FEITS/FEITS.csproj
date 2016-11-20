@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FEITS</RootNamespace>
     <AssemblyName>FEITS Exporter</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -25,8 +25,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2.4.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -44,7 +44,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -68,6 +68,15 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -89,11 +98,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\HalfBoxController.cs" />
-    <Compile Include="Controller\IExportImportView.cs" />
-    <Compile Include="Controller\IHalfBoxView.cs" />
-    <Compile Include="Controller\IMainView.cs" />
+    <Compile Include="Controller\Interfaces\IExportImportView.cs" />
+    <Compile Include="Controller\Interfaces\IHalfBoxView.cs" />
+    <Compile Include="Controller\Interfaces\IMainView.cs" />
     <Compile Include="Controller\ImportExportController.cs" />
+    <Compile Include="Controller\Interfaces\IComparisonView.cs" />
     <Compile Include="Controller\MainController.cs" />
+    <Compile Include="Controller\TwoFileController.cs" />
+    <Compile Include="View\TwoFileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\TwoFileForm.Designer.cs">
+      <DependentUpon>TwoFileForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\CompactMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,12 +136,6 @@
     <Compile Include="Model\MessageBlock.cs" />
     <Compile Include="Model\ParsedFileContainer.cs" />
     <Compile Include="Model\FontCharacter.cs" />
-    <Compile Include="View\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\DirectEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,12 +147,6 @@
     </Compile>
     <Compile Include="View\HalfBoxTester.Designer.cs">
       <DependentUpon>HalfBoxTester.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\ScriptExport.cs">
       <SubType>Form</SubType>
@@ -159,11 +164,11 @@
       <DependentUpon>ScriptImport.cs</DependentUpon>
     </Compile>
     <Compile Include="View\SpellBox.cs" />
+    <EmbeddedResource Include="View\TwoFileForm.resx">
+      <DependentUpon>TwoFileForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\CompactMainForm.resx">
       <DependentUpon>CompactMainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\DirectEdit.resx">
       <DependentUpon>DirectEdit.cs</DependentUpon>
@@ -176,9 +181,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\LoadingPopup.resx">
       <DependentUpon>LoadingPopup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\ScriptExport.resx">
       <DependentUpon>ScriptExport.cs</DependentUpon>
@@ -197,6 +199,7 @@
       <DependentUpon>ScriptImport.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="FEITS_TemporaryKey.pfx" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\DataSources\FEITS.Properties.Resources.datasource" />
     <None Include="Properties\DataSources\FEITS.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">
@@ -11002,6 +11005,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FEITS Icon.ico" />
+    <None Include="Resources\txt\FEDict.txt" />
     <None Include="Resources\img\Reminder_1.png" />
     <None Include="Resources\img\Reminder_0.jpg" />
   </ItemGroup>

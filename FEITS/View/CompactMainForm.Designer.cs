@@ -60,6 +60,7 @@
             this.MI_EnableBackgrounds = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_HalfBox = new System.Windows.Forms.ToolStripMenuItem();
+            this.MI_CompareMode = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_Reminder = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -279,7 +280,7 @@
             this.MI_TBStandard.CheckOnClick = true;
             this.MI_TBStandard.CheckState = System.Windows.Forms.CheckState.Checked;
             this.MI_TBStandard.Name = "MI_TBStandard";
-            this.MI_TBStandard.Size = new System.Drawing.Size(152, 22);
+            this.MI_TBStandard.Size = new System.Drawing.Size(121, 22);
             this.MI_TBStandard.Text = "Standard";
             this.MI_TBStandard.CheckedChanged += new System.EventHandler(this.MI_TBItem_CheckedChanged);
             this.MI_TBStandard.Click += new System.EventHandler(this.MI_CheckableItem_Click);
@@ -288,7 +289,7 @@
             // 
             this.MI_TBNohr.CheckOnClick = true;
             this.MI_TBNohr.Name = "MI_TBNohr";
-            this.MI_TBNohr.Size = new System.Drawing.Size(152, 22);
+            this.MI_TBNohr.Size = new System.Drawing.Size(121, 22);
             this.MI_TBNohr.Text = "Nohr";
             this.MI_TBNohr.CheckedChanged += new System.EventHandler(this.MI_TBItem_CheckedChanged);
             this.MI_TBNohr.Click += new System.EventHandler(this.MI_CheckableItem_Click);
@@ -297,7 +298,7 @@
             // 
             this.MI_TBHoshido.CheckOnClick = true;
             this.MI_TBHoshido.Name = "MI_TBHoshido";
-            this.MI_TBHoshido.Size = new System.Drawing.Size(152, 22);
+            this.MI_TBHoshido.Size = new System.Drawing.Size(121, 22);
             this.MI_TBHoshido.Text = "Hoshido";
             this.MI_TBHoshido.CheckedChanged += new System.EventHandler(this.MI_TBItem_CheckedChanged);
             this.MI_TBHoshido.Click += new System.EventHandler(this.MI_CheckableItem_Click);
@@ -316,7 +317,7 @@
             this.MI_PlayerMale.Checked = true;
             this.MI_PlayerMale.CheckState = System.Windows.Forms.CheckState.Checked;
             this.MI_PlayerMale.Name = "MI_PlayerMale";
-            this.MI_PlayerMale.Size = new System.Drawing.Size(152, 22);
+            this.MI_PlayerMale.Size = new System.Drawing.Size(112, 22);
             this.MI_PlayerMale.Text = "Male";
             this.MI_PlayerMale.CheckedChanged += new System.EventHandler(this.MI_PlayerGender_CheckedChanged);
             this.MI_PlayerMale.Click += new System.EventHandler(this.MI_CheckableItem_Click);
@@ -324,7 +325,7 @@
             // MI_PlayerFemale
             // 
             this.MI_PlayerFemale.Name = "MI_PlayerFemale";
-            this.MI_PlayerFemale.Size = new System.Drawing.Size(152, 22);
+            this.MI_PlayerFemale.Size = new System.Drawing.Size(112, 22);
             this.MI_PlayerFemale.Text = "Female";
             this.MI_PlayerFemale.CheckedChanged += new System.EventHandler(this.MI_PlayerGender_CheckedChanged);
             this.MI_PlayerFemale.Click += new System.EventHandler(this.MI_CheckableItem_Click);
@@ -345,7 +346,8 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MI_HalfBox});
+            this.MI_HalfBox,
+            this.MI_CompareMode});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
@@ -353,9 +355,16 @@
             // MI_HalfBox
             // 
             this.MI_HalfBox.Name = "MI_HalfBox";
-            this.MI_HalfBox.Size = new System.Drawing.Size(154, 22);
+            this.MI_HalfBox.Size = new System.Drawing.Size(173, 22);
             this.MI_HalfBox.Text = "&Half-Box Editor";
             this.MI_HalfBox.Click += new System.EventHandler(this.MI_HalfBox_Click);
+            // 
+            // MI_CompareMode
+            // 
+            this.MI_CompareMode.Name = "MI_CompareMode";
+            this.MI_CompareMode.Size = new System.Drawing.Size(173, 22);
+            this.MI_CompareMode.Text = "Comparison Mode";
+            this.MI_CompareMode.Click += new System.EventHandler(this.MI_CompareMode_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -491,7 +500,7 @@
             this.TB_CurrentLine.Multiline = true;
             this.TB_CurrentLine.Name = "TB_CurrentLine";
             this.TB_CurrentLine.Size = new System.Drawing.Size(400, 99);
-            this.TB_CurrentLine.TabIndex = 1;
+            this.TB_CurrentLine.TabIndex = 12;
             this.TB_CurrentLine.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.TB_CurrentLine_ChildChanged);
             this.TB_CurrentLine.Child = null;
             // 
@@ -566,11 +575,12 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem MI_EnableBackgrounds;
         private System.Windows.Forms.ToolStripMenuItem exportAllMessagesToolStripMenuItem;
-        private SpellBox TB_CurrentLine;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem MI_SpellCheck;
         private System.Windows.Forms.ToolStripMenuItem MI_PlayerGender;
         private System.Windows.Forms.ToolStripMenuItem MI_PlayerMale;
         private System.Windows.Forms.ToolStripMenuItem MI_PlayerFemale;
+        private System.Windows.Forms.ToolStripMenuItem MI_CompareMode;
+        private SpellBox TB_CurrentLine;
     }
 }
