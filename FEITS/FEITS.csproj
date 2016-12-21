@@ -66,7 +66,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -198,7 +198,6 @@
     <EmbeddedResource Include="View\ScriptImport.resx">
       <DependentUpon>ScriptImport.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="FEITS_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\DataSources\FEITS.Properties.Resources.datasource" />
     <None Include="Properties\DataSources\FEITS.Properties.Settings.datasource" />
