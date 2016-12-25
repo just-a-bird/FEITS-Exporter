@@ -3,18 +3,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Resources;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace FEITS.Model
 {
-    public class AssetGeneration
+    public static class AssetGeneration
     {
         private static bool isInitialized = false;
 
@@ -38,8 +38,8 @@ namespace FEITS.Model
         private static Uri lexUri;
 
         //Kamui
+        //BUG: EyeStyles not being used except for EyeStyles[0]
         private static string[] EyeStyles = {"a", "b", "c", "d", "e", "f", "g"};
-        private static string[] Kamuis = {"マイユニ男1", "マイユニ女2"};
 
         static AssetGeneration()
         {
@@ -96,169 +96,200 @@ namespace FEITS.Model
             }
         }
 
-        public static Image DrawString(Image BaseImage, string Message, int StartX, int StartY, Color? TC = null)
+        public static Image DrawString(Image baseImage, string message, int startX, int startY, Color? textColor = null)
         {
-            var TextColor = TC ?? Color.Black;
-            var CurX = StartX;
-            var CurY = StartY;
-            var NewImage = BaseImage.Clone() as Bitmap;
-            using (var g = Graphics.FromImage(NewImage))
+            var textColorOrDefault = textColor ?? Color.Black;
+            var curX = startX;
+            var curY = startY;
+            var newImage = (Bitmap) baseImage.Clone();
+            using (var g = Graphics.FromImage(newImage))
             {
-                foreach (var c in Message)
+                foreach (var c in message)
                 {
                     if (c == '\n')
                     {
-                        CurY += 20;
-                        CurX = StartX;
+                        curY += 20;
+                        curX = startX;
                     }
                     else
                     {
                         var cur = characters[GetValue(c)];
-                        g.DrawImage(cur.GetGlyph(TextColor), new Point(CurX, CurY - cur.Data.CropHeight));
-                        CurX += cur.Data.CropWidth;
+                        g.DrawImage(cur.GetGlyph(textColorOrDefault), new Point(curX, curY - cur.Data.CropHeight));
+                        curX += cur.Data.CropWidth;
                     }
                 }
             }
-            return NewImage;
+            return newImage;
         }
 
-        public static Image GetCharacterStageImage(string CName, string CEmo, Color HairColor, bool Slot1, int PGender)
+        public static Image GetCharacterStageImage(string name, string emotions, Color hairColor, bool Slot1,
+            PlayerGender playerGender)
         {
-            var USER = CName == "username";
-            var hairname = "_st_髪";
-            var dat_id = "FSID_ST_" + CName;
-            if (USER)
+            var isUser = name == "username";
+            var hairName = "_st_髪";
+            var dat_id = "FSID_ST_" + name;
+            if (isUser)
             {
-                dat_id = "FSID_ST_" + (new[] {"マイユニ_男1", "マイユニ_女2"})[PGender] + "_顔" + EyeStyles[0].ToUpper();
-                CName = EyeStyles[0] + Kamuis[PGender];
-                hairname = CName.Substring(1) + hairname + 0;
+                dat_id = "FSID_ST_" + playerGender.ToIfString(true) + "_顔" + EyeStyles[0].ToUpper();
+                name = EyeStyles[0] + playerGender.ToIfString();
+                hairName = name.Substring(1) + hairName + 0;
             }
             else
-                hairname = CName + hairname + "0";
-            var Emos = CEmo.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
-            var resname = CName + "_st_" + Emos[0];
-            Image C;
-            if (resourceList.Contains(resname))
-                C = Resources.ResourceManager.GetObject(resname) as Image;
-            else
-                C = new Bitmap(1, 1);
-            using (var g = Graphics.FromImage(C))
+                hairName = name + hairName + "0";
+            var splitEmotions = emotions.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+            var resourceName = name + "_st_" + splitEmotions[0];
+            Image characterImage;
+            if (resourceList.Contains(resourceName))
             {
-                if (USER && 0 > 0)
+                characterImage = (Image) Resources.ResourceManager.GetObject(resourceName);
+                Debug.Assert(characterImage != null, $"{nameof(characterImage)} != null");
+            }
+            else
+                characterImage = new Bitmap(1, 1);
+            using (var g = Graphics.FromImage(characterImage))
+            {
+#if ACCESSORY
+                if (isUser)
                 {
                     g.DrawImage(
-                        Resources.ResourceManager.GetObject((new[] {"マイユニ男1", "マイユニ女2"})[PGender] + "_st_アクセサリ1_" + 0)
+                        Resources.ResourceManager.GetObject(playerGender.ToIfString() + "_st_アクセサリ1_" + 0)
                             as Image, new Point(0, 0));
                 }
-                for (var i = 1; i < Emos.Length; i++)
+#endif
+                for (var i = 1; i < splitEmotions.Length; i++)
                 {
-                    var exresname = CName + "_st_" + Emos[i];
-                    if (Emos[i] == "汗" && resourceList.Contains(exresname))
+                    var emotion = splitEmotions[i];
+                    var exresname = name + "_st_" + emotion;
+                    if (!resourceList.Contains(exresname)) continue;
+
+                    var image = Resources.ResourceManager.GetObject(exresname) as Image;
+                    Debug.Assert(image != null, $"{nameof(image)} != null");
+                    byte xOffset, yOffset;
+                    switch (emotion)
                     {
-                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image,
-                            new Point(BitConverter.ToUInt16(faceData[dat_id], 0x40),
-                                BitConverter.ToUInt16(faceData[dat_id], 0x42)));
+                        case "汗":
+                            xOffset = 0x40;
+                            yOffset = 0x42;
+                            break;
+                        case "照":
+                            xOffset = 0x38;
+                            yOffset = 0x3A;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(emotions), emotion, "Unexpected emotion.");
                     }
-                    else if (Emos[i] == "照" && resourceList.Contains(exresname))
-                    {
-                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image,
-                            new Point(BitConverter.ToUInt16(faceData[dat_id], 0x38),
-                                BitConverter.ToUInt16(faceData[dat_id], 0x3A)));
-                    }
+                    g.DrawImage(image,
+                        new Point(BitConverter.ToUInt16(faceData[dat_id], xOffset),
+                            BitConverter.ToUInt16(faceData[dat_id], yOffset)));
                 }
-                if (resourceList.Contains(hairname))
+                if (resourceList.Contains(hairName))
                 {
-                    var hair = Resources.ResourceManager.GetObject(hairname) as Bitmap;
-                    g.DrawImage(ColorHair(hair, HairColor), new Point(0, 0));
+                    var hair = Resources.ResourceManager.GetObject(hairName) as Bitmap;
+                    g.DrawImage(ColorHair(hair, hairColor), new Point(0, 0));
                 }
-                if (USER && 0 > 0)
+#if ACCESSORY
+                if (isUser)
                 {
                     g.DrawImage(
-                        Resources.ResourceManager.GetObject((new[] {"マイユニ男1", "マイユニ女2"})[PGender] + "_st_アクセサリ2_" + 0)
+                        Resources.ResourceManager.GetObject(playerGender.ToIfString() + "_st_アクセサリ2_" + 0)
                             as Image, new Point(133, 28));
                 }
+#endif
             }
             if (Slot1)
-                C.RotateFlip(RotateFlipType.RotateNoneFlipX);
-            return C;
+                characterImage.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            return characterImage;
         }
 
-        public static Image GetCharacterBUImage(string CName, string CEmo, Color HairColor, bool Crop, int PGender)
+        public static Image GetCharacterBuImage(string name, string emotion, Color hairColor, bool crop,
+            PlayerGender playerGender)
         {
-            var hairname = "_bu_髪";
-            var dat_id = "FSID_BU_" + CName;
-            var USER = CName == "username";
-            if (USER)
+            var hairName = "_bu_髪";
+            var dat_id = "FSID_BU_" + name;
+            var isUser = name == "username";
+            var playerGenderString = playerGender.ToIfString();
+            if (isUser)
             {
-                dat_id = "FSID_BU_" + (new[] {"マイユニ_男1", "マイユニ_女2"})[PGender] + "_顔" + EyeStyles[0].ToUpper();
-                CName = EyeStyles[0] + Kamuis[PGender];
-                hairname = CName.Substring(1) + hairname + 0;
+                dat_id = $"FSID_BU_{playerGender.ToIfString(true)}_顔{EyeStyles[0].ToUpper()}";
+                name = $"{EyeStyles[0]}{playerGenderString}";
+                hairName = $"{playerGenderString}{hairName}0";
             }
             else
-                hairname = CName + hairname + "0";
-            var Emos = CEmo.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
-            var resname = CName + "_bu_" + Emos[0];
-            Image C;
+                hairName = name + hairName + "0";
+            var splitEmotions = emotion.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+            var resname = name + "_bu_" + splitEmotions[0];
+            Image characterImage;
             if (resourceList.Contains(resname))
-                C = Resources.ResourceManager.GetObject(resname) as Image;
-            else
-                C = new Bitmap(1, 1);
-            using (var g = Graphics.FromImage(C))
             {
-                if (USER && 0 > 0)
+                characterImage = (Image) Resources.ResourceManager.GetObject(resname);
+                Debug.Assert(characterImage != null, $"{nameof(characterImage)} != null");
+            }
+            else
+                characterImage = new Bitmap(1, 1);
+
+            using (var g = Graphics.FromImage(characterImage))
+            {
+#if ACCESSORY
+                if (isUser)
                 {
                     g.DrawImage(
-                        Resources.ResourceManager.GetObject((new[] {"マイユニ男1", "マイユニ女2"})[PGender] + "_bu_アクセサリ1_" + 0)
+                        Resources.ResourceManager.GetObject(playerGenderString +
+                                                            "_bu_アクセサリ1_" + 0)
                             as Image, new Point(0, 0));
                 }
-                for (var i = 1; i < Emos.Length; i++)
+#endif
+
+                for (var i = 1; i < splitEmotions.Length; i++)
                 {
-                    var exresname = CName + "_bu_" + Emos[i];
-                    if (Emos[i] == "汗" && resourceList.Contains(exresname))
+                    var exresname = name + "_bu_" + splitEmotions[i];
+                    if (splitEmotions[i] == "汗" && resourceList.Contains(exresname))
                     {
                         g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image,
                             new Point(BitConverter.ToUInt16(faceData[dat_id], 0x40),
                                 BitConverter.ToUInt16(faceData[dat_id], 0x42)));
                     }
-                    else if (Emos[i] == "照" && resourceList.Contains(exresname))
+                    else if (splitEmotions[i] == "照" && resourceList.Contains(exresname))
                     {
                         g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image,
                             new Point(BitConverter.ToUInt16(faceData[dat_id], 0x38),
                                 BitConverter.ToUInt16(faceData[dat_id], 0x3A)));
                     }
                 }
-                if (resourceList.Contains(hairname))
+                if (resourceList.Contains(hairName))
                 {
-                    var hair = Resources.ResourceManager.GetObject(hairname) as Bitmap;
-                    g.DrawImage(ColorHair(hair, HairColor), new Point(0, 0));
+                    var hair = Resources.ResourceManager.GetObject(hairName) as Bitmap;
+                    g.DrawImage(ColorHair(hair, hairColor), new Point(0, 0));
                 }
-                if (USER && 0 > 0)
+#if ACCESSORY
+                if (isUser)
                 {
                     var Acc = new[] {new Point(66, 5), new Point(65, 21)}[0 - 2];
                     g.DrawImage(
-                        Resources.ResourceManager.GetObject((new[] {"マイユニ男1", "マイユニ女2"})[PGender] + "_bu_アクセサリ2_" + 0)
+                        Resources.ResourceManager.GetObject((new[] {"マイユニ男1", "マイユニ女2"})[playerGender] +
+                                                            "_bu_アクセサリ2_" + 0)
                             as Image, Acc);
                 }
+#endif
             }
-            if (Crop)
+            if (crop)
             {
                 var Cropped = new Bitmap(BitConverter.ToUInt16(faceData[dat_id], 0x34),
                     BitConverter.ToUInt16(faceData[dat_id], 0x36));
                 using (var g = Graphics.FromImage(Cropped))
                 {
-                    g.DrawImage(C,
+                    g.DrawImage(characterImage,
                         new Point(-BitConverter.ToUInt16(faceData[dat_id], 0x30),
                             -BitConverter.ToUInt16(faceData[dat_id], 0x32)));
                 }
-                C = Cropped;
+                characterImage = Cropped;
             }
-            C.RotateFlip(RotateFlipType.RotateNoneFlipX);
-            return C;
+            characterImage.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            return characterImage;
         }
 
-        public static Image ColorHair(Image Hair, Color C)
+        public static Image ColorHair(Image hair, Color color)
         {
-            var bmp = Hair as Bitmap;
+            var bmp = (Bitmap) hair;
             var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
             var bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, bmp.PixelFormat);
 
@@ -272,12 +303,10 @@ namespace FEITS.Model
 
             for (var i = 0; i < rgbaValues.Length; i += 4)
             {
-                if (rgbaValues[i + 3] > 0)
-                {
-                    rgbaValues[i + 2] = BlendOverlay(C.R, rgbaValues[i + 2]);
-                    rgbaValues[i + 1] = BlendOverlay(C.G, rgbaValues[i + 1]);
-                    rgbaValues[i + 0] = BlendOverlay(C.B, rgbaValues[i + 0]);
-                }
+                if (rgbaValues[i + 3] <= 0) continue;
+                rgbaValues[i + 2] = BlendOverlay(color.R, rgbaValues[i + 2]);
+                rgbaValues[i + 1] = BlendOverlay(color.G, rgbaValues[i + 1]);
+                rgbaValues[i + 0] = BlendOverlay(color.B, rgbaValues[i + 0]);
             }
             // Copy the RGB values back to the bitmap
             Marshal.Copy(rgbaValues, 0, ptr, bytes);

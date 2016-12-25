@@ -99,28 +99,25 @@ namespace FEITS.View
             set { MI_EnableBackgrounds.Checked = value; }
         }
 
-        public int PlayerGender
+        public PlayerGender PlayerGender
         {
             get
             {
                 foreach(ToolStripMenuItem mi in MI_PlayerGender.DropDownItems)
                 {
                     if (mi.Checked)
-                        return MI_PlayerGender.DropDownItems.IndexOf(mi);
+                        return (PlayerGender) MI_PlayerGender.DropDownItems.IndexOf(mi);
                 }
 
-                return -1;
+                return PlayerGender.None;
             }
             set
             {
-                var menuItem = (ToolStripMenuItem)MI_PlayerGender.DropDownItems[value];
+                var menuItem = (ToolStripMenuItem)MI_PlayerGender.DropDownItems[(int) value];
 
                 foreach(ToolStripMenuItem mi in MI_PlayerGender.DropDownItems)
                 {
-                    if (mi == menuItem)
-                        mi.Checked = true;
-                    else
-                        mi.Checked = false;
+                    mi.Checked = mi == menuItem;
                 }
             }
         }

@@ -42,7 +42,7 @@ namespace FEITS.Controller
             }
 
             var containsInvalids = false;
-            var invalidChars = new HashSet<char>();
+            var invalidChars = new SortedSet<char>();
             foreach (var c in MessageScript.Where(c => !validChars[AssetGeneration.GetValue(c)]))
             {
                 containsInvalids = true;

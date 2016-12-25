@@ -1,7 +1,6 @@
 ﻿using FEITS.Controller;
 using FEITS.Model;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -26,7 +25,7 @@ namespace FEITS.View
 
         public void SetController(MainController controller)
         {
-            cont = (TwoFileController)controller;
+            cont = (TwoFileController) controller;
         }
 
         public void SetMessageList(List<MessageBlock> messages)
@@ -54,6 +53,7 @@ namespace FEITS.View
         }
 
         #region Properties
+
         //Message controls
         public int MsgListIndex
         {
@@ -82,13 +82,21 @@ namespace FEITS.View
         public string CurrentLine
         {
             get { return TB_CurrentLine_Target.Text; }
-            set { TB_CurrentLine_Target.Text = value; TB_CurrentLine_Target.ClearUndo(); }
+            set
+            {
+                TB_CurrentLine_Target.Text = value;
+                TB_CurrentLine_Target.ClearUndo();
+            }
         }
 
         public string SourceCurrentLine
         {
             get { return TB_CurrentLine_Source.Text; }
-            set { TB_CurrentLine_Source.Text = value; TB_CurrentLine_Source.ClearUndo(); }
+            set
+            {
+                TB_CurrentLine_Source.Text = value;
+                TB_CurrentLine_Source.ClearUndo();
+            }
         }
 
         public bool PrevLine
@@ -146,63 +154,24 @@ namespace FEITS.View
             set { MI_EnableBackgrounds.Checked = value; }
         }
 
-        public int PlayerGender
+        //TODO(Robin): Duplicate code
+        public PlayerGender PlayerGender
         {
-            get
-            {
-                foreach(ToolStripMenuItem mi in MI_PlayerGender_Target.DropDownItems)
-                {
-                    if (mi.Checked)
-                        return MI_PlayerGender_Target.DropDownItems.IndexOf(mi);
-                }
-
-                return -1;
-            }
-            set
-            {
-                var menuItem = (ToolStripMenuItem)MI_PlayerGender_Target.DropDownItems[value];
-
-                foreach(ToolStripMenuItem mi in MI_PlayerGender_Target.DropDownItems)
-                {
-                    if (mi == menuItem)
-                        mi.Checked = true;
-                    else
-                        mi.Checked = false;
-                }
-            }
+            get { return MI_PlayerGender_Target.GetGender(); }
+            set { MI_PlayerGender_Target.SetGender(value); }
         }
 
-        public int SourcePlayerGender
+        public PlayerGender SourcePlayerGender
         {
-            get
-            {
-                foreach (ToolStripMenuItem mi in MI_PlayerGender_Source.DropDownItems)
-                {
-                    if (mi.Checked)
-                        return MI_PlayerGender_Source.DropDownItems.IndexOf(mi);
-                }
-
-                return -1;
-            }
-            set
-            {
-                var menuItem = (ToolStripMenuItem)MI_PlayerGender_Source.DropDownItems[value];
-
-                foreach (ToolStripMenuItem mi in MI_PlayerGender_Source.DropDownItems)
-                {
-                    if (mi == menuItem)
-                        mi.Checked = true;
-                    else
-                        mi.Checked = false;
-                }
-            }
+            get { return MI_PlayerGender_Source.GetGender(); }
+            set { MI_PlayerGender_Source.SetGender(value); }
         }
 
         public int CurrentTextbox
         {
             get
             {
-                foreach(ToolStripMenuItem mi in MI_TBStyles.DropDownItems)
+                foreach (ToolStripMenuItem mi in MI_TBStyles.DropDownItems)
                 {
                     if (mi.Checked)
                         return MI_TBStyles.DropDownItems.IndexOf(mi);
@@ -212,9 +181,9 @@ namespace FEITS.View
             }
             set
             {
-                var menuItem = (ToolStripMenuItem)MI_TBStyles.DropDownItems[value];
+                var menuItem = (ToolStripMenuItem) MI_TBStyles.DropDownItems[value];
 
-                foreach(ToolStripMenuItem mi in MI_TBStyles.DropDownItems)
+                foreach (ToolStripMenuItem mi in MI_TBStyles.DropDownItems)
                 {
                     if (mi == menuItem)
                         mi.Checked = true;
@@ -292,16 +261,17 @@ namespace FEITS.View
 
         private void TB_CurrentLine_Target_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift))
+            if (System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift))
             {
-                if (e.Key == System.Windows.Input.Key.Enter && System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control))
+                if (e.Key == System.Windows.Input.Key.Enter &&
+                    System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control))
                 {
                     TB_CurrentLine_Target.ReadOnly = true;
 
                     if (PrevLine)
                         cont.PreviousPage();
                 }
-                else if(e.Key == System.Windows.Input.Key.Enter)
+                else if (e.Key == System.Windows.Input.Key.Enter)
                 {
                     TB_CurrentLine_Target.ReadOnly = true;
 
@@ -321,11 +291,12 @@ namespace FEITS.View
                     LB_MessageList_Target.SelectedIndex++;
             }
 
-            if(SimultaneousControl)
+            if (SimultaneousControl)
             {
                 if (System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift))
                 {
-                    if (e.Key == System.Windows.Input.Key.Enter && System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control))
+                    if (e.Key == System.Windows.Input.Key.Enter &&
+                        System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control))
                     {
                         TB_CurrentLine_Source.ReadOnly = true;
 
@@ -356,7 +327,7 @@ namespace FEITS.View
 
         private void TB_CurrentLine_Source_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(SimultaneousControl)
+            if (SimultaneousControl)
             {
                 TB_CurrentLine_Target_PreviewKeyDown(sender, e);
             }
@@ -364,7 +335,8 @@ namespace FEITS.View
             {
                 if (System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift))
                 {
-                    if (e.Key == System.Windows.Input.Key.Enter && System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control))
+                    if (e.Key == System.Windows.Input.Key.Enter &&
+                        System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control))
                     {
                         TB_CurrentLine_Source.ReadOnly = true;
 
@@ -395,13 +367,13 @@ namespace FEITS.View
 
         private void TB_CurrentLine_Target_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key == System.Windows.Input.Key.Enter)
+            if (e.Key == System.Windows.Input.Key.Enter)
             {
                 if (TB_CurrentLine_Target.ReadOnly)
                     TB_CurrentLine_Target.ReadOnly = false;
             }
 
-            if(SimultaneousControl)
+            if (SimultaneousControl)
             {
                 if (e.Key == System.Windows.Input.Key.Enter)
                 {
@@ -413,7 +385,7 @@ namespace FEITS.View
 
         private void TB_CurrentLine_Source_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(SimultaneousControl)
+            if (SimultaneousControl)
             {
                 TB_CurrentLine_Target_PreviewKeyUp(sender, e);
             }
@@ -536,7 +508,7 @@ namespace FEITS.View
 
         private void MI_Open_Target_Click(object sender, EventArgs e)
         {
-            if(cont.OpenFile())
+            if (cont.OpenFile())
                 ApplicationStatus = "File opened successfully";
             else
                 ApplicationStatus = "Error opening file";
@@ -598,7 +570,7 @@ namespace FEITS.View
 
         private void MI_SaveAs_Target_Click(object sender, EventArgs e)
         {
-            if(CurrentLine != string.Empty)
+            if (CurrentLine != string.Empty)
             {
                 if (cont.SaveFileAs())
                     ApplicationStatus = "Target saved at " + DateTime.Now.ToShortTimeString();
@@ -694,19 +666,19 @@ namespace FEITS.View
 
         private void MI_CheckableItem_Click(object sender, EventArgs e)
         {
-            var item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem) sender;
             if (!item.Checked)
                 item.Checked = true;
         }
 
         private void MI_PlayerGender_Target_CheckedChanged(object sender, EventArgs e)
         {
-            var item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem) sender;
 
             if (!item.Checked)
                 return;
 
-            foreach(ToolStripMenuItem mi in MI_PlayerGender_Target.DropDownItems)
+            foreach (ToolStripMenuItem mi in MI_PlayerGender_Target.DropDownItems)
             {
                 if (mi != item)
                     mi.Checked = false;
@@ -717,7 +689,7 @@ namespace FEITS.View
 
         private void MI_PlayerGender_Source_CheckedChanged(object sender, EventArgs e)
         {
-            var item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem) sender;
 
             if (!item.Checked)
                 return;
@@ -733,14 +705,14 @@ namespace FEITS.View
 
         private void MI_TBItem_CheckedChanged(object sender, EventArgs e)
         {
-            var item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem) sender;
 
             if (!item.Checked)
                 return;
 
             foreach (ToolStripMenuItem mi in MI_TBStyles.DropDownItems)
             {
-                if(mi != item)
+                if (mi != item)
                 {
                     mi.Checked = false;
                 }
@@ -771,14 +743,16 @@ namespace FEITS.View
 
         private void PB_PreviewBox_Click(object sender, EventArgs e)
         {
-            var box = (PictureBox)sender;
+            var box = (PictureBox) sender;
 
             if (box.Image == null)
                 return;
 
-            if((e as MouseEventArgs).Button == MouseButtons.Right)
+            if ((e as MouseEventArgs).Button == MouseButtons.Right)
             {
-                if (MessageBox.Show("Save the current conversation?", "Save Conversation As Image", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                if (
+                    MessageBox.Show("Save the current conversation?", "Save Conversation As Image",
+                        MessageBoxButtons.YesNo) != DialogResult.Yes)
                     return;
 
                 if (box.Name == "PB_PreviewBox_Target")
@@ -786,9 +760,10 @@ namespace FEITS.View
                 else
                     cont.SaveSourcePreview(true);
             }
-            else if((e as MouseEventArgs).Button == MouseButtons.Left)
+            else if ((e as MouseEventArgs).Button == MouseButtons.Left)
             {
-                if (MessageBox.Show("Save the current image?", "Save Preview as Image", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                if (MessageBox.Show("Save the current image?", "Save Preview as Image", MessageBoxButtons.YesNo) !=
+                    DialogResult.Yes)
                     return;
 
                 if (box.Name == "PB_PreviewBox_Source")
@@ -848,7 +823,7 @@ namespace FEITS.View
             }
             else if (e.KeyCode == Keys.PageDown)
             {
-                if(SimultaneousControl)
+                if (SimultaneousControl)
                 {
                     if (LB_MessageList_Source.SelectedIndex < LB_MessageList_Source.Items.Count - 1)
                         LB_MessageList_Source.SelectedIndex++;
@@ -861,10 +836,10 @@ namespace FEITS.View
 
         private void CompactMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(setClose)
+            if (setClose)
                 return;
 
-            if(LB_MessageList_Source.Items.Count < 1)
+            if (LB_MessageList_Source.Items.Count < 1)
             {
                 e.Cancel = true;
                 setClose = true;
@@ -872,7 +847,10 @@ namespace FEITS.View
                 return;
             }
 
-            var result = MessageBox.Show("Stop the comparison? All unsaved changes to the source will be lost, but target data will be retained.", "End Comparison", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result =
+                MessageBox.Show(
+                    "Stop the comparison? All unsaved changes to the source will be lost, but target data will be retained.",
+                    "End Comparison", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {
