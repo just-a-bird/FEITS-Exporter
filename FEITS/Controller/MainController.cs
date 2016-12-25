@@ -107,11 +107,11 @@ namespace FEITS.Controller
 
         public bool ImportMessageScript()
         {
-            ScriptImport messageImporter = new ScriptImport();
+            var messageImporter = new ScriptImport();
             try
             {
-                ImportExportController importCont = new ImportExportController(messageImporter, "");
-                DialogResult dialogResult = messageImporter.ShowDialog();
+                var importCont = new ImportExportController(messageImporter, "");
+                var dialogResult = messageImporter.ShowDialog();
 
                 if (dialogResult == DialogResult.OK)
                 {
@@ -136,10 +136,10 @@ namespace FEITS.Controller
 
         public void ExportMessageScript(bool allMessages)
         {
-            ScriptExport messageExporter = new ScriptExport();
+            var messageExporter = new ScriptExport();
             try
             {
-                ImportExportController exportCont = new ImportExportController(messageExporter, allMessages ? conv.File.CompileFileText() : conv.File.MessageList[conv.MessageIndex].CompileMessage(false));
+                var exportCont = new ImportExportController(messageExporter, allMessages ? conv.File.CompileFileText() : conv.File.MessageList[conv.MessageIndex].CompileMessage(false));
                 messageExporter.ShowDialog();
             }
             catch
@@ -161,7 +161,7 @@ namespace FEITS.Controller
                 return;
             }
 
-            string rawLine = string.Empty;
+            var rawLine = string.Empty;
             if (currentLineOnly)
             {
                 conv.File.MessageList[conv.MessageIndex].MessageLines[conv.LineIndex].UpdateRawWithNewDialogue();
@@ -169,18 +169,18 @@ namespace FEITS.Controller
                 rawLine = rawLine.Replace(Environment.NewLine, "\\n").Replace("\n", "\\n");
             }
 
-            using (DirectEdit messageEdit = new DirectEdit())
+            using (var messageEdit = new DirectEdit())
             {
-                ImportExportController editCont = new ImportExportController(messageEdit, currentLineOnly ? rawLine : conv.File.MessageList[conv.MessageIndex].CompileMessage(false));
+                var editCont = new ImportExportController(messageEdit, currentLineOnly ? rawLine : conv.File.MessageList[conv.MessageIndex].CompileMessage(false));
 
                 if (messageEdit.ShowDialog() == DialogResult.OK)
                 {
-                    string newMessage = string.Empty;
+                    var newMessage = string.Empty;
                     if (currentLineOnly)
                     {
                         conv.File.MessageList[conv.MessageIndex].MessageLines[conv.LineIndex].RawLine = editCont.MessageScript;
 
-                        foreach (MessageLine msg in conv.File.MessageList[conv.MessageIndex].MessageLines)
+                        foreach (var msg in conv.File.MessageList[conv.MessageIndex].MessageLines)
                         {
                             newMessage += msg.RawLine;
                         }
@@ -203,9 +203,9 @@ namespace FEITS.Controller
 
         public void OpenHalfBoxEditor()
         {
-            using (HalfBoxTester halfBox = new HalfBoxTester())
+            using (var halfBox = new HalfBoxTester())
             {
-                HalfBoxController hbCont = new HalfBoxController(halfBox);
+                var hbCont = new HalfBoxController(halfBox);
                 halfBox.ShowDialog();
             }
         }
@@ -215,7 +215,7 @@ namespace FEITS.Controller
             if(!reminderOpen)
             {
                 reminderOpen = true;
-                FriendlyReminder reminder = new FriendlyReminder();
+                var reminder = new FriendlyReminder();
                 reminder.SetController(this);
                 reminder.Show();
             }
@@ -241,8 +241,8 @@ namespace FEITS.Controller
 
         public void LoadAssets()
         {
-            IList dictList = ((CompactMainForm)mainView).GetCustomDictionary();
-            LoadingPopup loader = new LoadingPopup();
+            var dictList = ((CompactMainForm)mainView).GetCustomDictionary();
+            var loader = new LoadingPopup();
             loader.BeginLoading(dictList);
             loader.ShowDialog();
         }
@@ -311,7 +311,7 @@ namespace FEITS.Controller
             }
             catch
             {
-                
+                //TODO: ???
             }
         }
 
@@ -354,13 +354,13 @@ namespace FEITS.Controller
 
         public virtual bool HandleNewBackgroundImage(DragEventArgs e)
         {
-            string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+            var file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
 
             if(File.Exists(file))
             {
                 try
                 {
-                    Image img = Image.FromFile(file);
+                    var img = Image.FromFile(file);
                     if(img.Width > 1 && img.Height > 1)
                     {
                         conv.BackgroundImage = img;
@@ -389,32 +389,30 @@ namespace FEITS.Controller
             {
                 sfd.FileName = conv.File.FileName + "_Conversation";
 
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    Image imageFile = conv.RenderConversation();
-                    conv.GetCommandsUpUntilIndex();
-                    SetCurrentLine();
+                if (sfd.ShowDialog() != DialogResult.OK) return;
 
-                    imageFile.Save(sfd.FileName, ImageFormat.Png);
-                }
+                var imageFile = conv.RenderConversation();
+                conv.GetCommandsUpUntilIndex();
+                SetCurrentLine();
+
+                imageFile.Save(sfd.FileName, ImageFormat.Png);
             }
             else
             {
-                sfd.FileName = conv.File.FileName + "_Page" + mainView.CurrentPage.ToString();
-                
-                if(sfd.ShowDialog() == DialogResult.OK)
-                {
-                    Image imageFile = mainView.PreviewImage;
-                    imageFile.Save(sfd.FileName, ImageFormat.Png);
-                }
+                sfd.FileName = conv.File.FileName + "_Page" + mainView.CurrentPage;
+
+                if (sfd.ShowDialog() != DialogResult.OK) return;
+
+                var imageFile = mainView.PreviewImage;
+                imageFile.Save(sfd.FileName, ImageFormat.Png);
             }
         }
 
         public void SetupCompareMode()
         {
-            TwoFileForm compareForm = new TwoFileForm();
-            TwoFileController controller = new TwoFileController(compareForm, conv);
-            CompactMainForm form = (CompactMainForm)mainView;
+            var compareForm = new TwoFileForm();
+            var controller = new TwoFileController(compareForm, conv);
+            var form = (CompactMainForm)mainView;
             controller.SetNormalFormRefs(form);
             form.Hide();
 

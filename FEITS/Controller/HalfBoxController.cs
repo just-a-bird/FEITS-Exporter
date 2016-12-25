@@ -34,7 +34,7 @@ namespace FEITS.Controller
             Image hb = textboxes[view.CurrentTextboxIndex].Clone() as Bitmap;
             Image text = AssetGeneration.DrawString(new Bitmap(165, 50), view.CurrentLine.Replace(Environment.NewLine, "\n"), 0, 22, Color.FromArgb(68, 8, 0)) as Bitmap;
 
-            using (Graphics g = Graphics.FromImage(hb))
+            using (var g = Graphics.FromImage(hb))
             {
                 g.DrawImage(text, new Point(10, 0));
                 g.DrawImage(Resources.KeyPress, new Point(view.PreviewImage.Width - 30, view.PreviewImage.Height - hb.Height + 32));
@@ -45,10 +45,10 @@ namespace FEITS.Controller
 
         public void ExportText()
         {
-            using (ScriptExport lineExporter = new ScriptExport())
+            using (var lineExporter = new ScriptExport())
             {
-                ImportExportController exportCont = new ImportExportController(lineExporter, view.CurrentLine.Replace(Environment.NewLine, "\\n"));
-                DialogResult dialogResult = lineExporter.ShowDialog();
+                var exportCont = new ImportExportController(lineExporter, view.CurrentLine.Replace(Environment.NewLine, "\\n"));
+                var dialogResult = lineExporter.ShowDialog();
             }
         }
     }

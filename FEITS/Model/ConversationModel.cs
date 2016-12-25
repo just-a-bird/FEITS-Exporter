@@ -68,8 +68,8 @@ namespace FEITS.Model
         {
             //Grab names from PID and sort them into a dictionary
             names = new Dictionary<string, string>();
-            string[] pids = Resources.PID.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string str in pids)
+            var pids = Resources.PID.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var str in pids)
             {
                 var p = str.Split(new[] { '\t' });
                 names[p[0]] = p[1];
@@ -89,7 +89,7 @@ namespace FEITS.Model
         {
             ResetParameters();
 
-            for(int i = 0; i < lineIndex; i++)
+            for(var i = 0; i < lineIndex; i++)
             {
                 GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
             }
@@ -105,11 +105,11 @@ namespace FEITS.Model
 
             line.SpokenText = line.RawLine;
 
-            for(int i = 0; i < line.SpokenText.Length; i++)
+            for(var i = 0; i < line.SpokenText.Length; i++)
             {
                 if(line.SpokenText[i] == '$')
                 {
-                    Tuple<string, Command> res = MessageBlock.ParseCommand(line.SpokenText, i);
+                    var res = MessageBlock.ParseCommand(line.SpokenText, i);
                     line.SpokenText = res.Item1;
 
                     if (res.Item2.numParams > 0)
@@ -228,8 +228,8 @@ namespace FEITS.Model
         private Image RenderTypeOne(string line)
         {
             //Probably shouldn't be hard-coded
-            Bitmap box = new Bitmap(400, 240);
-            Bitmap tb = TextBoxes[TextboxIndex].Clone() as Bitmap;
+            var box = new Bitmap(400, 240);
+            var tb = TextBoxes[TextboxIndex].Clone() as Bitmap;
 
             //Generate text image from string
             if (line.Contains("$Nu") && hasPerms)
@@ -240,19 +240,19 @@ namespace FEITS.Model
             line = line.Replace(Environment.NewLine, "\n");
 
             //Draw the line's text
-            Bitmap text = AssetGeneration.DrawString(new Bitmap(310, 50), line, 0, 22, Color.FromArgb(68, 8, 0)) as Bitmap;
+            var text = AssetGeneration.DrawString(new Bitmap(310, 50), line, 0, 22, Color.FromArgb(68, 8, 0)) as Bitmap;
 
-            using (Graphics g = Graphics.FromImage(tb))
+            using (var g = Graphics.FromImage(tb))
             {
                 g.DrawImage(text, new Point(29, 0));
             }
 
             //Name box
-            string name = names.ContainsKey(charActive) ? names[charActive] : (charActive == "username" ? PlayerName : charActive);
-            int nameLength = AssetGeneration.GetLength(name);
-            Bitmap nb = AssetGeneration.DrawString(Resources.NameBox, name, Resources.NameBox.Width / 2 - nameLength / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap;  //Center name in NameBox
+            var name = names.ContainsKey(charActive) ? names[charActive] : (charActive == "username" ? PlayerName : charActive);
+            var nameLength = AssetGeneration.GetLength(name);
+            var nb = AssetGeneration.DrawString(Resources.NameBox, name, Resources.NameBox.Width / 2 - nameLength / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap;  //Center name in NameBox
 
-            using (Graphics g = Graphics.FromImage(box))
+            using (var g = Graphics.FromImage(box))
             {
                 if (enableBackgrounds)
                 {
@@ -261,13 +261,13 @@ namespace FEITS.Model
 
                 if (charA != string.Empty)
                 {
-                    Image ca = AssetGeneration.GetCharacterStageImage(charA, emotionA, colorA, true, PlayerGender);
+                    var ca = AssetGeneration.GetCharacterStageImage(charA, emotionA, colorA, true, PlayerGender);
                     g.DrawImage((charActive == charA) ? ca : AssetGeneration.Fade(ca), new Point(-28, box.Height - ca.Height + 14));
                 }
 
                 if (charB != string.Empty)
                 {
-                    Image cb = AssetGeneration.GetCharacterStageImage(charB, emotionB, colorB, false, PlayerGender);
+                    var cb = AssetGeneration.GetCharacterStageImage(charB, emotionB, colorB, false, PlayerGender);
                     g.DrawImage((charActive == charB) ? cb : AssetGeneration.Fade(cb), new Point(box.Width - cb.Width + 28, box.Height - cb.Height + 14));
                 }
 
@@ -292,9 +292,9 @@ namespace FEITS.Model
             string topLine = string.Empty, bottomLine = string.Empty;
             ResetParameters();
 
-            for (int i = 0; i <= lineIndex; i++)
+            for (var i = 0; i <= lineIndex; i++)
             {
-                string line = GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
+                var line = GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
 
                 if (line.Contains("$Nu") && hasPerms)
                 {
@@ -310,12 +310,12 @@ namespace FEITS.Model
             }
 
             //Hard coded dimensions
-            Bitmap box = new Bitmap(400, 240);
+            var box = new Bitmap(400, 240);
             Bitmap topBox = new Bitmap(1, 1), bottomBox = new Bitmap(1, 1);
             if (topLine != string.Empty && charA != string.Empty)
             {
                 topBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
-                using (Graphics g = Graphics.FromImage(topBox))
+                using (var g = Graphics.FromImage(topBox))
                 {
                     g.DrawImage(AssetGeneration.GetCharacterBUImage(charA, emotionA, colorA, true, PlayerGender), new Point(2, 3));
                     g.DrawImage(AssetGeneration.DrawString(new Bitmap(260, 50), topLine, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
@@ -325,18 +325,18 @@ namespace FEITS.Model
             if (bottomLine != string.Empty && charB != string.Empty)
             {
                 bottomBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
-                using (Graphics g = Graphics.FromImage(bottomBox))
+                using (var g = Graphics.FromImage(bottomBox))
                 {
                     g.DrawImage(AssetGeneration.GetCharacterBUImage(charB, emotionB, colorB, true, PlayerGender), new Point(2, 3));
                     g.DrawImage(AssetGeneration.DrawString(new Bitmap(282, 50), bottomLine, 0, 22, Color.FromArgb(68, 8, 0)), new Point(76, 0));
                 }
             }
 
-            using (Graphics g = Graphics.FromImage(box))
+            using (var g = Graphics.FromImage(box))
             {
                 if (lineIndex < File.MessageList[messageIndex].MessageLines.Count - 1)
                 {
-                    using (Graphics g2 = Graphics.FromImage(charActive == charA ? topBox : bottomBox))
+                    using (var g2 = Graphics.FromImage(charActive == charA ? topBox : bottomBox))
                     {
                         g2.DrawImage(Resources.KeyPress, new Point(TextBoxes[TextboxIndex].Width - 30, 32));
                     }
@@ -349,17 +349,17 @@ namespace FEITS.Model
 
                 if (topLine != string.Empty && charA != string.Empty)
                 {
-                    string topName = names.ContainsKey(charA) ? names[charA] : (charA == "username" ? PlayerName : charA);
-                    int nameLen = AssetGeneration.GetLength(topName);
-                    Bitmap topNameBox = AssetGeneration.DrawString(Resources.NameBox, topName, Resources.NameBox.Width / 2 - nameLen / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap; //Center name in NameBox
+                    var topName = names.ContainsKey(charA) ? names[charA] : (charA == "username" ? PlayerName : charA);
+                    var nameLen = AssetGeneration.GetLength(topName);
+                    var topNameBox = AssetGeneration.DrawString(Resources.NameBox, topName, Resources.NameBox.Width / 2 - nameLen / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap; //Center name in NameBox
                     g.DrawImage(topNameBox, new Point(7, topBox.Height - (topNameBox.Height - 20)));
                 }
 
                 if (bottomLine != string.Empty && charB != string.Empty)
                 {
-                    string bottomName = names.ContainsKey(charB) ? names[charB] : (charB == "username" ? PlayerName : charB);
-                    int nameLen = AssetGeneration.GetLength(bottomName);
-                    Bitmap bottomNameBox = AssetGeneration.DrawString(Resources.NameBox, bottomName, Resources.NameBox.Width / 2 - nameLen / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap;
+                    var bottomName = names.ContainsKey(charB) ? names[charB] : (charB == "username" ? PlayerName : charB);
+                    var nameLen = AssetGeneration.GetLength(bottomName);
+                    var bottomNameBox = AssetGeneration.DrawString(Resources.NameBox, bottomName, Resources.NameBox.Width / 2 - nameLen / 2, 16, Color.FromArgb(253, 234, 177)) as Bitmap;
                     g.DrawImage(bottomNameBox, new Point(7, box.Height - bottomBox.Height - 14));
                 }
             }
@@ -369,27 +369,27 @@ namespace FEITS.Model
 
         public Image RenderConversation()
         {
-            foreach(MessageLine line in File.MessageList[messageIndex].MessageLines)
+            foreach(var line in File.MessageList[messageIndex].MessageLines)
                 line.UpdateRawWithNewDialogue();
 
-            List<Image> images = new List<Image>();
-            int index = lineIndex;
+            var images = new List<Image>();
+            var index = lineIndex;
             ResetParameters();
-            for(int i = 0; i < File.MessageList[messageIndex].MessageLines.Count; i++)
+            for(var i = 0; i < File.MessageList[messageIndex].MessageLines.Count; i++)
             {
                 GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
-                string parsed = File.MessageList[messageIndex].MessageLines[i].SpokenText;
+                var parsed = File.MessageList[messageIndex].MessageLines[i].SpokenText;
                 if(!string.IsNullOrWhiteSpace(parsed) && !string.IsNullOrEmpty(parsed))
                 {
                     images.Add(RenderPreviewBox(parsed));
                 }
             }
             lineIndex = index;
-            Bitmap bmp = new Bitmap(images.Max(i => i.Width), images.Sum(i => i.Height));
-            using (Graphics g = Graphics.FromImage(bmp))
+            var bmp = new Bitmap(images.Max(i => i.Width), images.Sum(i => i.Height));
+            using (var g = Graphics.FromImage(bmp))
             {
-                int h = 0;
-                foreach(Image img in images)
+                var h = 0;
+                foreach(var img in images)
                 {
                     g.DrawImage(img, new Point(0, h));
                     h += img.Height;

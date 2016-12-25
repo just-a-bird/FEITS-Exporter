@@ -30,7 +30,7 @@ namespace FEITS.Model
                     lineIndex = RawLine.IndexOf("$", SpeechIndex);
                 }
 
-                string oldDialogue = string.Empty;
+                var oldDialogue = string.Empty;
                 if (lineIndex > SpeechIndex)
                     oldDialogue = RawLine.Substring(SpeechIndex, lineIndex - SpeechIndex);
                 else

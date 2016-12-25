@@ -29,7 +29,7 @@ namespace FEITS.Controller
         #region Menu Bar
         public override bool OpenFile()
         {
-            bool value = base.OpenFile();
+            var value = base.OpenFile();
             if (value)
                 SetViewName();
             return value;
@@ -78,7 +78,7 @@ namespace FEITS.Controller
 
         public override bool SaveFileAs()
         {
-            bool value = base.SaveFileAs();
+            var value = base.SaveFileAs();
             if (value)
                 SetViewName();
             return value;
@@ -119,9 +119,9 @@ namespace FEITS.Controller
 
         public bool ImportSourceMessageScript()
         {
-            using (ScriptImport messageImporter = new ScriptImport())
+            using (var messageImporter = new ScriptImport())
             {
-                ImportExportController importCont = new ImportExportController(messageImporter, "");
+                var importCont = new ImportExportController(messageImporter, "");
 
                 if (messageImporter.ShowDialog() == DialogResult.OK)
                 {
@@ -143,10 +143,10 @@ namespace FEITS.Controller
 
         public void ExportSourceMessageScript(bool allMessages)
         {
-            ScriptExport messageExporter = new ScriptExport();
+            var messageExporter = new ScriptExport();
             try
             {
-                ImportExportController exportCont = new ImportExportController(messageExporter, allMessages ? sourceConv.File.CompileFileText() : sourceConv.File.MessageList[sourceConv.MessageIndex].CompileMessage(false));
+                var exportCont = new ImportExportController(messageExporter, allMessages ? sourceConv.File.CompileFileText() : sourceConv.File.MessageList[sourceConv.MessageIndex].CompileMessage(false));
                 messageExporter.ShowDialog();
             }
             catch
@@ -168,7 +168,7 @@ namespace FEITS.Controller
                 return;
             }
 
-            string rawLine = string.Empty;
+            var rawLine = string.Empty;
             if(currentLineOnly)
             {
                 sourceConv.File.MessageList[sourceConv.MessageIndex].MessageLines[sourceConv.LineIndex].UpdateRawWithNewDialogue();
@@ -176,18 +176,18 @@ namespace FEITS.Controller
                 rawLine = rawLine.Replace(Environment.NewLine, "\\n").Replace("\n", "\\n");
             }
 
-            using (DirectEdit messageEdit = new DirectEdit())
+            using (var messageEdit = new DirectEdit())
             {
-                ImportExportController editCont = new ImportExportController(messageEdit, currentLineOnly ? rawLine : sourceConv.File.MessageList[sourceConv.MessageIndex].CompileMessage(false));
+                var editCont = new ImportExportController(messageEdit, currentLineOnly ? rawLine : sourceConv.File.MessageList[sourceConv.MessageIndex].CompileMessage(false));
 
                 if(messageEdit.ShowDialog() == DialogResult.OK)
                 {
-                    string newMessage = string.Empty;
+                    var newMessage = string.Empty;
                     if (currentLineOnly)
                     {
                         sourceConv.File.MessageList[sourceConv.MessageIndex].MessageLines[sourceConv.LineIndex].RawLine = editCont.MessageScript;
 
-                        foreach(MessageLine msg in sourceConv.File.MessageList[sourceConv.MessageIndex].MessageLines)
+                        foreach(var msg in sourceConv.File.MessageList[sourceConv.MessageIndex].MessageLines)
                         {
                             newMessage += msg.RawLine;
                         }
@@ -325,13 +325,13 @@ namespace FEITS.Controller
 
         public override bool HandleNewBackgroundImage(DragEventArgs e)
         {
-            bool value = base.HandleNewBackgroundImage(e);
+            var value = base.HandleNewBackgroundImage(e);
 
             if(value)
             {
                 try
                 {
-                    string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+                    var file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
                     sourceConv.BackgroundImage = Image.FromFile(file);
 
                     if (sourceConv.File.MessageList.Count > 0)
@@ -356,7 +356,7 @@ namespace FEITS.Controller
 
                 if(sfd.ShowDialog() == DialogResult.OK)
                 {
-                    Image imageFile = sourceConv.RenderConversation();
+                    var imageFile = sourceConv.RenderConversation();
                     sourceConv.GetCommandsUpUntilIndex();
                     SetCurrentSourceLine();
 
@@ -369,7 +369,7 @@ namespace FEITS.Controller
 
                 if(sfd.ShowDialog() == DialogResult.OK)
                 {
-                    Image imageFile = sourceView.SourcePreviewImage;
+                    var imageFile = sourceView.SourcePreviewImage;
                     imageFile.Save(sfd.FileName, ImageFormat.Png);
                 }
             }
@@ -380,7 +380,7 @@ namespace FEITS.Controller
             hiddenForm.SetMessageList(GetConversationFile().MessageList);
             hiddenForm.Show();
 
-            TwoFileForm form = (TwoFileForm)sourceView;
+            var form = (TwoFileForm)sourceView;
             form.Dispose();
         }
     }

@@ -20,9 +20,14 @@ namespace FEITS.Model
 
         //Font
         private static bool[] validCharacters;
-        public static bool[] ValidCharacters { get { return validCharacters; } }
+
+        public static bool[] ValidCharacters
+        {
+            get { return validCharacters; }
+        }
+
         private static FontCharacter[] characters;
-        private static Image[] Images = { Resources.Awakening_0, Resources.Awakening_1 };
+        private static Image[] Images = {Resources.Awakening_0, Resources.Awakening_1};
 
         //Resources
         private static Dictionary<string, byte[]> faceData;
@@ -33,17 +38,16 @@ namespace FEITS.Model
         private static Uri lexUri;
 
         //Kamui
-        private static string[] EyeStyles = { "a", "b", "c", "d", "e", "f", "g" };
-        private static string[] Kamuis = { "マイユニ男1", "マイユニ女2" };
+        private static string[] EyeStyles = {"a", "b", "c", "d", "e", "f", "g"};
+        private static string[] Kamuis = {"マイユニ男1", "マイユニ女2"};
 
         static AssetGeneration()
         {
-            
         }
 
         public static void Initialize(BackgroundWorker worker, DoWorkEventArgs e, IList dictList)
         {
-            if(isInitialized)
+            if (isInitialized)
             {
                 Console.WriteLine("Assets already initialized!");
             }
@@ -54,23 +58,23 @@ namespace FEITS.Model
                 //Set up font, generate list of valid chars
                 validCharacters = new bool[0x10000];
                 characters = new FontCharacter[0x10000];
-                for (int i = 0; i < Resources.chars.Length / 0x10; i++)
+                for (var i = 0; i < Resources.chars.Length/0x10; i++)
                 {
-                    FontCharacter fc = new FontCharacter(Resources.chars, i * 0x10);
-                    validCharacters[fc.Value] = true;
-                    fc.SetGlyph(Images[fc.IMG]);
-                    characters[fc.Value] = fc;
+                    var fc = new FontCharacter(Resources.chars, i*0x10);
+                    validCharacters[fc.Data.Value] = true;
+                    fc.SetGlyph(Images[fc.Data.ImageIndex]);
+                    characters[fc.Data.Value] = fc;
                 }
 
                 worker.ReportProgress(25);
 
                 //Grab face data and assign to dictionary
                 faceData = new Dictionary<string, byte[]>();
-                string[] fids = Resources.FID.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                for (int i = 0; i < fids.Length; i++)
+                var fids = Resources.FID.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+                for (var i = 0; i < fids.Length; i++)
                 {
-                    byte[] dat = new byte[0x48];
-                    Array.Copy(Resources.faces, i * 0x48, dat, 0, 0x48);
+                    var dat = new byte[0x48];
+                    Array.Copy(Resources.faces, i*0x48, dat, 0, 0x48);
                     faceData[fids[i]] = dat;
                 }
 
@@ -79,7 +83,7 @@ namespace FEITS.Model
                 dictList.Add(new Uri(@"pack://application:,,,/FEITS Exporter;component/Resources/txt/FE_Dictionary.lex"));
                 worker.ReportProgress(75);
 
-                ResourceSet set = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
+                var set = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
                 foreach (DictionaryEntry o in set)
                 {
                     resourceList.Add(o.Key as string);
@@ -94,13 +98,13 @@ namespace FEITS.Model
 
         public static Image DrawString(Image BaseImage, string Message, int StartX, int StartY, Color? TC = null)
         {
-            Color TextColor = TC.HasValue ? TC.Value : Color.Black;
-            int CurX = StartX;
-            int CurY = StartY;
-            Bitmap NewImage = BaseImage.Clone() as Bitmap;
-            using (Graphics g = Graphics.FromImage(NewImage))
+            var TextColor = TC ?? Color.Black;
+            var CurX = StartX;
+            var CurY = StartY;
+            var NewImage = BaseImage.Clone() as Bitmap;
+            using (var g = Graphics.FromImage(NewImage))
             {
-                foreach (char c in Message)
+                foreach (var c in Message)
                 {
                     if (c == '\n')
                     {
@@ -109,9 +113,9 @@ namespace FEITS.Model
                     }
                     else
                     {
-                        FontCharacter cur = characters[GetValue(c)];
-                        g.DrawImage(cur.GetGlyph(TextColor), new Point(CurX, CurY - cur.CropHeight));
-                        CurX += cur.CropWidth;
+                        var cur = characters[GetValue(c)];
+                        g.DrawImage(cur.GetGlyph(TextColor), new Point(CurX, CurY - cur.Data.CropHeight));
+                        CurX += cur.Data.CropWidth;
                     }
                 }
             }
@@ -120,50 +124,58 @@ namespace FEITS.Model
 
         public static Image GetCharacterStageImage(string CName, string CEmo, Color HairColor, bool Slot1, int PGender)
         {
-            bool USER = CName == "username";
-            string hairname = "_st_髪";
-            string dat_id = "FSID_ST_" + CName;
+            var USER = CName == "username";
+            var hairname = "_st_髪";
+            var dat_id = "FSID_ST_" + CName;
             if (USER)
             {
-                dat_id = "FSID_ST_" + (new[] { "マイユニ_男1", "マイユニ_女2" })[PGender] + "_顔" + EyeStyles[0].ToUpper();
+                dat_id = "FSID_ST_" + (new[] {"マイユニ_男1", "マイユニ_女2"})[PGender] + "_顔" + EyeStyles[0].ToUpper();
                 CName = EyeStyles[0] + Kamuis[PGender];
                 hairname = CName.Substring(1) + hairname + 0;
             }
             else
                 hairname = CName + hairname + "0";
-            var Emos = CEmo.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            string resname = CName + "_st_" + Emos[0];
+            var Emos = CEmo.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+            var resname = CName + "_st_" + Emos[0];
             Image C;
             if (resourceList.Contains(resname))
                 C = Resources.ResourceManager.GetObject(resname) as Image;
             else
                 C = new Bitmap(1, 1);
-            using (Graphics g = Graphics.FromImage(C))
+            using (var g = Graphics.FromImage(C))
             {
                 if (USER && 0 > 0)
                 {
-                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ女2" })[PGender] + "_st_アクセサリ1_" + 0) as Image, new Point(0, 0));
+                    g.DrawImage(
+                        Resources.ResourceManager.GetObject((new[] {"マイユニ男1", "マイユニ女2"})[PGender] + "_st_アクセサリ1_" + 0)
+                            as Image, new Point(0, 0));
                 }
-                for (int i = 1; i < Emos.Length; i++)
+                for (var i = 1; i < Emos.Length; i++)
                 {
-                    string exresname = CName + "_st_" + Emos[i];
+                    var exresname = CName + "_st_" + Emos[i];
                     if (Emos[i] == "汗" && resourceList.Contains(exresname))
                     {
-                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image, new Point(BitConverter.ToUInt16(faceData[dat_id], 0x40), BitConverter.ToUInt16(faceData[dat_id], 0x42)));
+                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image,
+                            new Point(BitConverter.ToUInt16(faceData[dat_id], 0x40),
+                                BitConverter.ToUInt16(faceData[dat_id], 0x42)));
                     }
                     else if (Emos[i] == "照" && resourceList.Contains(exresname))
                     {
-                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image, new Point(BitConverter.ToUInt16(faceData[dat_id], 0x38), BitConverter.ToUInt16(faceData[dat_id], 0x3A)));
+                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image,
+                            new Point(BitConverter.ToUInt16(faceData[dat_id], 0x38),
+                                BitConverter.ToUInt16(faceData[dat_id], 0x3A)));
                     }
                 }
                 if (resourceList.Contains(hairname))
                 {
-                    Bitmap hair = Resources.ResourceManager.GetObject(hairname) as Bitmap;
+                    var hair = Resources.ResourceManager.GetObject(hairname) as Bitmap;
                     g.DrawImage(ColorHair(hair, HairColor), new Point(0, 0));
                 }
                 if (USER && 0 > 0)
                 {
-                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ女2" })[PGender] + "_st_アクセサリ2_" + 0) as Image, new Point(133, 28));
+                    g.DrawImage(
+                        Resources.ResourceManager.GetObject((new[] {"マイユニ男1", "マイユニ女2"})[PGender] + "_st_アクセサリ2_" + 0)
+                            as Image, new Point(133, 28));
                 }
             }
             if (Slot1)
@@ -173,59 +185,70 @@ namespace FEITS.Model
 
         public static Image GetCharacterBUImage(string CName, string CEmo, Color HairColor, bool Crop, int PGender)
         {
-            string hairname = "_bu_髪";
-            string dat_id = "FSID_BU_" + CName;
-            bool USER = CName == "username";
+            var hairname = "_bu_髪";
+            var dat_id = "FSID_BU_" + CName;
+            var USER = CName == "username";
             if (USER)
             {
-                dat_id = "FSID_BU_" + (new[] { "マイユニ_男1", "マイユニ_女2" })[PGender] + "_顔" + EyeStyles[0].ToUpper();
+                dat_id = "FSID_BU_" + (new[] {"マイユニ_男1", "マイユニ_女2"})[PGender] + "_顔" + EyeStyles[0].ToUpper();
                 CName = EyeStyles[0] + Kamuis[PGender];
                 hairname = CName.Substring(1) + hairname + 0;
             }
             else
                 hairname = CName + hairname + "0";
-            var Emos = CEmo.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            string resname = CName + "_bu_" + Emos[0];
+            var Emos = CEmo.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+            var resname = CName + "_bu_" + Emos[0];
             Image C;
             if (resourceList.Contains(resname))
                 C = Resources.ResourceManager.GetObject(resname) as Image;
             else
                 C = new Bitmap(1, 1);
-            using (Graphics g = Graphics.FromImage(C))
+            using (var g = Graphics.FromImage(C))
             {
                 if (USER && 0 > 0)
                 {
-                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ女2" })[PGender] + "_bu_アクセサリ1_" + 0) as Image, new Point(0, 0));
+                    g.DrawImage(
+                        Resources.ResourceManager.GetObject((new[] {"マイユニ男1", "マイユニ女2"})[PGender] + "_bu_アクセサリ1_" + 0)
+                            as Image, new Point(0, 0));
                 }
-                for (int i = 1; i < Emos.Length; i++)
+                for (var i = 1; i < Emos.Length; i++)
                 {
-                    string exresname = CName + "_bu_" + Emos[i];
+                    var exresname = CName + "_bu_" + Emos[i];
                     if (Emos[i] == "汗" && resourceList.Contains(exresname))
                     {
-                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image, new Point(BitConverter.ToUInt16(faceData[dat_id], 0x40), BitConverter.ToUInt16(faceData[dat_id], 0x42)));
+                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image,
+                            new Point(BitConverter.ToUInt16(faceData[dat_id], 0x40),
+                                BitConverter.ToUInt16(faceData[dat_id], 0x42)));
                     }
                     else if (Emos[i] == "照" && resourceList.Contains(exresname))
                     {
-                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image, new Point(BitConverter.ToUInt16(faceData[dat_id], 0x38), BitConverter.ToUInt16(faceData[dat_id], 0x3A)));
+                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image,
+                            new Point(BitConverter.ToUInt16(faceData[dat_id], 0x38),
+                                BitConverter.ToUInt16(faceData[dat_id], 0x3A)));
                     }
                 }
                 if (resourceList.Contains(hairname))
                 {
-                    Bitmap hair = Resources.ResourceManager.GetObject(hairname) as Bitmap;
+                    var hair = Resources.ResourceManager.GetObject(hairname) as Bitmap;
                     g.DrawImage(ColorHair(hair, HairColor), new Point(0, 0));
                 }
                 if (USER && 0 > 0)
                 {
-                    Point Acc = new[] { new Point(66, 5), new Point(65, 21) }[0 - 2];
-                    g.DrawImage(Resources.ResourceManager.GetObject((new[] { "マイユニ男1", "マイユニ女2" })[PGender] + "_bu_アクセサリ2_" + 0) as Image, Acc);
+                    var Acc = new[] {new Point(66, 5), new Point(65, 21)}[0 - 2];
+                    g.DrawImage(
+                        Resources.ResourceManager.GetObject((new[] {"マイユニ男1", "マイユニ女2"})[PGender] + "_bu_アクセサリ2_" + 0)
+                            as Image, Acc);
                 }
             }
             if (Crop)
             {
-                Bitmap Cropped = new Bitmap(BitConverter.ToUInt16(faceData[dat_id], 0x34), BitConverter.ToUInt16(faceData[dat_id], 0x36));
-                using (Graphics g = Graphics.FromImage(Cropped))
+                var Cropped = new Bitmap(BitConverter.ToUInt16(faceData[dat_id], 0x34),
+                    BitConverter.ToUInt16(faceData[dat_id], 0x36));
+                using (var g = Graphics.FromImage(Cropped))
                 {
-                    g.DrawImage(C, new Point(-BitConverter.ToUInt16(faceData[dat_id], 0x30), -BitConverter.ToUInt16(faceData[dat_id], 0x32)));
+                    g.DrawImage(C,
+                        new Point(-BitConverter.ToUInt16(faceData[dat_id], 0x30),
+                            -BitConverter.ToUInt16(faceData[dat_id], 0x32)));
                 }
                 C = Cropped;
             }
@@ -235,19 +258,19 @@ namespace FEITS.Model
 
         public static Image ColorHair(Image Hair, Color C)
         {
-            Bitmap bmp = Hair as Bitmap;
-            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, bmp.PixelFormat);
+            var bmp = Hair as Bitmap;
+            var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            var bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, bmp.PixelFormat);
 
-            IntPtr ptr = bmpData.Scan0;
+            var ptr = bmpData.Scan0;
 
-            int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
-            byte[] rgbaValues = new byte[bytes];
+            var bytes = Math.Abs(bmpData.Stride)*bmp.Height;
+            var rgbaValues = new byte[bytes];
 
             // Copy the RGB values into the array.
             Marshal.Copy(ptr, rgbaValues, 0, bytes);
 
-            for (int i = 0; i < rgbaValues.Length; i += 4)
+            for (var i = 0; i < rgbaValues.Length; i += 4)
             {
                 if (rgbaValues[i + 3] > 0)
                 {
@@ -266,35 +289,36 @@ namespace FEITS.Model
 
         public static byte BlendOverlay(byte Src, byte Dst)
         {
-            return ((Dst < 128) ? (byte)Math.Max(Math.Min((Src / 255.0f * Dst / 255.0f) * 255.0f * 2, 255), 0) : (byte)Math.Max(Math.Min(255 - ((255 - Src) / 255.0f * (255 - Dst) / 255.0f) * 255.0f * 2, 255), 0));
+            return ((Dst < 128)
+                ? (byte) Math.Max(Math.Min((Src/255.0f*Dst/255.0f)*255.0f*2, 255), 0)
+                : (byte) Math.Max(Math.Min(255 - ((255 - Src)/255.0f*(255 - Dst)/255.0f)*255.0f*2, 255), 0));
         }
 
         public static Image Fade(Image BaseImage)
         {
+            var bmp = BaseImage as Bitmap;
+            var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            var bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, bmp.PixelFormat);
 
-            Bitmap bmp = BaseImage as Bitmap;
-            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, bmp.PixelFormat);
+            var ptr = bmpData.Scan0;
 
-            IntPtr ptr = bmpData.Scan0;
-
-            int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
-            byte[] rgbaValues = new byte[bytes];
+            var bytes = Math.Abs(bmpData.Stride)*bmp.Height;
+            var rgbaValues = new byte[bytes];
 
             // Copy the RGB values into the array.
             Marshal.Copy(ptr, rgbaValues, 0, bytes);
 
-            const double BLACK_A = 113.0 / 255.0;
+            const double BLACK_A = 113.0/255.0;
 
-            for (int i = 0; i < rgbaValues.Length; i += 4)
+            for (var i = 0; i < rgbaValues.Length; i += 4)
             {
                 if (rgbaValues[i + 3] <= 0) continue;
-                double DST_A = rgbaValues[i + 3] / 255.0;
+                var DST_A = rgbaValues[i + 3]/255.0;
                 // double FINAL_A = BLACK_A + (DST_A) * (1.0 - BLACK_A);
                 // rgbaValues[i + 3] = (byte)Math.Round((FINAL_A) * 255.0);
-                rgbaValues[i + 2] = (byte)Math.Round((((rgbaValues[i + 2] / 255.0)) * (DST_A) * (1.0 - BLACK_A)) * 255.0);
-                rgbaValues[i + 1] = (byte)Math.Round((((rgbaValues[i + 1] / 255.0)) * (DST_A) * (1.0 - BLACK_A)) * 255.0);
-                rgbaValues[i + 0] = (byte)Math.Round((((rgbaValues[i + 0] / 255.0)) * (DST_A) * (1.0 - BLACK_A)) * 255.0);
+                rgbaValues[i + 2] = (byte) Math.Round((((rgbaValues[i + 2]/255.0))*(DST_A)*(1.0 - BLACK_A))*255.0);
+                rgbaValues[i + 1] = (byte) Math.Round((((rgbaValues[i + 1]/255.0))*(DST_A)*(1.0 - BLACK_A))*255.0);
+                rgbaValues[i + 0] = (byte) Math.Round((((rgbaValues[i + 0]/255.0))*(DST_A)*(1.0 - BLACK_A))*255.0);
             }
             // Copy the RGB values back to the bitmap
             Marshal.Copy(rgbaValues, 0, ptr, bytes);
@@ -311,7 +335,10 @@ namespace FEITS.Model
 
         public static int GetLength(string s)
         {
-            return s.Select(GetValue).Select(val => Math.Max(characters[val].Width, characters[val].CropWidth)).Sum();
+            return
+                s.Select(GetValue)
+                    .Select(val => Math.Max(characters[val].Data.Width, characters[val].Data.CropWidth))
+                    .Sum();
         }
     }
 }

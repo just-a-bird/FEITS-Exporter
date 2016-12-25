@@ -34,7 +34,7 @@ namespace FEITS.View
             if (messages.Count < 1)
                 return;
 
-            BindingSource bs = new BindingSource();
+            var bs = new BindingSource();
             bs.DataSource = messages;
 
             LB_MessageList_Target.ValueMember = "Prefix";
@@ -46,7 +46,7 @@ namespace FEITS.View
             if (messages.Count < 1)
                 return;
 
-            BindingSource bs = new BindingSource();
+            var bs = new BindingSource();
             bs.DataSource = messages;
 
             LB_MessageList_Source.ValueMember = "Prefix";
@@ -160,7 +160,7 @@ namespace FEITS.View
             }
             set
             {
-                ToolStripMenuItem menuItem = (ToolStripMenuItem)MI_PlayerGender_Target.DropDownItems[value];
+                var menuItem = (ToolStripMenuItem)MI_PlayerGender_Target.DropDownItems[value];
 
                 foreach(ToolStripMenuItem mi in MI_PlayerGender_Target.DropDownItems)
                 {
@@ -186,7 +186,7 @@ namespace FEITS.View
             }
             set
             {
-                ToolStripMenuItem menuItem = (ToolStripMenuItem)MI_PlayerGender_Source.DropDownItems[value];
+                var menuItem = (ToolStripMenuItem)MI_PlayerGender_Source.DropDownItems[value];
 
                 foreach (ToolStripMenuItem mi in MI_PlayerGender_Source.DropDownItems)
                 {
@@ -212,7 +212,7 @@ namespace FEITS.View
             }
             set
             {
-                ToolStripMenuItem menuItem = (ToolStripMenuItem)MI_TBStyles.DropDownItems[value];
+                var menuItem = (ToolStripMenuItem)MI_TBStyles.DropDownItems[value];
 
                 foreach(ToolStripMenuItem mi in MI_TBStyles.DropDownItems)
                 {
@@ -694,14 +694,14 @@ namespace FEITS.View
 
         private void MI_CheckableItem_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem)sender;
             if (!item.Checked)
                 item.Checked = true;
         }
 
         private void MI_PlayerGender_Target_CheckedChanged(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem)sender;
 
             if (!item.Checked)
                 return;
@@ -717,7 +717,7 @@ namespace FEITS.View
 
         private void MI_PlayerGender_Source_CheckedChanged(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem)sender;
 
             if (!item.Checked)
                 return;
@@ -733,7 +733,7 @@ namespace FEITS.View
 
         private void MI_TBItem_CheckedChanged(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem)sender;
 
             if (!item.Checked)
                 return;
@@ -771,7 +771,7 @@ namespace FEITS.View
 
         private void PB_PreviewBox_Click(object sender, EventArgs e)
         {
-            PictureBox box = (PictureBox)sender;
+            var box = (PictureBox)sender;
 
             if (box.Image == null)
                 return;
@@ -872,7 +872,7 @@ namespace FEITS.View
                 return;
             }
 
-            DialogResult result = MessageBox.Show("Stop the comparison? All unsaved changes to the source will be lost, but target data will be retained.", "End Comparison", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = MessageBox.Show("Stop the comparison? All unsaved changes to the source will be lost, but target data will be retained.", "End Comparison", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {

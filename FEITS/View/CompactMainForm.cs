@@ -30,7 +30,7 @@ namespace FEITS.View
 
         public void SetMessageList(List<MessageBlock> messages)
         {
-            BindingSource bs = new BindingSource();
+            var bs = new BindingSource();
             bs.DataSource = messages;
 
             LB_MessageList.ValueMember = "Prefix";
@@ -39,7 +39,7 @@ namespace FEITS.View
 
         private void SetCustomDictionary()
         {
-            IList dictionary = System.Windows.Controls.SpellCheck.GetCustomDictionaries(TB_CurrentLine.Child as System.Windows.Controls.TextBox);
+            var dictionary = System.Windows.Controls.SpellCheck.GetCustomDictionaries(TB_CurrentLine.Child as System.Windows.Controls.TextBox);
             dictionary.Add(new Uri(@"pack://application:,,,/FEITS Exporter;component/Resources/txt/FE_Dictionary.lex"));
         }
 
@@ -113,7 +113,7 @@ namespace FEITS.View
             }
             set
             {
-                ToolStripMenuItem menuItem = (ToolStripMenuItem)MI_PlayerGender.DropDownItems[value];
+                var menuItem = (ToolStripMenuItem)MI_PlayerGender.DropDownItems[value];
 
                 foreach(ToolStripMenuItem mi in MI_PlayerGender.DropDownItems)
                 {
@@ -139,7 +139,7 @@ namespace FEITS.View
             }
             set
             {
-                ToolStripMenuItem menuItem = (ToolStripMenuItem)MI_TBStyles.DropDownItems[value];
+                var menuItem = (ToolStripMenuItem)MI_TBStyles.DropDownItems[value];
 
                 foreach(ToolStripMenuItem mi in MI_TBStyles.DropDownItems)
                 {
@@ -350,14 +350,14 @@ namespace FEITS.View
 
         private void MI_CheckableItem_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem)sender;
             if (!item.Checked)
                 item.Checked = true;
         }
 
         private void MI_PlayerGender_CheckedChanged(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem)sender;
 
             if (!item.Checked)
                 return;
@@ -373,7 +373,7 @@ namespace FEITS.View
 
         private void MI_TBItem_CheckedChanged(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem)sender;
 
             if (!item.Checked)
                 return;
@@ -417,7 +417,7 @@ namespace FEITS.View
 
         private void PB_PreviewBox_Click(object sender, EventArgs e)
         {
-            PictureBox box = (PictureBox)sender;
+            var box = (PictureBox)sender;
 
             if (box.Image == null)
                 return;
@@ -492,7 +492,7 @@ namespace FEITS.View
 
         private void CompactMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to exit? All unsaved changes will be lost.", "Exit Application", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = MessageBox.Show("Are you sure you want to exit? All unsaved changes will be lost.", "Exit Application", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.No)
                 e.Cancel = true;

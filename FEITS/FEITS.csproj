@@ -90,6 +90,7 @@
     <Compile Include="Controller\Interfaces\IComparisonView.cs" />
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Controller\TwoFileController.cs" />
+    <Compile Include="Model\FontCharacterData.cs" />
     <Compile Include="View\TwoFileForm.cs">
       <SubType>Form</SubType>
     </Compile>

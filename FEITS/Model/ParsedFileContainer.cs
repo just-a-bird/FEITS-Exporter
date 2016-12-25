@@ -47,7 +47,7 @@ namespace FEITS.Model
                 //Store the file path
                 FilePath = filePath;
 
-                string[] fileSplitByLinebreak = File.ReadAllLines(filePath);
+                var fileSplitByLinebreak = File.ReadAllLines(filePath);
 
                 if (LoadConversationFromString(fileSplitByLinebreak))
                     return true;
@@ -70,7 +70,7 @@ namespace FEITS.Model
             {
                 if(messageString.StartsWith("MESS_"))
                 {
-                    string[] fileSplitByLinebreak = messageString.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+                    var fileSplitByLinebreak = messageString.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
 
                     if (LoadConversationFromString(fileSplitByLinebreak))
                         return true;
@@ -79,7 +79,7 @@ namespace FEITS.Model
                 }
                 else
                 {
-                    MessageBlock newMessage = new MessageBlock();
+                    var newMessage = new MessageBlock();
                     newMessage.Prefix = "Imported Message";
                     newMessage.ParseMessage(messageString);
                     MessageList.Add(newMessage);
@@ -100,8 +100,8 @@ namespace FEITS.Model
             {
                 //Find where the header ends
                 //Should be after "Message Name: Message"
-                int headerEndIndex = 0;
-                for (int i = 0; i < fileLines.Length; i++)
+                var headerEndIndex = 0;
+                for (var i = 0; i < fileLines.Length; i++)
                 {
                     if (fileLines[i].Contains(":"))
                     {
@@ -122,23 +122,23 @@ namespace FEITS.Model
                 if (headerEndIndex != 0)
                 {
                     Header = new string[headerEndIndex];
-                    for (int i = 0; i < headerEndIndex; i++)
+                    for (var i = 0; i < headerEndIndex; i++)
                     {
                         Header[i] = fileLines[i];
                     }
 
                     //Create messages from the rest of the lines
-                    for (int i = headerEndIndex; i < fileLines.Length; i++)
+                    for (var i = headerEndIndex; i < fileLines.Length; i++)
                     {
                         //Separate the prefix from the message itself
                         if (fileLines[i].Contains(":"))
                         {
-                            MessageBlock newMessage = new MessageBlock();
-                            int prefixIndex = fileLines[i].IndexOf(":");
+                            var newMessage = new MessageBlock();
+                            var prefixIndex = fileLines[i].IndexOf(":");
                             newMessage.Prefix = fileLines[i].Substring(0, prefixIndex);
 
                             //Get the message by itself
-                            string message = fileLines[i].Substring(prefixIndex + 2);
+                            var message = fileLines[i].Substring(prefixIndex + 2);
 
                             //Make sure we didn't leave any prefix stuff behind
                             if (message.StartsWith(":"))
@@ -195,7 +195,7 @@ namespace FEITS.Model
                 //Update file path in case different
                 FilePath = filePath;
 
-                string compiledFileText = CompileFileText();
+                var compiledFileText = CompileFileText();
 
                 if (compiledFileText != string.Empty)
                 {
@@ -216,15 +216,15 @@ namespace FEITS.Model
         public string CompileFileText()
         {
             //Start compiling a string to make up the new file
-            string newFileText = string.Empty;
-            foreach (string str in Header)
+            var newFileText = string.Empty;
+            foreach (var str in Header)
             {
                 newFileText += str + Environment.NewLine;
             }
 
-            foreach (MessageBlock msg in MessageList)
+            foreach (var msg in MessageList)
             {
-                string compiledMsg = msg.CompileMessage();
+                var compiledMsg = msg.CompileMessage();
                 newFileText += (compiledMsg + Environment.NewLine);
             }
 
