@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FEITS.Model
 {
@@ -10,7 +11,9 @@ namespace FEITS.Model
         #region Constants
 
         //TODO(Robin): Give these descriptive names
-        public const string Prefix = "$";
+        public const string Prefix = "$",
+                            ParameterDelim = "|",
+                            Newline = "\n";
 
         public const string Wa = "$Wa",
                             Wc = "$Wc",
@@ -19,6 +22,7 @@ namespace FEITS.Model
                             N0 = "$N0",
                             N1 = "$N1",
                             kn = "$k\\n",
+                            kp = k + p,
                             k = "$k",
                             t0 = "$t0",
                             t1 = "$t1",
@@ -65,69 +69,78 @@ namespace FEITS.Model
 
         public static byte ParamsCount(string token)
         {
-            if (NoParamsSet.Contains(token))
+            if (NoParamTokensSet.Contains(token))
                 return 0;
-            if (SingleParamsSet.Contains(token))
+            if (SingleParamTokensSet.Contains(token))
                 return 1;
-            if (DoubleParamsSet.Contains(token))
+            if (DoubleParamTokensSet.Contains(token))
                 return 2;
             Debug.Assert(!AllTokensSet.Contains(token), $"{token} not found in {nameof(AllTokensSet)}");
             throw new ArgumentOutOfRangeException(nameof(token), token, "Invalid command token.");
         }
 
-        public static IEnumerable<string> NoParams => NoParamsSet;
-        public static IEnumerable<string> SingleParams => SingleParamsSet;
-        public static IEnumerable<string> DoubleParams => DoubleParamsSet;
+        public static string NormalizeLineEndings(string line, bool useEnvironmentNewline = false)
+        {
+            line = line.Replace("\\n", "\n")
+                       .Replace("$k\n", "$k\\n");
+            if (useEnvironmentNewline)
+                line = line.Replace("\n", Environment.NewLine);
+            return line;
+        }
 
-        private static readonly ISet<string>
-            AllTokensSet,
-            NoParamsSet = new SortedSet<string>
-            {
-                Wa,
-                Wc,
-                a,
-                Nu,
-                N0,
-                N1,
-                kn,
-                k,
-                t0,
-                t1,
-                p,
-                Wd,
-                Wv
-            },
-            SingleParamsSet = new SortedSet<string>
-            {
-                E,
-                Sbs,
-                Svp,
-                Sre,
-                Fw,
-                Ws,
-                VF,
-                Ssp,
-                Fo,
-                VNMPID,
-                Fi,
-                b,
-                w,
-                l
-            },
-            DoubleParamsSet = new SortedSet<string>
-            {
-                Wm,
-                Sbv,
-                Sbp,
-                Sls,
-                Slp,
-                Srp
-            };
+        public static IEnumerable<string> GetAllTokens() => AllTokensSet;
+        public static IEnumerable<string> GetNoParamTokens() => NoParamTokensSet;
+        public static IEnumerable<string> GetSingleParamTokens() => SingleParamTokensSet;
+        public static IEnumerable<string> GetDoubleParamTokens() => DoubleParamTokensSet;
+
+        private static readonly ISet<string> AllTokensSet,
+                                             NoParamTokensSet = new SortedSet<string>
+                                             {
+                                                 Wa,
+                                                 Wc,
+                                                 a,
+                                                 Nu,
+                                                 N0,
+                                                 N1,
+                                                 kn,
+                                                 k,
+                                                 t0,
+                                                 t1,
+                                                 p,
+                                                 Wd,
+                                                 Wv
+                                             },
+                                             SingleParamTokensSet = new SortedSet<string>
+                                             {
+                                                 E,
+                                                 Sbs,
+                                                 Svp,
+                                                 Sre,
+                                                 Fw,
+                                                 Ws,
+                                                 VF,
+                                                 Ssp,
+                                                 Fo,
+                                                 VNMPID,
+                                                 Fi,
+                                                 b,
+                                                 w,
+                                                 l
+                                             },
+                                             DoubleParamTokensSet = new SortedSet<string>
+                                             {
+                                                 Wm,
+                                                 Sbv,
+                                                 Sbp,
+                                                 Sls,
+                                                 Slp,
+                                                 Srp
+                                             };
 
         static CommandTokens()
         {
             AllTokensSet = new SortedSet<string>();
-            foreach (var set in new[] {NoParamsSet, SingleParamsSet, DoubleParamsSet})
+            foreach (var set in new[] {NoParamTokensSet, SingleParamTokensSet, DoubleParamTokensSet})
             {
                 foreach (var token in set)
                 {
@@ -137,6 +150,17 @@ namespace FEITS.Model
                     Debug.Assert(result, $"{token} successfully added to {nameof(AllTokensSet)}");
                 }
             }
+        }
+
+        //TODO(Robin): Change to set and add to AllTokens
+        public static readonly List<string> LineDelimiters = new List<string> {kp, kn};
+
+        public static readonly string LineSplitPattern =
+            $"(?<={string.Join(ParameterDelim, LineDelimiters.Select(Regex.Escape))})";
+        
+        public static IEnumerable<string> SplitLines(string message)
+        {
+            return Regex.Split(message, LineSplitPattern);
         }
     }
 }

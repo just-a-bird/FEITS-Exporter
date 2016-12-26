@@ -118,20 +118,12 @@ namespace FEITS.Model
 
         public string GetParsedCommands(MessageLine line)
         {
-            //TODO(Robin): Move to CommandTokens?
-            Func<string, bool, string> purify = (s, replaceEnvironment) =>
-            {
-                s = s.Replace("\\n", "\n")
-                     .Replace("$k\n", "$k\\n");
-                if (replaceEnvironment)
-                    s = s.Replace("\n", Environment.NewLine);
-                return s;
-            };
+            
 
             if (line.SpokenText != string.Empty)
             {
                 line.UpdateRawWithNewDialogue();
-                line.RawLine = purify(line.RawLine, false);
+                line.RawLine = CommandTokens.NormalizeLineEndings(line.RawLine);
             }
 
             line.SpokenText = line.RawLine;
@@ -261,8 +253,8 @@ namespace FEITS.Model
             line.SpeechIndex = line.RawLine.LastIndexOf(line.SpokenText, StringComparison.Ordinal);
 
 
-            line.RawLine = purify(line.RawLine, false);
-            line.SpokenText = purify(line.SpokenText, true);
+            line.RawLine = CommandTokens.NormalizeLineEndings(line.RawLine);
+            line.SpokenText = CommandTokens.NormalizeLineEndings(line.SpokenText, true);
 
             return line.SpokenText;
         }
