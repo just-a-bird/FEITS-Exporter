@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
 
 namespace FEITS.Model
 {
@@ -46,29 +47,42 @@ namespace FEITS.Model
             }
         }
 
-        public Image BackgroundImage;
-        private Image[] TextBoxes { get; } = {Resources.TextBox, Resources.TextBox_Nohr, Resources.TextBox_Hoshido};
+        public Image BackgroundImage { private get; set; }
+
+        private static readonly Image[] TextBoxes =
+        {
+            Resources.TextBox, Resources.TextBox_Nohr,
+            Resources.TextBox_Hoshido
+        };
+
         public int TextboxIndex { get; set; }
 
         //Character names with their translations
-        private readonly IReadOnlyDictionary<string, string> Names;
+        private readonly IReadOnlyDictionary<string, string> names;
 
         //
-        private Color ColorA { get; } = Color.FromArgb(0x5B, 0x58, 0x55);
-        private Color ColorB { get; } = Color.FromArgb(0x5B, 0x58, 0x55);
+        private static readonly Color DefaultColor = Color.FromArgb(0x5B, 0x58, 0x55);
+        private readonly Color colorA = DefaultColor;
+        private readonly Color colorB = DefaultColor;
 
         //Line commands
-        private bool HasPerms { get; set; }
-        private bool SetType { get; set; }
-        private string CharActive { get; set; } = string.Empty;
-        private string CharA { get; set; } = string.Empty;
+        private bool hasPerms;
+        private bool setType;
+        private string charActive = string.Empty;
+        private string charA = string.Empty;
 
-        private string CharB { get; set; } = string.Empty;
+        private string charB = string.Empty;
+
+        //TODO: Enum
         private int CharSide { get; set; } = -1;
+
+
+        //TODO(Robin): Enum
         private const string DefaultEmotion = "通常,";
-        private string EmotionA { get; set; } = DefaultEmotion;
-        private string EmotionB { get; set; } = DefaultEmotion;
-        private ConversationTypes ConversationType = ConversationTypes.Type1;
+        private string emotionA = DefaultEmotion;
+        private string emotionB = DefaultEmotion;
+
+        private ConversationTypes conversationType = ConversationTypes.Type1;
 
         public ConversationModel()
         {
@@ -80,16 +94,16 @@ namespace FEITS.Model
                 var p = str.Split('\t');
                 names[p[0]] = p[1];
             }
-            Names = new ReadOnlyDictionary<string, string>(names);
+            this.names = new ReadOnlyDictionary<string, string>(names);
         }
 
         private void ResetParameters()
         {
-            HasPerms = SetType = false;
-            CharActive = CharA = CharB = string.Empty;
-            EmotionA = EmotionB = DefaultEmotion;
+            hasPerms = setType = false;
+            charActive = charA = charB = string.Empty;
+            emotionA = emotionB = DefaultEmotion;
             CharSide = -1;
-            ConversationType = ConversationTypes.Type1;
+            conversationType = ConversationTypes.Type1;
         }
 
         public void GetCommandsUpUntilIndex()
@@ -104,10 +118,20 @@ namespace FEITS.Model
 
         public string GetParsedCommands(MessageLine line)
         {
+            //TODO(Robin): Move to CommandTokens?
+            Func<string, bool, string> purify = (s, replaceEnvironment) =>
+            {
+                s = s.Replace("\\n", "\n")
+                     .Replace("$k\n", "$k\\n");
+                if (replaceEnvironment)
+                    s = s.Replace("\n", Environment.NewLine);
+                return s;
+            };
+
             if (line.SpokenText != string.Empty)
             {
                 line.UpdateRawWithNewDialogue();
-                line.RawLine = line.RawLine.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
+                line.RawLine = purify(line.RawLine, false);
             }
 
             line.SpokenText = line.RawLine;
@@ -119,29 +143,35 @@ namespace FEITS.Model
                 var res = MessageBlock.ParseCommand(line.SpokenText, i);
                 line.SpokenText = res.Item1;
 
-                if (res.Item2.numParams > 0)
-                    if (res.Item2.Params[0] == "ベロア")
-                        res.Item2.Params[0] = "べロア"; // Velour Fix
+                var command = res.Item2;
+                var @params = command.Params;
+                if (command.numParams > 0)
+                    if (@params[0] == "ベロア")
+                        @params[0] = "べロア"; // Velour Fix
 
-                switch (res.Item2.cmd)
+                switch (command.CommandWithPrefix)
                 {
-                    case "$E":
-                        if (string.IsNullOrEmpty(CharActive) || CharActive != CharB)
-                            EmotionA = res.Item2.Params[0] != "," ? res.Item2.Params[0] : DefaultEmotion;
+                    case CommandTokens.E:
+                        var emotion = @params[0] != "," ? @params[0] : DefaultEmotion;
+                        if (string.IsNullOrEmpty(charActive) || charActive != charB)
+                            emotionA = emotion;
                         else
-                            EmotionB = res.Item2.Params[0] != "," ? res.Item2.Params[0] : DefaultEmotion;
+                        {
+                            Debug.Assert(charActive == charB, $"{charActive} == {charB}");
+                            emotionB = emotion;
+                        }
                         break;
-                    case "$Ws":
-                        CharActive = res.Item2.Params[0];
+                    case CommandTokens.Ws:
+                        charActive = @params[0];
                         break;
-                    case "$Wm":
-                        CharSide = Convert.ToInt32(res.Item2.Params[1]);
+                    case CommandTokens.Wm:
+                        CharSide = Convert.ToInt32(@params[1]);
 
                         //NOTE(Robin): Prepare an exception for multiple possible fail states below
                         var unexpectedCharSideException = new ArgumentOutOfRangeException(nameof(CharSide), CharSide,
                             "Unexpected character side parameter.");
 
-                        switch (ConversationType)
+                        switch (conversationType)
                         {
                             case ConversationTypes.Type0:
                             {
@@ -149,12 +179,12 @@ namespace FEITS.Model
                                 {
                                     case 0:
                                     case 2:
-                                        CharA = res.Item2.Params[0];
-                                        EmotionA = DefaultEmotion;
+                                        charA = @params[0];
+                                        emotionA = DefaultEmotion;
                                         break;
                                     case 6:
-                                        CharB = res.Item2.Params[0];
-                                        EmotionB = DefaultEmotion;
+                                        charB = @params[0];
+                                        emotionB = DefaultEmotion;
                                         break;
                                     default:
                                         throw unexpectedCharSideException;
@@ -166,12 +196,12 @@ namespace FEITS.Model
                                 switch (CharSide)
                                 {
                                     case 3:
-                                        CharA = res.Item2.Params[0];
-                                        EmotionA = DefaultEmotion;
+                                        charA = @params[0];
+                                        emotionA = DefaultEmotion;
                                         break;
                                     case 7:
-                                        CharB = res.Item2.Params[0];
-                                        EmotionB = DefaultEmotion;
+                                        charB = @params[0];
+                                        emotionB = DefaultEmotion;
                                         break;
                                     default:
                                         throw unexpectedCharSideException;
@@ -179,49 +209,46 @@ namespace FEITS.Model
                                 break;
                             }
                             default:
-                                throw new ArgumentOutOfRangeException(nameof(ConversationType), ConversationType,
+                                throw new ArgumentOutOfRangeException(nameof(conversationType), conversationType,
                                     "Unexpected conversation type.");
                         }
                         break;
-                    case "$Wd":
-                        if (CharActive == CharB)
+                    case CommandTokens.Wd:
+                        if (charActive == charB)
                         {
-                            CharActive = CharA;
-                            CharB = string.Empty;
+                            charActive = charA;
+                            charB = string.Empty;
                         }
                         else
                         {
-                            Debug.Assert(CharActive == CharA, $"{nameof(CharActive)} == {nameof(CharA)}");
-                            CharA = string.Empty;
+                            Debug.Assert(charActive == charA, $"{nameof(charActive)} == {nameof(charA)}");
+                            charA = string.Empty;
                         }
                         break;
-                    case "$a":
-                        HasPerms = true;
+                    case CommandTokens.a:
+                        hasPerms = true;
                         break;
-                    case "$t0":
-                        if (!SetType)
-                            ConversationType = ConversationTypes.Type0;
-                        SetType = true;
+                    case CommandTokens.t0:
+                        if (!setType)
+                            conversationType = ConversationTypes.Type0;
+                        setType = true;
                         break;
-                    case "$t1":
-                        if (!SetType)
-                            ConversationType = ConversationTypes.Type1;
-                        SetType = true;
+                    case CommandTokens.t1:
+                        if (!setType)
+                            conversationType = ConversationTypes.Type1;
+                        setType = true;
                         break;
-                    case "$Nu":
+                    case CommandTokens.Nu:
                         line.SpokenText = $"{line.SpokenText.Substring(0, i)}$Nu{line.SpokenText.Substring(i)}";
                         i += 2;
                         break;
-                    case "$Wa":
-                    case "$Wc":
-                    case "$w":
-                    case "$k":
-                    case "$p":
-                    case "$k\\n":
-                        break;
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(res.Item2.cmd), res.Item2.cmd,
-                            "Unexpected command.");
+                        Debug.WriteLine($"Unhandled command: {command.CommandWithPrefix}");
+                        if (!CommandTokens.IsValid(command.CommandWithPrefix))
+                            throw new ArgumentOutOfRangeException(nameof(command.CommandWithPrefix),
+                                command.CommandWithPrefix,
+                                "Unexpected command.");
+                        break;
                 }
                 i--;
             }
@@ -233,12 +260,9 @@ namespace FEITS.Model
 
             line.SpeechIndex = line.RawLine.LastIndexOf(line.SpokenText, StringComparison.Ordinal);
 
-            Func<string, string> purify = s => s.Replace("\\n", "\n")
-                                                .Replace("$k\n", "$k\\n")
-                                                .Replace("\n", Environment.NewLine);
 
-            line.RawLine = purify(line.RawLine);
-            line.SpokenText = purify(line.SpokenText);
+            line.RawLine = purify(line.RawLine, false);
+            line.SpokenText = purify(line.SpokenText, true);
 
             return line.SpokenText;
         }
@@ -247,7 +271,7 @@ namespace FEITS.Model
 
         public Image RenderPreviewBox(string line)
         {
-            return ConversationType == ConversationTypes.Type1 ? RenderTypeOne(line) : RenderTypeZero();
+            return conversationType == ConversationTypes.Type1 ? RenderTypeOne(line) : RenderTypeZero();
         }
 
         private Image RenderTypeOne(string line)
@@ -257,7 +281,7 @@ namespace FEITS.Model
             var tb = (Bitmap) TextBoxes[TextboxIndex].Clone();
 
             //Generate text image from string
-            if (line.Contains("$Nu") && HasPerms)
+            if (line.Contains("$Nu") && hasPerms)
             {
                 line = line.Replace("$Nu", PlayerName);
             }
@@ -273,9 +297,9 @@ namespace FEITS.Model
             }
 
             //Name box
-            var name = Names.ContainsKey(CharActive)
-                ? Names[CharActive]
-                : (CharActive == "username" ? PlayerName : CharActive);
+            var name = names.ContainsKey(charActive)
+                ? names[charActive]
+                : (charActive == "username" ? PlayerName : charActive);
             var nameLength = AssetGeneration.GetLength(name);
             var nb =
                 (Bitmap)
@@ -289,26 +313,26 @@ namespace FEITS.Model
                     g.DrawImage(BackgroundImage, new Point(0, 0));
                 }
 
-                if (CharA != string.Empty)
+                if (charA != string.Empty)
                 {
-                    var ca = AssetGeneration.GetCharacterStageImage(CharA, EmotionA, ColorA, true, PlayerGender);
-                    g.DrawImage((CharActive == CharA) ? ca : AssetGeneration.Fade(ca),
+                    var ca = AssetGeneration.GetCharacterStageImage(charA, emotionA, colorA, true, PlayerGender);
+                    g.DrawImage((charActive == charA) ? ca : AssetGeneration.Fade(ca),
                         new Point(-28, box.Height - ca.Height + 14));
                 }
 
-                if (CharB != string.Empty)
+                if (charB != string.Empty)
                 {
-                    var cb = AssetGeneration.GetCharacterStageImage(CharB, EmotionB, ColorB, false, PlayerGender);
-                    g.DrawImage((CharActive == CharB) ? cb : AssetGeneration.Fade(cb),
+                    var cb = AssetGeneration.GetCharacterStageImage(charB, emotionB, colorB, false, PlayerGender);
+                    g.DrawImage((charActive == charB) ? cb : AssetGeneration.Fade(cb),
                         new Point(box.Width - cb.Width + 28, box.Height - cb.Height + 14));
                 }
 
                 g.DrawImage(tb, new Point(10, box.Height - tb.Height + 2));
 
-                if (CharActive != string.Empty)
+                if (charActive != string.Empty)
                 {
                     g.DrawImage(nb,
-                        CharActive == CharB
+                        charActive == charB
                             ? new Point(box.Width - nb.Width - 6, box.Height - tb.Height - 14)
                             : new Point(7, box.Height - tb.Height - 14));
                 }
@@ -331,14 +355,14 @@ namespace FEITS.Model
             {
                 var line = GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
 
-                if (line.Contains("$Nu") && HasPerms)
+                if (line.Contains("$Nu") && hasPerms)
                 {
                     line = line.Replace("$Nu", PlayerName);
                 }
 
                 line = line.Replace(Environment.NewLine, "\n");
 
-                if (CharActive == CharA)
+                if (charActive == charA)
                     topLine = line;
                 else
                     bottomLine = line;
@@ -348,12 +372,12 @@ namespace FEITS.Model
             var box = new Bitmap(400, 240);
             Bitmap topBox = new Bitmap(1, 1),
                    bottomBox = new Bitmap(1, 1);
-            if (topLine != string.Empty && CharA != string.Empty)
+            if (topLine != string.Empty && charA != string.Empty)
             {
                 topBox = (Bitmap) (TextBoxes[TextboxIndex].Clone());
                 using (var g = Graphics.FromImage(topBox))
                 {
-                    g.DrawImage(AssetGeneration.GetCharacterBuImage(CharA, EmotionA, ColorA, true, PlayerGender),
+                    g.DrawImage(AssetGeneration.GetCharacterBuImage(charA, emotionA, colorA, true, PlayerGender),
                         new Point(2, 3));
                     g.DrawImage(
                         AssetGeneration.DrawString(new Bitmap(260, 50), topLine, 0, 22, Color.FromArgb(68, 8, 0)),
@@ -361,12 +385,12 @@ namespace FEITS.Model
                 }
             }
 
-            if (bottomLine != string.Empty && CharB != string.Empty)
+            if (bottomLine != string.Empty && charB != string.Empty)
             {
                 bottomBox = (Bitmap) TextBoxes[TextboxIndex].Clone();
                 using (var g = Graphics.FromImage(bottomBox))
                 {
-                    g.DrawImage(AssetGeneration.GetCharacterBuImage(CharB, EmotionB, ColorB, true, PlayerGender),
+                    g.DrawImage(AssetGeneration.GetCharacterBuImage(charB, emotionB, colorB, true, PlayerGender),
                         new Point(2, 3));
                     g.DrawImage(
                         AssetGeneration.DrawString(new Bitmap(282, 50), bottomLine, 0, 22, Color.FromArgb(68, 8, 0)),
@@ -378,7 +402,7 @@ namespace FEITS.Model
             {
                 if (LineIndex < File.MessageList[messageIndex].MessageLines.Count - 1)
                 {
-                    using (var g2 = Graphics.FromImage(CharActive == CharA ? topBox : bottomBox))
+                    using (var g2 = Graphics.FromImage(charActive == charA ? topBox : bottomBox))
                     {
                         g2.DrawImage(Resources.KeyPress, new Point(TextBoxes[TextboxIndex].Width - 30, 32));
                     }
@@ -389,9 +413,9 @@ namespace FEITS.Model
                 g.DrawImage(topBox, new Point(10, 3));
                 g.DrawImage(bottomBox, new Point(10, box.Height - bottomBox.Height + 2));
 
-                if (topLine != string.Empty && CharA != string.Empty)
+                if (topLine != string.Empty && charA != string.Empty)
                 {
-                    var topName = Names.ContainsKey(CharA) ? Names[CharA] : (CharA == "username" ? PlayerName : CharA);
+                    var topName = names.ContainsKey(charA) ? names[charA] : (charA == "username" ? PlayerName : charA);
                     var nameLen = AssetGeneration.GetLength(topName);
                     var topNameBox =
                         (Bitmap)
@@ -400,14 +424,14 @@ namespace FEITS.Model
                     g.DrawImage(topNameBox, new Point(7, topBox.Height - (topNameBox.Height - 20)));
                 }
 
-                if (string.IsNullOrEmpty(bottomLine) || string.IsNullOrEmpty(CharB))
+                if (string.IsNullOrEmpty(bottomLine) || string.IsNullOrEmpty(charB))
                 {
                     return box;
                 }
                 {
-                    var bottomName = Names.ContainsKey(CharB)
-                        ? Names[CharB]
-                        : (CharB == "username" ? PlayerName : CharB);
+                    var bottomName = names.ContainsKey(charB)
+                        ? names[charB]
+                        : (charB == "username" ? PlayerName : charB);
                     var nameLen = AssetGeneration.GetLength(bottomName);
                     var bottomNameBox =
                         (Bitmap)

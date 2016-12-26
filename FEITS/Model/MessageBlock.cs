@@ -47,7 +47,7 @@ namespace FEITS.Model
             {
                 if (!trunc.StartsWith(delim)) continue;
 
-                newCmd.cmd = delim;
+                newCmd.CommandWithPrefix = delim;
                 newCmd.numParams = 0;
                 newCmd.Params = new string[newCmd.numParams];
                 line = line.Substring(0, offset) + line.Substring(offset + delim.Length);
@@ -58,7 +58,7 @@ namespace FEITS.Model
             {
                 if (!trunc.StartsWith(delim)) continue;
 
-                newCmd.cmd = delim;
+                newCmd.CommandWithPrefix = delim;
                 newCmd.numParams = 1;
                 newCmd.Params = new string[newCmd.numParams];
                 var index = line.IndexOf("|", offset, StringComparison.Ordinal);
@@ -70,7 +70,7 @@ namespace FEITS.Model
             {
                 if (!trunc.StartsWith(delim)) continue;
 
-                newCmd.cmd = delim;
+                newCmd.CommandWithPrefix = delim;
                 newCmd.numParams = 2;
                 newCmd.Params = new string[newCmd.numParams];
                 var index = line.IndexOf("|", offset, StringComparison.Ordinal);

@@ -135,6 +135,7 @@
     <Compile Include="Controller\Interfaces\IComparisonView.cs" />
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Controller\TwoFileController.cs" />
+    <Compile Include="Model\CommandTokens.cs" />
     <Compile Include="Model\FontCharacterData.cs" />
     <Compile Include="Model\PlayerGender.cs" />
     <Compile Include="View\CommonOperations.cs" />
