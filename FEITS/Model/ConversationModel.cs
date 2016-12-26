@@ -2,6 +2,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace FEITS.Model
@@ -51,42 +53,43 @@ namespace FEITS.Model
         }
 
         public Image BackgroundImage;
-        public Image[] TextBoxes = {Resources.TextBox, Resources.TextBox_Nohr, Resources.TextBox_Hoshido};
-        public int TextboxIndex;
+        private Image[] TextBoxes { get; } = {Resources.TextBox, Resources.TextBox_Nohr, Resources.TextBox_Hoshido};
+        public int TextboxIndex { get; set; }
 
         //Character names with their translations
-        private readonly Dictionary<string, string> names;
+        private readonly IReadOnlyDictionary<string, string> Names;
 
         //
-        private Color colorA = Color.FromArgb(0x5B, 0x58, 0x55);
-        private Color colorB = Color.FromArgb(0x5B, 0x58, 0x55);
+        private Color ColorA { get; } = Color.FromArgb(0x5B, 0x58, 0x55);
+        private Color ColorB { get; } = Color.FromArgb(0x5B, 0x58, 0x55);
 
         //Line commands
-        public bool HasPerms { get; private set; }
-        public bool SetType { get; private set; }
-        public string CharActive { get; private set; } = string.Empty;
-        public string CharA { get; private set; } = string.Empty;
+        private bool HasPerms { get; set; }
+        private bool SetType { get; set; }
+        private string CharActive { get; set; } = string.Empty;
+        private string CharA { get; set; } = string.Empty;
 
-        public string CharB { get; private set; } = string.Empty;
-        public int CharSide { get; private set; } = -1;
+        private string CharB { get; set; } = string.Empty;
+        private int CharSide { get; set; } = -1;
         private const string DefaultEmotion = "通常,";
-        public string EmotionA { get; private set; } = DefaultEmotion;
-        public string EmotionB { get; private set; } = DefaultEmotion;
+        private string EmotionA { get; set; } = DefaultEmotion;
+        private string EmotionB { get; set; } = DefaultEmotion;
         private ConversationTypes ConversationType = ConversationTypes.Type1;
 
         public ConversationModel()
         {
             //Grab names from PID and sort them into a dictionary
-            names = new Dictionary<string, string>();
+            var names = new Dictionary<string, string>();
             var pids = Resources.PID.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var str in pids)
             {
                 var p = str.Split('\t');
                 names[p[0]] = p[1];
             }
+            Names = new ReadOnlyDictionary<string, string>(names);
         }
 
-        public void ResetParameters()
+        private void ResetParameters()
         {
             HasPerms = SetType = false;
             CharActive = CharA = CharB = string.Empty;
@@ -107,7 +110,7 @@ namespace FEITS.Model
 
         public string GetParsedCommands(MessageLine line)
         {
-            if (line.SpokenText != string.Empty)
+            if(line.SpokenText != string.Empty)
             {
                 line.UpdateRawWithNewDialogue();
                 line.RawLine = line.RawLine.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
@@ -115,9 +118,9 @@ namespace FEITS.Model
 
             line.SpokenText = line.RawLine;
 
-            for (var i = 0; i < line.SpokenText.Length; i++)
+            for(var i = 0; i < line.SpokenText.Length; i++)
             {
-                if (line.SpokenText[i] == '$')
+                if(line.SpokenText[i] == '$')
                 {
                     var res = MessageBlock.ParseCommand(line.SpokenText, i);
                     line.SpokenText = res.Item1;
@@ -126,7 +129,7 @@ namespace FEITS.Model
                         if (res.Item2.Params[0] == "ベロア")
                             res.Item2.Params[0] = "べロア"; // Velour Fix
 
-                    switch (res.Item2.cmd)
+                    switch(res.Item2.cmd)
                     {
                         case "$E":
                             if (CharActive != string.Empty && CharActive == CharB)
@@ -150,14 +153,14 @@ namespace FEITS.Model
                         case "$Wm":
                             CharSide = Convert.ToInt32(res.Item2.Params[1]);
 
-                            if (ConversationType == ConversationTypes.Type1)
+                            if(ConversationType == ConversationTypes.Type1)
                             {
-                                if (CharSide == 3)
+                                if(CharSide == 3)
                                 {
                                     CharA = res.Item2.Params[0];
                                     EmotionA = DefaultEmotion;
                                 }
-                                else if (CharSide == 7)
+                                else if(CharSide == 7)
                                 {
                                     CharB = res.Item2.Params[0];
                                     EmotionB = DefaultEmotion;
@@ -165,12 +168,12 @@ namespace FEITS.Model
                             }
                             else
                             {
-                                if (CharSide == 0 | CharSide == 2)
+                                if(CharSide == 0| CharSide == 2)
                                 {
                                     CharA = res.Item2.Params[0];
                                     EmotionA = DefaultEmotion;
                                 }
-                                else if (CharSide == 6)
+                                else if(CharSide == 6)
                                 {
                                     CharB = res.Item2.Params[0];
                                     EmotionB = DefaultEmotion;
@@ -178,7 +181,7 @@ namespace FEITS.Model
                             }
                             break;
                         case "$Wd":
-                            if (CharActive == CharB)
+                            if(CharActive == CharB)
                             {
                                 CharActive = CharA;
                                 CharB = string.Empty;
@@ -216,7 +219,7 @@ namespace FEITS.Model
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(line.SpokenText))
+            if(string.IsNullOrWhiteSpace(line.SpokenText))
             {
                 line.SpokenText = string.Empty;
             }
@@ -240,7 +243,7 @@ namespace FEITS.Model
         {
             //Probably shouldn't be hard-coded
             var box = new Bitmap(400, 240);
-            var tb = TextBoxes[TextboxIndex].Clone() as Bitmap;
+            var tb = (Bitmap) TextBoxes[TextboxIndex].Clone();
 
             //Generate text image from string
             if (line.Contains("$Nu") && HasPerms)
@@ -251,7 +254,7 @@ namespace FEITS.Model
             line = line.Replace(Environment.NewLine, "\n");
 
             //Draw the line's text
-            var text = AssetGeneration.DrawString(new Bitmap(310, 50), line, 0, 22, Color.FromArgb(68, 8, 0)) as Bitmap;
+            var text = (Bitmap) AssetGeneration.DrawString(new Bitmap(310, 50), line, 0, 22, Color.FromArgb(68, 8, 0));
 
             using (var g = Graphics.FromImage(tb))
             {
@@ -259,13 +262,14 @@ namespace FEITS.Model
             }
 
             //Name box
-            var name = names.ContainsKey(CharActive)
-                ? names[CharActive]
+            var name = Names.ContainsKey(CharActive)
+                ? Names[CharActive]
                 : (CharActive == "username" ? PlayerName : CharActive);
             var nameLength = AssetGeneration.GetLength(name);
             var nb =
-                AssetGeneration.DrawString(Resources.NameBox, name, Resources.NameBox.Width/2 - nameLength/2, 16,
-                    Color.FromArgb(253, 234, 177)) as Bitmap; //Center name in NameBox
+                (Bitmap)
+                    AssetGeneration.DrawString(Resources.NameBox, name, Resources.NameBox.Width/2 - nameLength/2, 16,
+                        Color.FromArgb(253, 234, 177)); //Center name in NameBox
 
             using (var g = Graphics.FromImage(box))
             {
@@ -276,14 +280,14 @@ namespace FEITS.Model
 
                 if (CharA != string.Empty)
                 {
-                    var ca = AssetGeneration.GetCharacterStageImage(CharA, EmotionA, colorA, true, PlayerGender);
+                    var ca = AssetGeneration.GetCharacterStageImage(CharA, EmotionA, ColorA, true, PlayerGender);
                     g.DrawImage((CharActive == CharA) ? ca : AssetGeneration.Fade(ca),
                         new Point(-28, box.Height - ca.Height + 14));
                 }
 
                 if (CharB != string.Empty)
                 {
-                    var cb = AssetGeneration.GetCharacterStageImage(CharB, EmotionB, colorB, false, PlayerGender);
+                    var cb = AssetGeneration.GetCharacterStageImage(CharB, EmotionB, ColorB, false, PlayerGender);
                     g.DrawImage((CharActive == CharB) ? cb : AssetGeneration.Fade(cb),
                         new Point(box.Width - cb.Width + 28, box.Height - cb.Height + 14));
                 }
@@ -331,13 +335,14 @@ namespace FEITS.Model
 
             //Hard coded dimensions
             var box = new Bitmap(400, 240);
-            Bitmap topBox = new Bitmap(1, 1), bottomBox = new Bitmap(1, 1);
+            Bitmap topBox = new Bitmap(1, 1),
+                   bottomBox = new Bitmap(1, 1);
             if (topLine != string.Empty && CharA != string.Empty)
             {
-                topBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
+                topBox = (Bitmap) (TextBoxes[TextboxIndex].Clone());
                 using (var g = Graphics.FromImage(topBox))
                 {
-                    g.DrawImage(AssetGeneration.GetCharacterBuImage(CharA, EmotionA, colorA, true, PlayerGender),
+                    g.DrawImage(AssetGeneration.GetCharacterBuImage(CharA, EmotionA, ColorA, true, PlayerGender),
                         new Point(2, 3));
                     g.DrawImage(
                         AssetGeneration.DrawString(new Bitmap(260, 50), topLine, 0, 22, Color.FromArgb(68, 8, 0)),
@@ -347,10 +352,10 @@ namespace FEITS.Model
 
             if (bottomLine != string.Empty && CharB != string.Empty)
             {
-                bottomBox = (TextBoxes[TextboxIndex].Clone()) as Bitmap;
+                bottomBox = (Bitmap) TextBoxes[TextboxIndex].Clone();
                 using (var g = Graphics.FromImage(bottomBox))
                 {
-                    g.DrawImage(AssetGeneration.GetCharacterBuImage(CharB, EmotionB, colorB, true, PlayerGender),
+                    g.DrawImage(AssetGeneration.GetCharacterBuImage(CharB, EmotionB, ColorB, true, PlayerGender),
                         new Point(2, 3));
                     g.DrawImage(
                         AssetGeneration.DrawString(new Bitmap(282, 50), bottomLine, 0, 22, Color.FromArgb(68, 8, 0)),
@@ -375,23 +380,28 @@ namespace FEITS.Model
 
                 if (topLine != string.Empty && CharA != string.Empty)
                 {
-                    var topName = names.ContainsKey(CharA) ? names[CharA] : (CharA == "username" ? PlayerName : CharA);
+                    var topName = Names.ContainsKey(CharA) ? Names[CharA] : (CharA == "username" ? PlayerName : CharA);
                     var nameLen = AssetGeneration.GetLength(topName);
                     var topNameBox =
-                        AssetGeneration.DrawString(Resources.NameBox, topName, Resources.NameBox.Width/2 - nameLen/2, 16,
-                            Color.FromArgb(253, 234, 177)) as Bitmap; //Center name in NameBox
+                        (Bitmap)
+                            AssetGeneration.DrawString(Resources.NameBox, topName, Resources.NameBox.Width/2 - nameLen/2,
+                                16, Color.FromArgb(253, 234, 177)); //Center name in NameBox
                     g.DrawImage(topNameBox, new Point(7, topBox.Height - (topNameBox.Height - 20)));
                 }
 
-                if (bottomLine != string.Empty && CharB != string.Empty)
+                if (string.IsNullOrEmpty(bottomLine) || string.IsNullOrEmpty(CharB))
                 {
-                    var bottomName = names.ContainsKey(CharB)
-                        ? names[CharB]
+                    return box;
+                }
+                {
+                    var bottomName = Names.ContainsKey(CharB)
+                        ? Names[CharB]
                         : (CharB == "username" ? PlayerName : CharB);
                     var nameLen = AssetGeneration.GetLength(bottomName);
                     var bottomNameBox =
-                        AssetGeneration.DrawString(Resources.NameBox, bottomName, Resources.NameBox.Width/2 - nameLen/2,
-                            16, Color.FromArgb(253, 234, 177)) as Bitmap;
+                        (Bitmap)
+                            AssetGeneration.DrawString(Resources.NameBox, bottomName,
+                                Resources.NameBox.Width/2 - nameLen/2, 16, Color.FromArgb(253, 234, 177));
                     g.DrawImage(bottomNameBox, new Point(7, box.Height - bottomBox.Height - 14));
                 }
             }
@@ -408,11 +418,11 @@ namespace FEITS.Model
             var images = new List<Image>();
             var index = lineIndex;
             ResetParameters();
-            for (var i = 0; i < File.MessageList[messageIndex].MessageLines.Count; i++)
+            foreach (var t in File.MessageList[messageIndex].MessageLines)
             {
-                GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
-                var parsed = File.MessageList[messageIndex].MessageLines[i].SpokenText;
-                if (!string.IsNullOrWhiteSpace(parsed) && !string.IsNullOrEmpty(parsed))
+                GetParsedCommands(t);
+                var parsed = t.SpokenText;
+                if (!string.IsNullOrWhiteSpace(parsed))
                 {
                     images.Add(RenderPreviewBox(parsed));
                 }
@@ -434,7 +444,10 @@ namespace FEITS.Model
 
         public PlayerGender GetPlayerGenderFromMessageList()
         {
-            return File.MessageList[MessageIndex].Prefix.Contains("PCF") ? PlayerGender.Female : PlayerGender.Male;
+            const string femalePrefix = "PCF";
+            return File.MessageList[MessageIndex].Prefix.Contains(femalePrefix)
+                ? PlayerGender.Female
+                : PlayerGender.Male;
         }
     }
 }

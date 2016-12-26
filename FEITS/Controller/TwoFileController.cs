@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
+using FEITS.Properties;
 
 namespace FEITS.Controller
 {
@@ -87,7 +88,7 @@ namespace FEITS.Controller
 
         public bool SaveSourceFileAs()
         {
-            SaveFileDialog.Filter = "Text files (*.txt)|*.txt";
+            SaveFileDialog.Filter = Resources.TextFileFilter;
             SaveFileDialog.FilterIndex = 1;
 
             if (sourceConv.File.FileName != string.Empty)
@@ -161,8 +162,7 @@ namespace FEITS.Controller
             }
             finally
             {
-                if (messageExporter != null)
-                    messageExporter.Dispose();
+                messageExporter.Dispose();
             }
         }
 

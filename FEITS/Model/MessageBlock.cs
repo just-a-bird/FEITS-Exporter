@@ -61,7 +61,7 @@ namespace FEITS.Model
                 newCmd.cmd = delim;
                 newCmd.numParams = 1;
                 newCmd.Params = new string[newCmd.numParams];
-                var index = line.IndexOf("|", offset, StringComparison.InvariantCulture);
+                var index = line.IndexOf("|", offset, StringComparison.Ordinal);
                 newCmd.Params[0] = line.Substring(offset + delim.Length, index - (offset + delim.Length));
                 line = line.Substring(0, offset) + line.Substring(index + 1);
             }
@@ -73,8 +73,8 @@ namespace FEITS.Model
                 newCmd.cmd = delim;
                 newCmd.numParams = 2;
                 newCmd.Params = new string[newCmd.numParams];
-                var index = line.IndexOf("|", offset, StringComparison.InvariantCulture);
-                var index2 = line.IndexOf("|", index + 1, StringComparison.InvariantCulture);
+                var index = line.IndexOf("|", offset, StringComparison.Ordinal);
+                var index2 = line.IndexOf("|", index + 1, StringComparison.Ordinal);
 
                 if(delim == "$Srp")
                 {

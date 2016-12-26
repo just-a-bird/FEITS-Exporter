@@ -33,8 +33,7 @@ namespace FEITS.View
             if (messages.Count < 1)
                 return;
 
-            var bs = new BindingSource();
-            bs.DataSource = messages;
+            var bs = new BindingSource {DataSource = messages};
 
             LB_MessageList_Target.ValueMember = "Prefix";
             LB_MessageList_Target.DataSource = bs;
@@ -45,8 +44,7 @@ namespace FEITS.View
             if (messages.Count < 1)
                 return;
 
-            var bs = new BindingSource();
-            bs.DataSource = messages;
+            var bs = new BindingSource {DataSource = messages};
 
             LB_MessageList_Source.ValueMember = "Prefix";
             LB_MessageList_Source.DataSource = bs;

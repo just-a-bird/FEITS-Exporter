@@ -33,15 +33,7 @@ namespace FEITS.View
         public bool AllowImport
         {
             get { return B_LoadScript.Enabled; }
-            set
-            {
-                B_LoadScript.Enabled = value;
-
-                if (B_LoadScript.Enabled)
-                    B_LoadScript.DialogResult = DialogResult.OK;
-                else
-                    B_LoadScript.DialogResult = DialogResult.None;
-            }
+            set { B_LoadScript.SetEnabledAndUpdateDialogResult(value); }
         }
 
         public bool ContainsGenderCode { get; set; }
@@ -61,7 +53,7 @@ namespace FEITS.View
         {
             if (e.Data.GetDataPresent(DataFormats.Text))
             {
-                MessageText = (string)e.Data.GetData(DataFormats.UnicodeText); ;
+                MessageText = (string) e.Data.GetData(DataFormats.UnicodeText);
             }
             else
             {

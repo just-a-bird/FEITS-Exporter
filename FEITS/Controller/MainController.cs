@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using FEITS.Properties;
 
 namespace FEITS.Controller
 {
@@ -31,7 +32,7 @@ namespace FEITS.Controller
 
         public virtual bool OpenFile()
         {
-            OpenFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            OpenFileDialog.Filter = Resources.TextFileOrAllFileFilter;
             OpenFileDialog.FilterIndex = 1;
             OpenFileDialog.FileName = string.Empty;
 
@@ -71,7 +72,7 @@ namespace FEITS.Controller
 
         public virtual bool SaveFileAs()
         {
-            SaveFileDialog.Filter = "Text files (*.txt)|*.txt";
+            SaveFileDialog.Filter = Resources.TextFileFilter;
             SaveFileDialog.FilterIndex = 1;
 
             if (!string.IsNullOrEmpty(MainConversation.File.FileName))
@@ -399,7 +400,7 @@ namespace FEITS.Controller
 
         public void SavePreview(bool fullConversation)
         {
-            SaveFileDialog.Filter = "PNG Files (*.png)|*.png";
+            SaveFileDialog.Filter = Resources.PngFileFilter;
 
             if (fullConversation)
             {

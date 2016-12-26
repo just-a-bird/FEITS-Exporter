@@ -30,8 +30,7 @@ namespace FEITS.View
 
         public void SetMessageList(List<MessageBlock> messages)
         {
-            var bs = new BindingSource();
-            bs.DataSource = messages;
+            var bs = new BindingSource {DataSource = messages};
 
             LB_MessageList.ValueMember = "Prefix";
             LB_MessageList.DataSource = bs;
@@ -39,13 +38,13 @@ namespace FEITS.View
 
         private void SetCustomDictionary()
         {
-            var dictionary = System.Windows.Controls.SpellCheck.GetCustomDictionaries(TB_CurrentLine.Child as System.Windows.Controls.TextBox);
+            var dictionary = System.Windows.Controls.SpellCheck.GetCustomDictionaries((System.Windows.Controls.TextBox) TB_CurrentLine.Child);
             dictionary.Add(new Uri(@"pack://application:,,,/FEITS Exporter;component/Resources/txt/FE_Dictionary.lex"));
         }
 
         public IList GetCustomDictionary()
         {
-            return System.Windows.Controls.SpellCheck.GetCustomDictionaries(TB_CurrentLine.Child as System.Windows.Controls.TextBox);
+            return System.Windows.Controls.SpellCheck.GetCustomDictionaries((System.Windows.Controls.TextBox) TB_CurrentLine.Child);
         }
 
         #region Properties

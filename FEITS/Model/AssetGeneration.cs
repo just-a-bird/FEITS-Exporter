@@ -16,22 +16,18 @@ namespace FEITS.Model
 {
     public static class AssetGeneration
     {
-        private static bool isInitialized = false;
+        private static bool IsInitialized;
 
         //Font
-        private static bool[] validCharacters;
 
-        public static bool[] ValidCharacters
-        {
-            get { return validCharacters; }
-        }
+        public static bool[] ValidCharacters { get; private set; }
+        private static FontCharacter[] Characters { get; set; }
 
-        private static FontCharacter[] characters;
-        private static Image[] Images = {Resources.Awakening_0, Resources.Awakening_1};
+        private static Image[] Images { get; } = {Resources.Awakening_0, Resources.Awakening_1};
 
         //Resources
         private static Dictionary<string, byte[]> faceData;
-        private static List<string> resourceList = new List<string>();
+        private static List<string> ResourceList { get; } = new List<string>();
 
         //Lexicon
         private static readonly string tempPath = Path.Combine(Path.GetTempPath(), "FEITS\\");
@@ -39,15 +35,11 @@ namespace FEITS.Model
 
         //Kamui
         //BUG: EyeStyles not being used except for EyeStyles[0]
-        private static string[] EyeStyles = {"a", "b", "c", "d", "e", "f", "g"};
-
-        static AssetGeneration()
-        {
-        }
-
+        private static string[] EyeStyles { get; } = {"a", "b", "c", "d", "e", "f", "g"};
+        
         public static void Initialize(BackgroundWorker worker, DoWorkEventArgs e, IList dictList)
         {
-            if (isInitialized)
+            if (IsInitialized)
             {
                 Console.WriteLine("Assets already initialized!");
             }
@@ -56,14 +48,14 @@ namespace FEITS.Model
                 Console.WriteLine("Initializing assets...");
 
                 //Set up font, generate list of valid chars
-                validCharacters = new bool[0x10000];
-                characters = new FontCharacter[0x10000];
+                ValidCharacters = new bool[0x10000];
+                Characters = new FontCharacter[0x10000];
                 for (var i = 0; i < Resources.chars.Length/0x10; i++)
                 {
                     var fc = new FontCharacter(Resources.chars, i*0x10);
-                    validCharacters[fc.Data.Value] = true;
+                    ValidCharacters[fc.Data.Value] = true;
                     fc.SetGlyph(Images[fc.Data.ImageIndex]);
-                    characters[fc.Data.Value] = fc;
+                    Characters[fc.Data.Value] = fc;
                 }
 
                 worker.ReportProgress(25);
@@ -86,13 +78,13 @@ namespace FEITS.Model
                 var set = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
                 foreach (DictionaryEntry o in set)
                 {
-                    resourceList.Add(o.Key as string);
+                    ResourceList.Add(o.Key as string);
                 }
 
                 worker.ReportProgress(100);
                 Resources.ResourceManager.ReleaseAllResources();
 
-                isInitialized = true;
+                IsInitialized = true;
             }
         }
 
@@ -113,7 +105,7 @@ namespace FEITS.Model
                     }
                     else
                     {
-                        var cur = characters[GetValue(c)];
+                        var cur = Characters[GetValue(c)];
                         g.DrawImage(cur.GetGlyph(textColorOrDefault), new Point(curX, curY - cur.Data.CropHeight));
                         curX += cur.Data.CropWidth;
                     }
@@ -139,7 +131,7 @@ namespace FEITS.Model
             var splitEmotions = emotions.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
             var resourceName = name + "_st_" + splitEmotions[0];
             Image characterImage;
-            if (resourceList.Contains(resourceName))
+            if (ResourceList.Contains(resourceName))
             {
                 characterImage = (Image) Resources.ResourceManager.GetObject(resourceName);
                 Debug.Assert(characterImage != null, $"{nameof(characterImage)} != null");
@@ -160,7 +152,7 @@ namespace FEITS.Model
                 {
                     var emotion = splitEmotions[i];
                     var exresname = name + "_st_" + emotion;
-                    if (!resourceList.Contains(exresname)) continue;
+                    if (!ResourceList.Contains(exresname)) continue;
 
                     var image = Resources.ResourceManager.GetObject(exresname) as Image;
                     Debug.Assert(image != null, $"{nameof(image)} != null");
@@ -182,7 +174,7 @@ namespace FEITS.Model
                         new Point(BitConverter.ToUInt16(faceData[dat_id], xOffset),
                             BitConverter.ToUInt16(faceData[dat_id], yOffset)));
                 }
-                if (resourceList.Contains(hairName))
+                if (ResourceList.Contains(hairName))
                 {
                     var hair = Resources.ResourceManager.GetObject(hairName) as Bitmap;
                     g.DrawImage(ColorHair(hair, hairColor), new Point(0, 0));
@@ -219,7 +211,7 @@ namespace FEITS.Model
             var splitEmotions = emotion.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
             var resname = name + "_bu_" + splitEmotions[0];
             Image characterImage;
-            if (resourceList.Contains(resname))
+            if (ResourceList.Contains(resname))
             {
                 characterImage = (Image) Resources.ResourceManager.GetObject(resname);
                 Debug.Assert(characterImage != null, $"{nameof(characterImage)} != null");
@@ -241,21 +233,22 @@ namespace FEITS.Model
 
                 for (var i = 1; i < splitEmotions.Length; i++)
                 {
+                    //TODO(Robin): Redundant; see above
                     var exresname = name + "_bu_" + splitEmotions[i];
-                    if (splitEmotions[i] == "汗" && resourceList.Contains(exresname))
+                    if (splitEmotions[i] == "汗" && ResourceList.Contains(exresname))
                     {
-                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image,
+                        g.DrawImage((Image) Resources.ResourceManager.GetObject(exresname),
                             new Point(BitConverter.ToUInt16(faceData[dat_id], 0x40),
                                 BitConverter.ToUInt16(faceData[dat_id], 0x42)));
                     }
-                    else if (splitEmotions[i] == "照" && resourceList.Contains(exresname))
+                    else if (splitEmotions[i] == "照" && ResourceList.Contains(exresname))
                     {
-                        g.DrawImage(Resources.ResourceManager.GetObject(exresname) as Image,
+                        g.DrawImage((Image) Resources.ResourceManager.GetObject(exresname),
                             new Point(BitConverter.ToUInt16(faceData[dat_id], 0x38),
                                 BitConverter.ToUInt16(faceData[dat_id], 0x3A)));
                     }
                 }
-                if (resourceList.Contains(hairName))
+                if (ResourceList.Contains(hairName))
                 {
                     var hair = Resources.ResourceManager.GetObject(hairName) as Bitmap;
                     g.DrawImage(ColorHair(hair, hairColor), new Point(0, 0));
@@ -366,8 +359,8 @@ namespace FEITS.Model
         {
             return
                 s.Select(GetValue)
-                    .Select(val => Math.Max(characters[val].Data.Width, characters[val].Data.CropWidth))
-                    .Sum();
+                 .Select(val => Math.Max(Characters[val].Data.Width, Characters[val].Data.CropWidth))
+                 .Sum();
         }
     }
 }
