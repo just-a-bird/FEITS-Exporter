@@ -20,18 +20,12 @@ namespace FEITS.Model
             set
             {
                 messageIndex = value;
-                lineIndex = 0;
+                LineIndex = 0;
                 ResetParameters();
             }
         }
 
-        private int lineIndex;
-
-        public int LineIndex
-        {
-            get { return lineIndex; }
-            set { lineIndex = value; }
-        }
+        public int LineIndex { get; set; }
 
         //Settings
         public string PlayerName = "Kamui";
@@ -102,7 +96,7 @@ namespace FEITS.Model
         {
             ResetParameters();
 
-            for (var i = 0; i < lineIndex; i++)
+            for (var i = 0; i < LineIndex; i++)
             {
                 GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
             }
@@ -110,7 +104,7 @@ namespace FEITS.Model
 
         public string GetParsedCommands(MessageLine line)
         {
-            if(line.SpokenText != string.Empty)
+            if (line.SpokenText != string.Empty)
             {
                 line.UpdateRawWithNewDialogue();
                 line.RawLine = line.RawLine.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
@@ -118,116 +112,133 @@ namespace FEITS.Model
 
             line.SpokenText = line.RawLine;
 
-            for(var i = 0; i < line.SpokenText.Length; i++)
+            for (var i = 0; i < line.SpokenText.Length; i++)
             {
-                if(line.SpokenText[i] == '$')
+                if (line.SpokenText[i] != '$') continue;
+
+                var res = MessageBlock.ParseCommand(line.SpokenText, i);
+                line.SpokenText = res.Item1;
+
+                if (res.Item2.numParams > 0)
+                    if (res.Item2.Params[0] == "ベロア")
+                        res.Item2.Params[0] = "べロア"; // Velour Fix
+
+                switch (res.Item2.cmd)
                 {
-                    var res = MessageBlock.ParseCommand(line.SpokenText, i);
-                    line.SpokenText = res.Item1;
+                    case "$E":
+                        if (string.IsNullOrEmpty(CharActive) || CharActive != CharB)
+                            EmotionA = res.Item2.Params[0] != "," ? res.Item2.Params[0] : DefaultEmotion;
+                        else
+                            EmotionB = res.Item2.Params[0] != "," ? res.Item2.Params[0] : DefaultEmotion;
+                        break;
+                    case "$Ws":
+                        CharActive = res.Item2.Params[0];
+                        break;
+                    case "$Wm":
+                        CharSide = Convert.ToInt32(res.Item2.Params[1]);
 
-                    if (res.Item2.numParams > 0)
-                        if (res.Item2.Params[0] == "ベロア")
-                            res.Item2.Params[0] = "べロア"; // Velour Fix
+                        //NOTE(Robin): Prepare an exception for multiple possible fail states below
+                        var unexpectedCharSideException = new ArgumentOutOfRangeException(nameof(CharSide), CharSide,
+                            "Unexpected character side parameter.");
 
-                    switch(res.Item2.cmd)
-                    {
-                        case "$E":
-                            if (CharActive != string.Empty && CharActive == CharB)
+                        switch (ConversationType)
+                        {
+                            case ConversationTypes.Type0:
                             {
-                                if (res.Item2.Params[0] != ",")
-                                    EmotionB = res.Item2.Params[0];
-                                else
-                                    EmotionB = DefaultEmotion;
-                            }
-                            else
-                            {
-                                if (res.Item2.Params[0] != ",")
-                                    EmotionA = res.Item2.Params[0];
-                                else
-                                    EmotionA = DefaultEmotion;
-                            }
-                            break;
-                        case "$Ws":
-                            CharActive = res.Item2.Params[0];
-                            break;
-                        case "$Wm":
-                            CharSide = Convert.ToInt32(res.Item2.Params[1]);
-
-                            if(ConversationType == ConversationTypes.Type1)
-                            {
-                                if(CharSide == 3)
+                                switch (CharSide)
                                 {
-                                    CharA = res.Item2.Params[0];
-                                    EmotionA = DefaultEmotion;
+                                    case 0:
+                                    case 2:
+                                        CharA = res.Item2.Params[0];
+                                        EmotionA = DefaultEmotion;
+                                        break;
+                                    case 6:
+                                        CharB = res.Item2.Params[0];
+                                        EmotionB = DefaultEmotion;
+                                        break;
+                                    default:
+                                        throw unexpectedCharSideException;
                                 }
-                                else if(CharSide == 7)
-                                {
-                                    CharB = res.Item2.Params[0];
-                                    EmotionB = DefaultEmotion;
-                                }
+                                break;
                             }
-                            else
+                            case ConversationTypes.Type1:
                             {
-                                if(CharSide == 0| CharSide == 2)
+                                switch (CharSide)
                                 {
-                                    CharA = res.Item2.Params[0];
-                                    EmotionA = DefaultEmotion;
+                                    case 3:
+                                        CharA = res.Item2.Params[0];
+                                        EmotionA = DefaultEmotion;
+                                        break;
+                                    case 7:
+                                        CharB = res.Item2.Params[0];
+                                        EmotionB = DefaultEmotion;
+                                        break;
+                                    default:
+                                        throw unexpectedCharSideException;
                                 }
-                                else if(CharSide == 6)
-                                {
-                                    CharB = res.Item2.Params[0];
-                                    EmotionB = DefaultEmotion;
-                                }
+                                break;
                             }
-                            break;
-                        case "$Wd":
-                            if(CharActive == CharB)
-                            {
-                                CharActive = CharA;
-                                CharB = string.Empty;
-                            }
-                            else
-                            {
-                                CharA = string.Empty;
-                            }
-                            break;
-                        case "$a":
-                            HasPerms = true;
-                            break;
-                        case "$t0":
-                            if (!SetType)
-                                ConversationType = ConversationTypes.Type0;
-                            SetType = true;
-                            break;
-                        case "$t1":
-                            if (!SetType)
-                                ConversationType = ConversationTypes.Type1;
-                            SetType = true;
-                            break;
-                        case "$Nu":
-                            line.SpokenText = line.SpokenText.Substring(0, i) + "$Nu" + line.SpokenText.Substring(i);
-                            i += 2;
-                            break;
-                        case "$Wa":
-                            break;
-                        case "$Wc":
-                            break;
-                        default:
-                            break;
-                    }
-                    i--;
+                            default:
+                                throw new ArgumentOutOfRangeException(nameof(ConversationType), ConversationType,
+                                    "Unexpected conversation type.");
+                        }
+                        break;
+                    case "$Wd":
+                        if (CharActive == CharB)
+                        {
+                            CharActive = CharA;
+                            CharB = string.Empty;
+                        }
+                        else
+                        {
+                            Debug.Assert(CharActive == CharA, $"{nameof(CharActive)} == {nameof(CharA)}");
+                            CharA = string.Empty;
+                        }
+                        break;
+                    case "$a":
+                        HasPerms = true;
+                        break;
+                    case "$t0":
+                        if (!SetType)
+                            ConversationType = ConversationTypes.Type0;
+                        SetType = true;
+                        break;
+                    case "$t1":
+                        if (!SetType)
+                            ConversationType = ConversationTypes.Type1;
+                        SetType = true;
+                        break;
+                    case "$Nu":
+                        line.SpokenText = $"{line.SpokenText.Substring(0, i)}$Nu{line.SpokenText.Substring(i)}";
+                        i += 2;
+                        break;
+                    case "$Wa":
+                    case "$Wc":
+                    case "$w":
+                    case "$k":
+                    case "$p":
+                    case "$k\\n":
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(res.Item2.cmd), res.Item2.cmd,
+                            "Unexpected command.");
                 }
+                i--;
             }
 
-            if(string.IsNullOrWhiteSpace(line.SpokenText))
+            if (string.IsNullOrWhiteSpace(line.SpokenText))
             {
                 line.SpokenText = string.Empty;
             }
 
-            line.SpeechIndex = line.RawLine.LastIndexOf(line.SpokenText);
-            line.RawLine = line.RawLine.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
-            line.SpokenText.Replace("\\n", "\n").Replace("$k\n", "$k\\n");
-            line.SpokenText = line.SpokenText.Replace("\n", Environment.NewLine);
+            line.SpeechIndex = line.RawLine.LastIndexOf(line.SpokenText, StringComparison.Ordinal);
+
+            Func<string, string> purify = s => s.Replace("\\n", "\n")
+                                                .Replace("$k\n", "$k\\n")
+                                                .Replace("\n", Environment.NewLine);
+
+            line.RawLine = purify(line.RawLine);
+            line.SpokenText = purify(line.SpokenText);
 
             return line.SpokenText;
         }
@@ -302,7 +313,7 @@ namespace FEITS.Model
                             : new Point(7, box.Height - tb.Height - 14));
                 }
 
-                if (lineIndex > File.MessageList[messageIndex].MessageLines.Count - 1)
+                if (LineIndex > File.MessageList[messageIndex].MessageLines.Count - 1)
                 {
                     g.DrawImage(Resources.KeyPress, new Point(box.Width - 33, box.Height - tb.Height + 32));
                 }
@@ -316,7 +327,7 @@ namespace FEITS.Model
             string topLine = string.Empty, bottomLine = string.Empty;
             ResetParameters();
 
-            for (var i = 0; i <= lineIndex; i++)
+            for (var i = 0; i <= LineIndex; i++)
             {
                 var line = GetParsedCommands(File.MessageList[messageIndex].MessageLines[i]);
 
@@ -365,7 +376,7 @@ namespace FEITS.Model
 
             using (var g = Graphics.FromImage(box))
             {
-                if (lineIndex < File.MessageList[messageIndex].MessageLines.Count - 1)
+                if (LineIndex < File.MessageList[messageIndex].MessageLines.Count - 1)
                 {
                     using (var g2 = Graphics.FromImage(CharActive == CharA ? topBox : bottomBox))
                     {
@@ -416,7 +427,7 @@ namespace FEITS.Model
                 line.UpdateRawWithNewDialogue();
 
             var images = new List<Image>();
-            var index = lineIndex;
+            var index = LineIndex;
             ResetParameters();
             foreach (var t in File.MessageList[messageIndex].MessageLines)
             {
@@ -427,7 +438,7 @@ namespace FEITS.Model
                     images.Add(RenderPreviewBox(parsed));
                 }
             }
-            lineIndex = index;
+            LineIndex = index;
             var bmp = new Bitmap(images.Max(i => i.Width), images.Sum(i => i.Height));
             using (var g = Graphics.FromImage(bmp))
             {
