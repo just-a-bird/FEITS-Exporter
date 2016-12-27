@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -78,7 +79,7 @@ namespace FEITS.Model
 
                 if(delim == "$Srp")
                 {
-                    Console.WriteLine(@"$Srp processed!");
+                    Debug.WriteLine(@"$Srp processed!");
                 }
 
                 if(delim == "$Wm")

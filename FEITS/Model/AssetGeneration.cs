@@ -41,11 +41,11 @@ namespace FEITS.Model
         {
             if (IsInitialized)
             {
-                Console.WriteLine("Assets already initialized!");
+                Debug.WriteLine("Assets already initialized!");
             }
             else
             {
-                Console.WriteLine("Initializing assets...");
+                Debug.WriteLine("Initializing assets...");
 
                 //Set up font, generate list of valid chars
                 ValidCharacters = new bool[0x10000];

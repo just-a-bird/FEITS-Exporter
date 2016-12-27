@@ -1,6 +1,7 @@
 ﻿using FEITS.Model;
 using FEITS.View;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -255,7 +256,7 @@ namespace FEITS.Controller
         public void SetCurrentMessage()
         {
             MainConversation.MessageIndex = MainView.MsgListIndex;
-            Console.WriteLine(MainConversation.MessageIndex);
+            Debug.WriteLine(MainConversation.MessageIndex);
             SetCurrentLine();
 
             MainView.PlayerGender = MainConversation.GetPlayerGenderFromMessageList();

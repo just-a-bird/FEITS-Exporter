@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -54,7 +55,7 @@ namespace FEITS.Model
                 return LoadConversationFromString(fileSplitByLinebreak);
             }
             EmptyFileData();
-            Console.WriteLine("Opened file was empty; treating as a new object and keeping the file path.");
+            Debug.WriteLine("Opened file was empty; treating as a new object and keeping the file path.");
             return true;
         }
 
