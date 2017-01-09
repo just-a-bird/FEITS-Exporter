@@ -11038,7 +11038,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FEITS Icon.ico" />
-    <None Include="Resources\txt\FEDict.txt" />
     <None Include="Resources\img\Reminder_1.png" />
     <None Include="Resources\img\Reminder_0.jpg" />
   </ItemGroup>
